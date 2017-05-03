@@ -3,7 +3,7 @@
   "version": "1.1.0",
   "description": "Starter for Express, React, Redux, SCSS applications",
   "scripts": {
-    "serve": "nodemon ./server/server.js localhost 3000",
+    "server": "nodemon ./server/server.js localhost 3000",
     "dev": "webpack-dev-server --watch --colors",
     "build": "rimraf dist && NODE_ENV=production webpack --colors",
     "start": "NODE_ENV=production PORT=8080 node start ./server/server.js",

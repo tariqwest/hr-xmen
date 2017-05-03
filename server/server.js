@@ -1,10 +1,12 @@
 var express = require('express');
-var photoAI = require('./photoAI');
+var photoAI = require('./api/photoAI');
 
 const app = express();
 
 app.use(express.static('./'));
 app.use(express.static('dist'));
+
+photoAI.getFoodPrediction()
 
 app.get('*', (req, res) => {
   res.sendFile(`${__dirname}/dist/index.html`);
