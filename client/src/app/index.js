@@ -5,9 +5,9 @@ import { createStore, applyMiddleware } from 'redux';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 
 import App from './components/App';
-import Home from './components/home/Home';
-import About from './components/about/About';
-import More from './components/more/More';
+import PhotoGrid from './components/photogrid/PhotoGrid';
+import Photo from './components/photo/Photo';
+import Profile from './components/profile/Profile';
 
 import reducers from './reducers';
 
@@ -20,9 +20,9 @@ ReactDOM.render(
   <Provider store={store}>
     <Router onUpdate={() => window.scrollTo(0, 0)} history={browserHistory}>
       <Route path="/" component={App}>
-        <IndexRoute component={Home} />;
-        <Route path="/about" component={About} />
-        <Route path="/more" component={More} />
+        <IndexRoute component={PhotoGrid} />;
+        <Route path="/photo" component={Photo} />
+        <Route path="/profile" component={Profile} />
       </Route>
     </Router>
   </Provider>
