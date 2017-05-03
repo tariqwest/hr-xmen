@@ -1,4 +1,6 @@
-const express = require('express');
+var express = require('express');
+var photoAI = require('./photoAI');
+
 const app = express();
 
 app.use(express.static('./'));
