@@ -1,6 +1,6 @@
 var express = require('express');
-var photoAI = require('./api/photoAI');
 var emoji = require('node-emoji');
+var photoAI = require('./api/photoAI');
 var openMenu = require('./api/openMenu');
 
 const app = express();
@@ -9,7 +9,7 @@ app.use(express.static('./'));
 app.use(express.static('dist'));
 
 // photoAI.getFoodPrediction()
-// openMenu.getMenuItems('burger', 'san francisco', 'ca', (result)=>{ console.log('** OpenMenu result: ', JSON.stringify(result)) });
+// openMenu.getMenuItems('burger', '94103', 'US');
 
 app.get('*', (req, res) => {
   res.sendFile(`${__dirname}/dist/index.html`);
