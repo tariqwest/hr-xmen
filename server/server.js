@@ -28,6 +28,7 @@ app.listen(port, () => {
 });
 
 app.get('/photos', ()=>{
+
   /*
 
   request:
@@ -37,12 +38,13 @@ app.get('/photos', ()=>{
     format: JSON
     contents:
       status (success or fail)
-      photos: [{ url }, { ... }]
+      photos: [ 'url', '...']
   
   */
+
 });
 
-app.post('/process_photo', ()=>{
+app.post('/photos/photo-process', ()=>{
   
   /*
 
@@ -81,7 +83,7 @@ app.post('/process_photo', ()=>{
 
 });
 
-app.post('/save_photo', ()=>{
+app.post('/photos/photo-save', ()=>{
   
   /*
 
