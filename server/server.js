@@ -26,3 +26,84 @@ app.listen(port, () => {
   console.log('app listening on', port);
   console.log(emoji.emojify(':rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket:'));
 });
+
+app.get('/photos', ()=>{
+
+  /*
+
+  request:
+    N/A - get with no params
+
+  response:
+    format: JSON
+    contents:
+      status (success or fail)
+      photos: [ 'url', '...']
+  
+  */
+
+});
+
+app.post('/photos/photo-process', ()=>{
+  
+  /*
+
+    process:
+      submit userLocation coordinates to Google Maps
+      receive user postal code from Google Maps
+      submit photo url to photoAI
+      receive ingredients from photoAI
+      submit top ingredient to openMenu
+
+      process restaurants:
+        receive menu item + restaurant (address) from openMenu 
+        submit restuarnt to yelp
+        receive retsaurant details from yelp
+
+      process recipes:
+        receive menu item from openMenu 
+        submit menu item to yummly
+        receive recipe details from yummly
+
+    request:
+      format: JSON
+      contents: 
+        photoURL ''
+        userLocation {lat,lng}
+
+    response:
+      format: JSON
+      contents:
+        status (success or fail)
+        photoURL ''
+        recipes [{name, description, instructions, prepTime, ingredients, rating, url}, {...}]
+        restaurants [{name, address, rating}, {...}]
+
+  */
+
+});
+
+app.post('/photos/photo-save', ()=>{
+  
+  /*
+
+    process:
+      receive post request from client
+      get user for this request
+      add request photo to DB with owner set to request user
+
+    request:
+      format: JSON
+      contents:
+        photoURL ''
+        restaurants [{name, address, rating, url}, {...}]
+        recipes [{}, {...}]
+
+    response:
+      format: JSON
+      contents:
+        status (success or fail)
+      
+  */
+
+});
