@@ -66,7 +66,7 @@ const PhotoGrid = () => {
 <div className="container photogrid">
   <h1>Photo Grid</h1>
   <div style={styles.root}>
-    <GridList cellHeight={280} style={styles.gridList}>
+    <GridList cellHeight={280} cols={3} style={styles.gridList}>
       <Subheader>Food</Subheader>
       {tilesData.map((tile) => (
       <GridTile key={tile.img} title={tile.title} subtitle={<span><b>{tile.description}</b></span>} actionIcon={
