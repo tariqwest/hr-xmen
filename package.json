@@ -61,6 +61,7 @@
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
+    "body-parser": "^1.17.1",
     "clarifai": "^2.1.6",
     "express": "^4.13.4",
     "material-ui": "^0.18.0",

@@ -1,5 +1,6 @@
 var express = require('express');
 var emoji = require('node-emoji');
+var bodyParser = require('body-parser');
 var photoAI = require('./api/photoAI');
 var openMenu = require('./api/openMenu');
 var yelp = require('./api/yelpAPI');
@@ -10,21 +11,15 @@ app.use(express.static('./'));
 app.use(express.static('dist'));
 
 // photoAI.getFoodPrediction()
+
 // openMenu.getMenuItems('burger', '94103', 'US');
+
+// var restaurantAddr = "10 Mason St, San Francisco, CA 94102";
+// var restaurantName = "Taqueria Castillo";
+// yelp.yelpAPI(restaurantAddr, restaurantName);
 
 app.get('*', (req, res) => {
   res.sendFile(`${__dirname}/dist/index.html`);
-});
-
-// some sample code to use the yelp api
-// var restaurantAddr = "809 Bush St San Francisco, CA 94108";
-// yelp.yelpAPI(restaurantAddr);
-
-const port = process.env.PORT || 3000;
-
-app.listen(port, () => {
-  console.log('app listening on', port);
-  console.log(emoji.emojify(':rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket:'));
 });
 
 app.get('/photos', ()=>{
@@ -96,8 +91,8 @@ app.post('/photos/photo-save', ()=>{
       format: JSON
       contents:
         photoURL ''
-        restaurants [{name, address, rating, url}, {...}]
-        recipes [{}, {...}]
+        restaurants [{ / see above / }, {...}]
+        recipes [{ / see above / }, {...}]
 
     response:
       format: JSON
@@ -106,4 +101,11 @@ app.post('/photos/photo-save', ()=>{
       
   */
 
+});
+
+const port = process.env.PORT || 3000;
+
+app.listen(port, () => {
+  console.log('app listening on', port);
+  console.log(emoji.emojify(':rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket: :rocket:'));
 });
