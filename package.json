@@ -63,6 +63,7 @@
   "dependencies": {
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
+    "axios": "^0.16.1",
     "clarifai": "^2.1.6",
     "express": "^4.13.4",
     "material-ui": "^0.18.0",
