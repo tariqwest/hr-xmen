@@ -10,7 +10,7 @@ module.exports = {
   getFoodPrediction: (imageURL) => {
     app.models.predict('bd367be194cf45149e75f01d59f77ba7', 'https://samples.clarifai.com/food.jpg').then(
       function(response) {
-        console.log(response);
+        console.log(response.outputs[0].data);
       },
       function(err) {
         console.error(err);
