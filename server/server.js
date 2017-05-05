@@ -1,28 +1,35 @@
 var express = require('express');
+var morgan = require('morgan');
+var Promise = require('bluebird');
 var emoji = require('node-emoji');
 var bodyParser = require('body-parser');
 var photoAI = require('./api/photoAI');
 var openMenu = require('./api/openMenu');
-var yelp = require('./api/yelpAPI');
+var yelp = require('./api/yelp');
+var googleMapsGeocode = require('./api/googleMapsGeocode');
 
 const app = express();
 
+app.use(morgan('tiny'));
 app.use(express.static('./'));
 app.use(express.static('dist'));
 
+
 // photoAI.getFoodPrediction()
 
-// openMenu.getMenuItems('burger', '94103', 'US');
+// openMenu.getMenuItems('burger', '94102', 'US');
 
 // var restaurantAddr = "10 Mason St, San Francisco, CA 94102";
 // var restaurantName = "Taqueria Castillo";
 // yelp.yelpAPI(restaurantAddr, restaurantName);
 
-app.get('*', (req, res) => {
+//googleMapsGeocode.getPostalCode('37.7836970', '-122.4089660');
+
+app.get('/', (req, res) => {
   res.sendFile(`${__dirname}/dist/index.html`);
 });
 
-app.get('/photos', ()=>{
+app.get('/photos', (req, res)=>{
 
   /*
 
@@ -39,7 +46,7 @@ app.get('/photos', ()=>{
 
 });
 
-app.post('/photos/photo-process', ()=>{
+app.post('/photos/photo-process', (req, res)=>{
   
   /*
 
@@ -52,7 +59,7 @@ app.post('/photos/photo-process', ()=>{
 
       process restaurants:
         receive menu item + restaurant (address) from openMenu 
-        submit restuarnt to yelp
+        submit restuarant to yelp
         receive retsaurant details from yelp
 
       process recipes:
@@ -76,9 +83,13 @@ app.post('/photos/photo-process', ()=>{
 
   */
 
+  // var mockPhotoURL = 'http://www.burgergoesgreen.com/wp-content/uploads/2014/06/burgers.jpeg';
+  // var mockUserLocation = {lat: '37.7836970', lng: '-122.4089660'};
+  // googleMapsGeocode.getPostalCode(mockUserLocation.lat, mockUserLocation.lng);
+
 });
 
-app.post('/photos/photo-save', ()=>{
+app.post('/photos/photo-save', (req, res)=>{
   
   /*
 
