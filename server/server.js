@@ -23,7 +23,7 @@ app.use(express.static('dist'));
 // var restaurantName = "Taqueria Castillo";
 // yelp.yelpAPI(restaurantAddr, restaurantName);
 
-//googleMapsGeocode.getPostalCode('37.7836970', '-122.4089660');
+// googleMapsGeocode.getPostalCode('37.7836970', '-122.4089660');
 
 app.get('/', (req, res) => {
   res.sendFile(`${__dirname}/dist/index.html`);
