@@ -3,6 +3,8 @@ var emoji = require('node-emoji');
 var photoAI = require('./api/photoAI');
 var openMenu = require('./api/openMenu');
 var yelp = require('./api/yelpAPI');
+var googleMapsGeocode = require('./api/yelp');
+
 
 const app = express();
 
@@ -11,6 +13,8 @@ app.use(express.static('dist'));
 
 // photoAI.getFoodPrediction()
 // openMenu.getMenuItems('burger', '94103', 'US');
+
+googleMapsGeocode.getPostalCode('37.7836970','-122.4089660');
 
 app.get('*', (req, res) => {
   res.sendFile(`${__dirname}/dist/index.html`);
