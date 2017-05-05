@@ -14,7 +14,7 @@ app.use(express.static('dist'));
 // photoAI.getFoodPrediction()
 // openMenu.getMenuItems('burger', '94103', 'US');
 
-googleMapsGeocode.getPostalCode('37.7836970','-122.4089660');
+// googleMapsGeocode.getPostalCode('37.7836970','-122.4089660');
 
 app.get('*', (req, res) => {
   res.sendFile(`${__dirname}/dist/index.html`);
