@@ -8,7 +8,7 @@ var yelp = new Yelp({
 // https://github.com/Yelp/yelp-api-v3/blob/master/docs/api-references/businesses-search.md
 
 module.exports = {
-	yelpAPI: (location) => {yelp.search({term: 'food', location: `${location}`, price: '1,2,3', limit: 1})
+	yelpAPI: (restaurantAddr, restaurantName) => {yelp.search({term: `${restaurantName}`, location: `${restaurantAddr}`, limit: 1})
 	.then(function (data) {
 		var properData = (JSON.parse(data));
 		var restaurant = properData.businesses[0];
