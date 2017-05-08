@@ -8,6 +8,7 @@ var openMenu = require('./api/openMenu');
 var yelp = require('./api/yelp');
 var googleMapsGeocode = require('./api/googleMapsGeocode');
 
+
 const app = express();
 
 app.use(morgan('tiny'));
@@ -18,6 +19,7 @@ app.use(express.static('dist'));
 // photoAI.getFoodPrediction()
 
 // openMenu.getMenuItems('burger', '94102', 'US');
+
 
 // var restaurantAddr = "10 Mason St, San Francisco, CA 94102";
 // var restaurantName = "Taqueria Castillo";
