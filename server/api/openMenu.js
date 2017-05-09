@@ -11,13 +11,14 @@ module.exports = {
         key: process.env.OPENMENU_KEY || '5b17ec42-2f8c-11e7-a91a-00163eeae34c',
         s: food,
         postal_code: postal_code,
-        country: country
+        country: country,
+        mi: 1,
       },
       useQuerystring: true
     };
     return request(options)
     .then((result)=>{
-      console.log('** Open menu result:', result);//JSON.parse(result).response.result.items[0]);
+      //console.log('** Open menu result:', result);//JSON.parse(result).response.result.items[0]);
       return Promise.resolve(result); 
     });
   },

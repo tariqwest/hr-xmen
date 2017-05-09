@@ -16,7 +16,7 @@ module.exports = {
     };
     return request(options)
     .then((result)=>{
-      console.log(result, '*** Google API response body')
+      // console.log('*** Google API response body ***', result)
       var postalCode;
       var countryCode;
       for(var component of JSON.parse(result).results[0].address_components){
@@ -27,27 +27,9 @@ module.exports = {
           countryCode = component.short_name;
         }
       }
-      console.log({postalCode, countryCode}, '*** Parsed postal code and country')
+      // console.log('*** Parsed postal code and country ***', {postalCode, countryCode}, )
       return Promise.resolve({postalCode, countryCode});
     });
-
-    // return request(options, (err, res, body)=>{
-    //   if(err){
-    //     throw err;
-    //   }
-    //   var postalCode;
-    //   var countryCode;
-    //   for(var component of JSON.parse(body).results[0].address_components){
-    //     if(component.types[0] === 'postal_code'){
-    //       postalCode = component.short_name;
-    //     }
-    //     if(component.types[0] === 'country'){
-    //       countryCode = component.short_name;
-    //     }
-    //   }
-    //   console.log('** Google postal code lookup result:', postalCode, countryCode);
-    //   return {postalCode, countryCode} ;
-    // })
   },
 }
 

@@ -1,6 +1,7 @@
 var express = require('express');
 var morgan = require('morgan');
 var Promise = require('bluebird');
+var _ = require('underscore');
 var emoji = require('node-emoji');
 var bodyParser = require('body-parser');
 var photoAI = require('./api/photoAI');
@@ -23,7 +24,7 @@ app.use(express.static('dist'));
 
 // var restaurantAddr = "10 Mason St, San Francisco, CA 94102";
 // var restaurantName = "Taqueria Castillo";
-// yelp.yelpAPI(restaurantAddr, restaurantName);
+// yelp.getRestaurant(restaurantAddr, restaurantName);
 
 // googleMapsGeocode.getPostalCode('37.7836970', '-122.4089660');
 
@@ -89,6 +90,8 @@ app.post('/photos/photo-process', (req, res)=>{
 
   var food;
 
+  var restaurants = [];
+
   // var mockPhotoURL = 'http://www.burgergoesgreen.com/wp-content/uploads/2014/06/burgers.jpeg';
   var mockUserLocation = {lat: '37.7836970', lng: '-122.4089660'};
 
@@ -99,15 +102,25 @@ app.post('/photos/photo-process', (req, res)=>{
   //photoAI.getFoodPrediction();
   Promise.resolve('burger')
   .then((prediction)=>{
-    console.log(prediction, '*** Result of getFoodPrediction');
+    console.log('*** Result of getFoodPrediction ***', prediction);
     food = prediction;
     return googleMapsGeocode.getPostalCode(mockUserLocation.lat, mockUserLocation.lng);
   })
   .then(({postalCode, countryCode})=>{
+    console.log('*** Result of getPostalCode ***', postalCode, countryCode);
     return openMenu.getMenuItems(food, postalCode, countryCode);
   })
   .then((menuItems)=>{
-    console.log(menuItems, '*** Result of getMenuItems');
+    console.log('*** Result of getMenuItems ***', JSON.parse(menuItems).response.result.items);
+    var menuItems = JSON.parse(menuItems).response.result.items;
+    menuItems = _.uniq(menuItems, false, (item)=>{
+      return item.address_1;
+    });
+    return Promise.resolve(menuItems);
+  }).mapSeries((menuItem)=>{
+    return yelp.getRestaurant(`${menuItem.address_1}, ${menuItem.city_town}, ${menuItem.state_province}`, menuItem.restaurant_name);
+  }).then((yelpRestaurants)=>{
+    console.log('*** Result of openMenu + yelp restaurants ***', yelpRestaurants);
   });
 
 });
