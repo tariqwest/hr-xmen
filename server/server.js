@@ -174,7 +174,7 @@ app.post('/photos/photo-process', (req, res)=>{
   //var mockUserLocation = {lat: '37.7836970', lng: '-122.4089660'};
 
   //photoAI.getFoodPrediction(req.body.photoURL)
-  Promise.resolve('burger')
+Promise.resolve('burger')
   .then((prediction)=>{
     console.log('*** Result of getFoodPrediction ***', prediction);
     foodPrediction = prediction;
@@ -207,7 +207,6 @@ app.post('/photos/photo-process', (req, res)=>{
     console.log('*** Result of openMenu + yummly recipes ***', clientResponse.recipes);
     res.json(clientResponse);
   });
-
 });
 
 app.post('/photos/photo-save', (req, res)=>{

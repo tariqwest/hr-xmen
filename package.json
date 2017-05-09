@@ -60,6 +60,7 @@
     "webpack-hot-middleware": "^2.18.0"
   },
   "dependencies": {
+    "500px": "^0.5.1",
     "axios": "^0.16.1",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
