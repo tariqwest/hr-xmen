@@ -1,4 +1,4 @@
-var express = require('express');
+const express = require('express');
 var morgan = require('morgan');
 var Promise = require('bluebird');
 var _ = require('underscore');
@@ -7,18 +7,19 @@ var bodyParser = require('body-parser');
 var photoAI = require('./api/photoAI');
 var openMenu = require('./api/openMenu');
 var yelp = require('./api/yelp');
+var webpackHotMiddleware = require('webpack-hot-middleware');
 var googleMapsGeocode = require('./api/googleMapsGeocode');
 var pictures500px = require('./api/pictures500px');
 
 // Replace with actual yummly API
 var yummly = { getRecipes: (food)=>{
   var recipe = {
-    name: food, 
-    description: 'description blah blah blah', 
-    instructions: 'instructions blah blah blah', 
-    prepTime: '30mins', 
-    ingredients: 'ingredients blah blah blah', 
-    rating: '4.5', 
+    name: food,
+    description: 'description blah blah blah',
+    instructions: 'instructions blah blah blah',
+    prepTime: '30mins',
+    ingredients: 'ingredients blah blah blah',
+    rating: '4.5',
     url: 'http://yummly.com/recipes/123456'
   };
   return [{recipe}, {recipe}, {recipe}];
@@ -31,7 +32,6 @@ app.use(morgan('tiny'));
 app.use(express.static('./'));
 app.use(express.static('dist'));
 
-
 // photoAI.getFoodPrediction()
 
 // openMenu.getMenuItems('burger', '94102', 'US');
@@ -43,12 +43,73 @@ app.use(express.static('dist'));
 
 // googleMapsGeocode.getPostalCode('37.7836970', '-122.4089660');
 
+/* Following middleware, because had issues with no 'Access-Control-Allow-Origin'
+Thanks to:
+http://stackoverflow.com/questions/18310394/no-access-control-allow-origin-node-apache-port-issue */
+app.use(function(req, res, next) {
+  // Website you wish to allow to connect
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+  // Request methods you wish to allow
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  // Request headers you wish to allow
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+  // Set to true if you need the website to include cookies in the requests sent
+  // to the API (e.g. in case you use sessions)
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  // Pass to next layer of middleware
+  next();
+});
+
+const tilesData = [
+  {
+    img: 'http://cdn-image.foodandwine.com/sites/default/files/201111-xl-liege-waffles.jpg',
+    title: 'Liege Waffles',
+    description: 'description',
+  },
+  {
+    img: 'https://static1.squarespace.com/static/50a43af2e4b013b04b877d4e/50a48341e4b06eecde88101c/50c183d0e4b08bba8489d091/1434199989721/_MG_9865.jpg',
+    title: 'Liege Waffles',
+    description: 'description',
+  },
+  {
+    img: 'https://www.sweetashoney.co/wp-content/uploads/DSC_0081.jpg',
+    title: 'Liege Waffles',
+    description: 'description',
+  },
+  {
+    img: 'http://1.bp.blogspot.com/-Zg0XbmBG-NI/VCnq3KYS5RI/AAAAAAAAG1s/ri7467hdlKA/s1600/waffle%2Bcover%2BREVISED.jpg',
+    title: 'Liege Waffles',
+    description: 'description',
+  },
+  {
+    img: 'http://www.europeancuisines.com/sites/default/files/Liege_Waffles_Plated_Up.jpg',
+    title: 'Liege Waffles',
+    description: 'description',
+  },
+  {
+    img: 'https://2.bp.blogspot.com/-gvWAv7FO6wI/Vthl0_-QzUI/AAAAAAAAQ8U/CT20sQq_zJc/s1600/DSC_5768.JPG',
+    title: 'Liege Waffles',
+    description: 'description',
+  },
+  {
+    img: 'https://foodydoody.files.wordpress.com/2015/09/dsc_5130.jpg',
+    title: 'Liege Waffles',
+    description: 'description',
+  },
+  {
+    img: 'http://4.bp.blogspot.com/-Yz0eHsyFtLI/VP5dcZrAMyI/AAAAAAAAPLk/-s2uDvuVlEo/s1600/Caramelized%2BWaffles%2B(Liege%2BWaffles)%2B2.jpg',
+    title: 'Liege Waffles',
+    description: 'description',
+  },
+];
+
 app.get('/', (req, res) => {
   res.sendFile(`${__dirname}/dist/index.html`);
 });
 
 app.get('/photos', (req, res)=>{
-
+  console.log('GOT')
+  res.json(tilesData)
   /*
 
   request:
@@ -59,13 +120,13 @@ app.get('/photos', (req, res)=>{
     contents:
       status (success or fail)
       photos: [ 'url', '...']
-  
+
   */
 
 });
 
 app.post('/photos/photo-process', (req, res)=>{
-  
+
   /*
 
     process:
@@ -76,18 +137,18 @@ app.post('/photos/photo-process', (req, res)=>{
       submit top ingredient to openMenu
 
       process restaurants:
-        receive menu item + restaurant (address) from openMenu 
+        receive menu item + restaurant (address) from openMenu
         submit restuarant to yelp
         receive retsaurant details from yelp
 
       process recipes:
-        receive menu item from openMenu 
+        receive menu item from openMenu
         submit menu item to yummly
         receive recipe details from yummly
 
     request:
       format: JSON
-      contents: 
+      contents:
         photoURL ''
         userLocation {lat,lng}
 
@@ -126,7 +187,7 @@ app.post('/photos/photo-process', (req, res)=>{
   .then((menuItems)=>{
     console.log('*** Result of getMenuItems ***', JSON.parse(menuItems).response.result.items);
     var menuItems = JSON.parse(menuItems).response.result.items;
-    recipeMenuItem = menuItems[0].menu_item_name; 
+    recipeMenuItem = menuItems[0].menu_item_name;
     menuItems = _.uniq(menuItems, false, (item)=>{
       return item.address_1;
     });
@@ -150,7 +211,7 @@ app.post('/photos/photo-process', (req, res)=>{
 });
 
 app.post('/photos/photo-save', (req, res)=>{
-  
+
   /*
 
     process:
@@ -169,7 +230,16 @@ app.post('/photos/photo-save', (req, res)=>{
       format: JSON
       contents:
         status (success or fail)
-      
+
+  */
+
+});
+
+app.get('/photos/profile', (req, res)=>{
+  res.json(tilesData)
+  /*
+  Get user's profile info
+  - Saved photos, restaurants, recipes
   */
 
 });

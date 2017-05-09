@@ -13,4 +13,3 @@ function App({ children }) {
 App.propTypes = { children: PropTypes.object };
 
 export default App;
-   

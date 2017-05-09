@@ -1,6 +1,6 @@
 /* eslint-disable no-undef, no-unused-expressions */
 import { renderComponent, expect } from '../test_helper';
-import App from '../../client/src/app/components/App';
+import App from '../../src/app/components/App';
 
 describe('App', () => {
   let component;
