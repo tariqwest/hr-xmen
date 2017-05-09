@@ -49,7 +49,7 @@ Thanks to:
 http://stackoverflow.com/questions/18310394/no-access-control-allow-origin-node-apache-port-issue */
 app.use(function(req, res, next) {
   // Website you wish to allow to connect
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:3000');
   // Request methods you wish to allow
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
   // Request headers you wish to allow
@@ -187,7 +187,7 @@ app.post('/photos/photo-process', (req, res)=>{
   })
   .then((menuItems)=>{
     console.log('*** Result of getMenuItems ***', menuItems);
-    recipeSearchString = menuItems[0].menu_item_name; 
+    recipeSearchString = menuItems[0].menu_item_name;
     return Promise.resolve(menuItems);
   })
   .mapSeries((menuItem)=>{

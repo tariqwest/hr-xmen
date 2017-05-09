@@ -2,6 +2,9 @@ import React from 'react';
 import { AxiosProvider, Request, Get, Delete, Head, Post, Put, Patch } from 'react-axios'
 import { Link } from 'react-router';
 
+import photoStore from '../../stores/photoStore';
+import photoActions from '../../actions/photoActions';
+
 import RaisedButton from 'material-ui/RaisedButton';
 import {GridList, GridTile} from 'material-ui/GridList';
 import IconButton from 'material-ui/IconButton';
@@ -27,8 +30,25 @@ class PhotoGrid extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      data: []
+      photoList: photoStore.getList()
     }
+  }
+
+  handleAddItem(newItem) {
+    photoActions.addItem(newItem);
+  }
+
+  handleClick(photoItem){
+    this.handleAddItem(photoItem);
+    this.setState({
+      photoList: photoStore.getList()
+    })
+  }
+
+  _onChange() {
+    this.setState({
+      photoList: photoStore.getList()
+    })
   }
 
   render() {
@@ -56,9 +76,9 @@ class PhotoGrid extends React.Component {
                           <Subheader>Food</Subheader>
                           {response.data.map((tile, index) => (
                           <Link
-                          to={{pathname: '/photo/' + {index},
-                           state: {test: 'test'}}}
+                          to={'/photo/' + index}
                           className="ripple"
+                          onClick={this.handleClick.bind(this, response.data)}
                           key={tile.img}>
                           <GridTile
                             className="ripple"
