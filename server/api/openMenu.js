@@ -1,8 +1,9 @@
-var request = require('request');
+var Promise = require('bluebird');
+var request = require('request-promise');
 var querystring = require('querystring');
 
 module.exports = {
-  getMenuItems: (food, postal_code, country, callback) => {
+  getMenuItems: (food, postal_code, country) => {
     var options = {
       method: 'GET',
       url: 'https://openmenu.com/api/v2/search.php',
@@ -14,8 +15,10 @@ module.exports = {
       },
       useQuerystring: true
     };
-    request(options, (err, res, body)=>{
-      console.log('** Open menu result:', JSON.parse(body).response.result.items[0]);
+    return request(options)
+    .then((result)=>{
+      console.log('** Open menu result:', result);//JSON.parse(result).response.result.items[0]);
+      return Promise.resolve(result); 
     });
   },
 }

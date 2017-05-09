@@ -85,9 +85,30 @@ app.post('/photos/photo-process', (req, res)=>{
 
   */
 
+  var clientResponse = {};
+
+  var food;
+
   // var mockPhotoURL = 'http://www.burgergoesgreen.com/wp-content/uploads/2014/06/burgers.jpeg';
-  // var mockUserLocation = {lat: '37.7836970', lng: '-122.4089660'};
-  // googleMapsGeocode.getPostalCode(mockUserLocation.lat, mockUserLocation.lng);
+  var mockUserLocation = {lat: '37.7836970', lng: '-122.4089660'};
+
+  // googleMapsGeocode.getPostalCode(mockUserLocation.lat, mockUserLocation.lng)
+  // .then(({postalCode , countryCode})=>{
+  //   console.log(postalCode, countryCode, '*** Result of getPostalCode');
+
+  //photoAI.getFoodPrediction();
+  Promise.resolve('burger')
+  .then((prediction)=>{
+    console.log(prediction, '*** Result of getFoodPrediction');
+    food = prediction;
+    return googleMapsGeocode.getPostalCode(mockUserLocation.lat, mockUserLocation.lng);
+  })
+  .then(({postalCode, countryCode})=>{
+    return openMenu.getMenuItems(food, postalCode, countryCode);
+  })
+  .then((menuItems)=>{
+    console.log(menuItems, '*** Result of getMenuItems');
+  });
 
 });
 
