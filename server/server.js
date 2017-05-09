@@ -10,6 +10,7 @@ var yelp = require('./api/yelp');
 var webpackHotMiddleware = require('webpack-hot-middleware');
 var googleMapsGeocode = require('./api/googleMapsGeocode');
 var pictures500px = require('./api/pictures500px');
+var yummly = require('./api/yummly');
 
 // Replace with actual yummly API
 var yummly = { getRecipes: (food)=>{
