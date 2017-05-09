@@ -61,15 +61,25 @@
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.17.1",
     "clarifai": "^2.1.6",
     "express": "^4.13.4",
     "material-ui": "^0.18.0",
+    "morgan": "^1.8.1",
+    "node-emoji": "^1.5.1",
     "nodemon": "^1.11.0",
+    "querystring": "^0.2.0",
     "react": "^15.5.4",
     "react-bootstrap": "^0.31.0",
     "react-dom": "^15.5.4",
     "react-redux": "^5.0.2",
     "react-router": "^3.0.2",
-    "redux": "^3.5.2"
+    "react-tap-event-plugin": "^2.0.1",
+    "redux": "^3.5.2",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1",
+    "underscore": "^1.8.3",
+    "yelp-api-v3": "^1.5.0"
   }
 }
