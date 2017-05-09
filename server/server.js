@@ -9,9 +9,23 @@ var openMenu = require('./api/openMenu');
 var yelp = require('./api/yelp');
 var googleMapsGeocode = require('./api/googleMapsGeocode');
 
+// Replace with actual yummly API
+var yummly = { getRecipes: (food)=>{
+  var recipe = {
+    name: food, 
+    description: 'description blah blah blah', 
+    instructions: 'instructions blah blah blah', 
+    prepTime: '30mins', 
+    ingredients: 'ingredients blah blah blah', 
+    rating: '4.5', 
+    url: 'http://yummly.com/recipes/123456'
+  };
+  return [{recipe}, {recipe}, {recipe}];
+}}
 
 const app = express();
 
+app.use(bodyParser.json());
 app.use(morgan('tiny'));
 app.use(express.static('./'));
 app.use(express.static('dist'));
@@ -88,31 +102,30 @@ app.post('/photos/photo-process', (req, res)=>{
 
   var clientResponse = {};
 
-  var food;
+  clientResponse.photoURL = req.body.photoURL;
 
-  var restaurants = [];
+  var foodPrediction;
 
-  // var mockPhotoURL = 'http://www.burgergoesgreen.com/wp-content/uploads/2014/06/burgers.jpeg';
-  var mockUserLocation = {lat: '37.7836970', lng: '-122.4089660'};
+  var recipeMenuItem;
 
-  // googleMapsGeocode.getPostalCode(mockUserLocation.lat, mockUserLocation.lng)
-  // .then(({postalCode , countryCode})=>{
-  //   console.log(postalCode, countryCode, '*** Result of getPostalCode');
+  //var mockPhotoURL = 'http://www.burgergoesgreen.com/wp-content/uploads/2014/06/burgers.jpeg';
+  //var mockUserLocation = {lat: '37.7836970', lng: '-122.4089660'};
 
-  //photoAI.getFoodPrediction();
+  //photoAI.getFoodPrediction(req.body.photoURL)
   Promise.resolve('burger')
   .then((prediction)=>{
     console.log('*** Result of getFoodPrediction ***', prediction);
-    food = prediction;
-    return googleMapsGeocode.getPostalCode(mockUserLocation.lat, mockUserLocation.lng);
+    foodPrediction = prediction;
+    return googleMapsGeocode.getPostalCode(req.body.location.lat, req.body.location.lng);
   })
   .then(({postalCode, countryCode})=>{
     console.log('*** Result of getPostalCode ***', postalCode, countryCode);
-    return openMenu.getMenuItems(food, postalCode, countryCode);
+    return openMenu.getMenuItems(foodPrediction, postalCode, countryCode);
   })
   .then((menuItems)=>{
     console.log('*** Result of getMenuItems ***', JSON.parse(menuItems).response.result.items);
     var menuItems = JSON.parse(menuItems).response.result.items;
+    recipeMenuItem = menuItems[0].menu_item_name; 
     menuItems = _.uniq(menuItems, false, (item)=>{
       return item.address_1;
     });
@@ -120,7 +133,17 @@ app.post('/photos/photo-process', (req, res)=>{
   }).mapSeries((menuItem)=>{
     return yelp.getRestaurant(`${menuItem.address_1}, ${menuItem.city_town}, ${menuItem.state_province}`, menuItem.restaurant_name);
   }).then((yelpRestaurants)=>{
-    console.log('*** Result of openMenu + yelp restaurants ***', yelpRestaurants);
+    clientResponse.restaurants = yelpRestaurants.sort((a, b)=>{
+      if(b.rating - a.rating === 0){
+        return b.review_count - a.review_count;
+      }
+      return b.rating - a.rating;
+    }).slice(0,3);
+    console.log('*** Result of openMenu + yelp restaurants ***', clientResponse.restaurants);
+  }).then(()=>{
+    clientResponse.recipes = yummly.getRecipes(recipeMenuItem);
+    console.log('*** Result of openMenu + yummly recipes ***', clientResponse.recipes);
+    res.json(clientResponse);
   });
 
 });
