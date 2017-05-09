@@ -21,7 +21,7 @@ ReactDOM.render(
     <Router onUpdate={() => window.scrollTo(0, 0)} history={browserHistory}>
       <Route path="/" component={App}>
         <IndexRoute component={PhotoGrid} />;
-        <Route path="/photo" component={Photo} />
+        <Route path="/photo/:type" component={Photo} />
         <Route path="/profile" component={Profile} />
       </Route>
     </Router>
