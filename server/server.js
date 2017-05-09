@@ -8,6 +8,7 @@ var photoAI = require('./api/photoAI');
 var openMenu = require('./api/openMenu');
 var yelp = require('./api/yelp');
 var googleMapsGeocode = require('./api/googleMapsGeocode');
+var pictures500px = require('./api/pictures500px');
 
 // Replace with actual yummly API
 var yummly = { getRecipes: (food)=>{
