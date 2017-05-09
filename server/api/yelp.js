@@ -8,26 +8,26 @@ var yelp = new Yelp({
 // https://github.com/Yelp/yelp-api-v3/blob/master/docs/api-references/businesses-search.md
 
 module.exports = {
-	getRestaurant: (restaurantAddr, restaurantName) => {
-	return yelp.search({term: `${restaurantName}`, location: `${restaurantAddr}`, limit: 1})
-	.then(function (data) {
-		var properData = (JSON.parse(data));
-		var restaurant = properData.businesses[0];
-		var restYelpInfo = {
-			id: restaurant.id,
-			image_url: restaurant.image_url,
-			review_count: restaurant.review_count,
-			rating: restaurant.rating,
-			url: restaurant.url,
-			name: restaurant.name,
-			location : restaurant.location.display_address.join(' '),
-			categories : restaurant.categories
-		};
-		//console.log('*** Result of yelp search', restYelpInfo);
-		//return Promise.resolve(restYelpInfo);
-		return restYelpInfo;
-	})
-	.catch(function (err) {
-	    console.error(err);
-	});}
+  getRestaurant: (restaurantAddr, restaurantName) => {
+  return yelp.search({term: `${restaurantName}`, location: `${restaurantAddr}`, limit: 1})
+  .then(function (data) {
+    var properData = (JSON.parse(data));
+    var restaurant = properData.businesses[0];
+    var restYelpInfo = {
+      id: restaurant.id,
+      image_url: restaurant.image_url,
+      review_count: restaurant.review_count,
+      rating: restaurant.rating,
+      url: restaurant.url,
+      name: restaurant.name,
+      location : restaurant.location.display_address.join(' '),
+      categories : restaurant.categories
+    };
+    //console.log('*** Result of yelp search', restYelpInfo);
+    //return Promise.resolve(restYelpInfo);
+    return restYelpInfo;
+  })
+  .catch(function (err) {
+      console.error(err);
+  });}
 }

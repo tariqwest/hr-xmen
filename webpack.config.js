@@ -23,13 +23,13 @@ var webpackConfig = {
       },
     }),
     new HtmlWebpackPlugin({
-      template: Path.join(__dirname, './client/src/index.html'),
+      template: Path.join(__dirname, './client/index.html'),
     }),
   ],
   module: {
     loaders: [{
       test: /.jsx?$/,
-      include: Path.join(__dirname, './client/src/app'),
+      include: Path.join(__dirname, './client/app'),
       loader: 'babel',
     }],
   },
@@ -41,8 +41,8 @@ var webpackConfig = {
 webpackConfig.entry = !isProduction
   ? ['webpack-dev-server/client?http://localhost:' + port,
      'webpack/hot/dev-server',
-     Path.join(__dirname, './client/src/app/index')]
-  : [Path.join(__dirname, './client/src/app/index')];
+     Path.join(__dirname, './client/app/index')]
+  : [Path.join(__dirname, './client/app/index')];
 
 // ------------------------------------------
 // Bundle output
