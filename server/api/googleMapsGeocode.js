@@ -28,7 +28,10 @@ module.exports = {
         }
       }
       // console.log('*** Parsed postal code and country ***', {postalCode, countryCode}, )
-      return Promise.resolve({postalCode, countryCode});
+      return Promise.resolve({postalCode: postalCode, countryCode: countryCode});
+    })
+    .catch((err)=>{
+      throw 'google maps geocode api: ' + err;
     });
   },
 }

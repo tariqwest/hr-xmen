@@ -4,7 +4,7 @@ var Promise = require('bluebird');
 var _ = require('underscore');
 var emoji = require('node-emoji');
 var bodyParser = require('body-parser');
-var photoAI = require('./api/photoAI');
+var clarifai = require('./api/clarifai');
 var openMenu = require('./api/openMenu');
 var yelp = require('./api/yelp');
 var webpackHotMiddleware = require('webpack-hot-middleware');
@@ -32,7 +32,8 @@ app.use(morgan('tiny'));
 app.use(express.static('./'));
 app.use(express.static('dist'));
 
-// photoAI.getFoodPrediction()
+
+// clarifai.getFoodPrediction()
 
 // openMenu.getMenuItems('burger', '94102', 'US');
 
@@ -132,8 +133,8 @@ app.post('/photos/photo-process', (req, res)=>{
     process:
       submit userLocation coordinates to Google Maps
       receive user postal code from Google Maps
-      submit photo url to photoAI
-      receive ingredients from photoAI
+      submit photo url to clarifai
+      receive ingredients from clarifai
       submit top ingredient to openMenu
 
       process restaurants:
@@ -166,46 +167,49 @@ app.post('/photos/photo-process', (req, res)=>{
 
   clientResponse.photoURL = req.body.photoURL;
 
-  var foodPrediction;
+  clientResponse.status = 'success';
 
-  var recipeMenuItem;
+  clientResponse.statusCode = 200;
 
-  //var mockPhotoURL = 'http://www.burgergoesgreen.com/wp-content/uploads/2014/06/burgers.jpeg';
-  //var mockUserLocation = {lat: '37.7836970', lng: '-122.4089660'};
+  var menuItemSearchString;
 
-  //photoAI.getFoodPrediction(req.body.photoURL)
-Promise.resolve('burger')
-  .then((prediction)=>{
+  var recipeSearchString;
+
+  Promise.resolve(clarifai.getFoodPrediction(req.body.photoURL))
+  .then(({prediction})=>{
     console.log('*** Result of getFoodPrediction ***', prediction);
-    foodPrediction = prediction;
+    menuItemSearchString = prediction;
     return googleMapsGeocode.getPostalCode(req.body.location.lat, req.body.location.lng);
   })
   .then(({postalCode, countryCode})=>{
     console.log('*** Result of getPostalCode ***', postalCode, countryCode);
-    return openMenu.getMenuItems(foodPrediction, postalCode, countryCode);
+    return openMenu.getMenuItems(menuItemSearchString, postalCode, countryCode);
   })
   .then((menuItems)=>{
-    console.log('*** Result of getMenuItems ***', JSON.parse(menuItems).response.result.items);
-    var menuItems = JSON.parse(menuItems).response.result.items;
-    recipeMenuItem = menuItems[0].menu_item_name;
-    menuItems = _.uniq(menuItems, false, (item)=>{
-      return item.address_1;
-    });
+    console.log('*** Result of getMenuItems ***', menuItems);
+    recipeSearchString = menuItems[0].menu_item_name; 
     return Promise.resolve(menuItems);
-  }).mapSeries((menuItem)=>{
+  })
+  .mapSeries((menuItem)=>{
     return yelp.getRestaurant(`${menuItem.address_1}, ${menuItem.city_town}, ${menuItem.state_province}`, menuItem.restaurant_name);
-  }).then((yelpRestaurants)=>{
+  })
+  .then((restaurants)=>{
     clientResponse.restaurants = yelpRestaurants.sort((a, b)=>{
       if(b.rating - a.rating === 0){
         return b.review_count - a.review_count;
       }
       return b.rating - a.rating;
     }).slice(0,3);
-    console.log('*** Result of openMenu + yelp restaurants ***', clientResponse.restaurants);
-  }).then(()=>{
+    console.log('*** Result of openMenu + yelp restaurants lookup ***', clientResponse.restaurants);
+  })
+  .then(()=>{
     clientResponse.recipes = yummly.getRecipes(recipeMenuItem);
     console.log('*** Result of openMenu + yummly recipes ***', clientResponse.recipes);
     res.json(clientResponse);
+  })
+  .catch((err)=>{
+    console.log('*** Error while processing photo ***', err);
+    res.status(404).send({statusCode: 404, status: err});
   });
 });
 
