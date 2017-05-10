@@ -10,6 +10,7 @@ var yelp = require('./api/yelp');
 var webpackHotMiddleware = require('webpack-hot-middleware');
 var googleMapsGeocode = require('./api/googleMapsGeocode');
 var pictures500px = require('./api/pictures500px');
+var database = require('../db/models/photoHungryDB.js')
 
 // Replace with actual yummly API
 var yummly = { getRecipes: (food)=>{
@@ -214,9 +215,47 @@ app.post('/photos/photo-process', (req, res)=>{
 });
 
 app.post('/photos/photo-save', (req, res)=>{
+  /* 
+    Here's an example of how to send the data from the request to the database.
+    it still needs to 'get user for this request'.
+  */
+  console.log("received POST request on /photos/photo-save");
+  
+  // var photoHungry4DB = new database.foodinfo({
+  //   picture_url: req.body.picture_url,
+  //   recipe_url: req.body.recipe_url,
+  //   restaurant: { 
+  //     name: req.body.restaurant.name,
+  //     address: req.body.restaurant.address,
+  //     phone: req.body.restaurant.phone,
+  //     menuItemName: req.body.restaurant.menuItemName,
+  //     },
+  //   user_record: req.body.user_record
+  // });
 
+  // The following is just a hardcoded example to test write to the database.
+  var photoHungry4DB = new database.fsresult({
+    picture_url: 'http://leitesculinaria.com/89229/recipes-batter-fried-chicken.html',
+    recipe_url: 'http://leitesculinaria.com/89229/recipes-batter-fried-chicken.html',
+    restaurant: { 
+      name: 'KFC',
+      address: '691 Eddy St Ste 249, San Francisco, CA 94109',
+      phone: '1-800-EAT-CHKN',
+      menuItemName: 'fried chicken: 8 piece bucket, original recipe',
+      },
+    user_record: 'A Very Hungry Person!'
+  });
+
+  console.log('photoHungry4DB created');
+  photoHungry4DB.save(function(error){
+    if (error) {
+      console.log('error: photoHungry4DB *DID NOT* save to database');
+    } else {
+      console.log('success: photoHungry4DB saved to database');
+    }
+  });
+  res.end();
   /*
-
     process:
       receive post request from client
       get user for this request
@@ -233,9 +272,8 @@ app.post('/photos/photo-save', (req, res)=>{
       format: JSON
       contents:
         status (success or fail)
-
+      
   */
-
 });
 
 app.get('/photos/profile', (req, res)=>{
