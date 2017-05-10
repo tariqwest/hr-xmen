@@ -11,6 +11,11 @@ var dummyData = require('./dummyData');
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var webpackHotMiddleware = require('webpack-hot-middleware');
+var session = require('express-session');
+//var cookieParser = require('cookie-parser');
+var passport = require('passport');
+var fbStrategy = require('passport-facebook').Strategy;
+var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 
 // APIs
 var clarifai = require('./api/clarifai');
@@ -25,11 +30,15 @@ var yummly = require('./api/yummly');
 const app = express();
 
 // Setup middleware
-app.use(bodyParser.json());
 app.use(morgan('tiny'));
-app.use(express.static('./'));
-app.use(express.static('dist'));
-
+// app.use(express.static('./'));
+// app.use(express.static('dist'));
+app.use(bodyParser.json())
+  .use(bodyParser.urlencoded());
+app.use(cookieParser());
+app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
 
 // Set response headers for all requests
 app.use(function(req, res, next) {
@@ -40,9 +49,77 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.get('/', (req, res) => {
-  res.sendFile(`${__dirname}/dist/index.html`);
+// Facebook login using passport module
+const fbConfig = {
+  'appId' : '731067390387302',
+  'appSecret' : '44b9509aee1bc0d04a641d3da4fa069a',
+  'callbackUrl' : `http://localhost:${process.env.PORT || 3000}/login/facebook/callback`
+}
+
+passport.use(new fbStrategy({
+    clientID: fbConfig.appId,
+    clientSecret: fbConfig.appSecret,
+    callbackURL: fbConfig.callbackUrl,
+    profileFields: ['id', 'email', 'first_name', 'last_name'],
+  },
+  (token, refreshToken, profile, done) => {
+    console.log('*** Facebook auth success ***', token, profile);
+    // process.nextTick(() => {
+    //   User.findOne({ 'fb_id': profile.id })
+    //     .then(function(user, err) {
+    //       if (err) {
+    //         return done(err);
+    //       }
+    //       if (user) {
+    //         return done(null, user);
+    //       } else {
+    //         var newUser = new User();
+    //         newUser.fb_id = profile.id;
+    //         newUser.fb_token = token;
+    //         newUser.fb_name = profile.name.givenName + ' ' + profile.name.familyName;
+    //         //newUser.fb_email = (profile.emails[0].value || '').toLowerCase();
+
+    //         newUser.save(function(err) {
+    //           if (err) {
+    //             //throw err;
+    //           }
+    //           console.log('** New user created **', newUser);
+    //           return done(null, newUser);
+    //         });
+    //       }
+    //     });
+    // });
+    done(null, profile);
+  }));
+
+// configure passport authenticated session persistence.
+passport.serializeUser(function(user, cb) {
+  cb(null, user);
 });
+
+passport.deserializeUser(function(obj, cb) {
+  cb(null, obj);
+});
+
+
+app.use('/app', ensureLoggedIn('/login'));
+
+app.use('/app', express.static(__dirname + '/../dist'));
+
+app.get('/', ensureLoggedIn('/login'), function(req, res) {
+  res.redirect('/app');
+});
+
+app.use('/login', express.static(__dirname + '/login.html'));
+
+app.get('/login/facebook',
+  passport.authenticate('facebook', { scope: ['user_posts', 'user_photos', 'publish_actions'] }));
+
+app.get('/login/facebook/callback',
+  passport.authenticate('facebook', { failureRedirect: '/login' }),
+  function(req, res) {
+    res.redirect('/');
+  });
 
 app.get('/photos', (req, res) => {
   fiveHundredPX.searchPhotos('food', res)
