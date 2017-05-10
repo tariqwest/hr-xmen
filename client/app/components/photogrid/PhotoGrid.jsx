@@ -1,10 +1,17 @@
 import React from 'react';
 import { AxiosProvider, Request, Get, Delete, Head, Post, Put, Patch } from 'react-axios'
+import { Link } from 'react-router';
+
+import photoStore from '../../stores/photoStore';
+import photoActions from '../../actions/photoActions';
+
 import RaisedButton from 'material-ui/RaisedButton';
 import {GridList, GridTile} from 'material-ui/GridList';
 import IconButton from 'material-ui/IconButton';
 import Subheader from 'material-ui/Subheader';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
+import CircularProgress from 'material-ui/CircularProgress';
+import TouchRipple from 'material-ui/internal/TouchRipple'
 
 const styles = {
   root: {
@@ -16,13 +23,32 @@ const styles = {
     width: 1000,
     height: 850,
     overflowY: 'auto',
-  },
+  }
 };
 
 class PhotoGrid extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      photoList: photoStore.getList()
+    }
+  }
+
+  handleAddItem(newItem) {
+    photoActions.addItem(newItem);
+  }
+
+  handleClick(photoItem){
+    this.handleAddItem(photoItem);
+    this.setState({
+      photoList: photoStore.getList()
+    })
+  }
+
+  _onChange() {
+    this.setState({
+      photoList: photoStore.getList()
+    })
   }
 
   render() {
@@ -36,7 +62,11 @@ class PhotoGrid extends React.Component {
                   return (<div>Something bad happened: {error.message}</div>)
                 }
                 else if(isLoading) {
-                  return (<div>Loading...</div>)
+                  return (
+                    <div>
+                      <CircularProgress size={80} thickness={5} />
+                    </div>
+                  )
                 }
                 else if(response !== null) {
                   return (
@@ -44,15 +74,21 @@ class PhotoGrid extends React.Component {
                       <div style={styles.root}>
                         <GridList cellHeight={280} cols={3} style={styles.gridList}>
                           <Subheader>Food</Subheader>
-                          {response.data.map((tile) => (
+                          {response.data.map((tile, index) => (
+                          <Link
+                          to={'/photo/' + index}
+                          className="ripple"
+                          onClick={this.handleClick.bind(this, response.data)}
+                          key={tile.img}>
                           <GridTile
-                            key={tile.img}
+                            className="ripple"
                             title={tile.title}
                             subtitle={<span><b>{tile.description}</b></span>}
                             actionIcon={<IconButton><StarBorder color="white" /></IconButton>}
                             >
                           <img src={tile.img} />
                           </GridTile>
+                          </Link>
                           ))}
                         </GridList>
                       </div>

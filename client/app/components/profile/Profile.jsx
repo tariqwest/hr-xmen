@@ -4,6 +4,7 @@ import { AxiosProvider, Request, Get, Delete, Head, Post, Put, Patch } from 'rea
 import {GridList, GridTile} from 'material-ui/GridList';
 import IconButton from 'material-ui/IconButton';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
+import CircularProgress from 'material-ui/CircularProgress';
 
 const styles = {
   root: {
@@ -32,7 +33,11 @@ function Profile() {
                 return (<div>Something bad happened: {error.message}</div>)
               }
               else if(isLoading) {
-                return (<div>Loading...</div>)
+                return (
+                  <div>
+                    <CircularProgress size={80} thickness={5} />
+                  </div>
+                )
               }
               else if(response !== null) {
                 return (

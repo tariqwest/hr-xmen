@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -18,12 +17,12 @@ import './components/bundle.scss';
 
 ReactDOM.render(
   <MuiThemeProvider>
-    <Router onUpdate={() => window.scrollTo(0, 0)} history={browserHistory}>
-      <Route path="/" component={App}>
-        <IndexRoute component={PhotoGrid} />;
-        <Route path="/photo" component={Photo} />
-        <Route path="/profile" component={Profile} />
-      </Route>
-    </Router>
+      <Router onUpdate={() => window.scrollTo(0, 0)} history={browserHistory}>
+        <Route path="/" component={App}>
+          <IndexRoute component={PhotoGrid} />;
+          <Route path="/photo/:type" component={Photo} />
+          <Route path="/profile" component={Profile} />
+        </Route>
+      </Router>
   </MuiThemeProvider>
   , document.getElementById('react-root'));
