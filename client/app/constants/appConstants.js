@@ -1,5 +1,6 @@
 var appConstants = {
-  ADD_ITEM: "ADD_ITEM"
+  ADD_PHOTOS: "ADD_PHOTOS",
+  ADD_CURRENT: "ADD_CURRENT"
 };
 
 module.exports = appConstants;

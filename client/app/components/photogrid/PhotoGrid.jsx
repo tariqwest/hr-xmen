@@ -30,25 +30,27 @@ class PhotoGrid extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      photoList: photoStore.getList()
+      photoList: photoStore.getList(),
+      currentPhoto: photoStore.getCurrent()
     }
   }
+
+  // componentDidMount(){
+  //   photoStore.addChangeListener(this._onChange);
+  // }
 
   handleAddItem(newItem) {
     photoActions.addItem(newItem);
   }
 
-  handleClick(photoItem){
-    this.handleAddItem(photoItem);
-    this.setState({
-      photoList: photoStore.getList()
-    })
+  handleAddCurrent(newCurrent) {
+    photoActions.addCurrent(newCurrent);
   }
 
-  _onChange() {
-    this.setState({
-      photoList: photoStore.getList()
-    })
+  handleClick(photoItems, index){
+    console.log(photoItems[index])
+    this.handleAddItem(photoItems);
+    this.handleAddCurrent(photoItems[index]);
   }
 
   render() {
@@ -78,16 +80,16 @@ class PhotoGrid extends React.Component {
                           <Link
                           to={'/photo/' + index}
                           className="ripple"
-                          onClick={this.handleClick.bind(this, response.data)}
+                          onClick={this.handleClick.bind(this, response.data, index)}
                           key={tile.img}>
-                          <GridTile
-                            className="ripple"
-                            title={tile.title}
-                            subtitle={<span><b>{tile.description}</b></span>}
-                            actionIcon={<IconButton><StarBorder color="white" /></IconButton>}
-                            >
-                          <img src={tile.img} />
-                          </GridTile>
+                            <GridTile
+                              className="ripple"
+                              title={tile.title}
+                              subtitle={<span><b>{tile.description}</b></span>}
+                              actionIcon={<IconButton><StarBorder color="white" /></IconButton>}
+                              >
+                            <img src={tile.img} />
+                            </GridTile>
                           </Link>
                           ))}
                         </GridList>
