@@ -1,8 +1,8 @@
 var yummly = require('yummly');
 
 var credentials = {
-    id: '2e911d5a',
-    key: '6d6f6d337087c3872e561bf6b171508f'
+    id: '',
+    key: ''
 };
 
 var query = 'fried chicken';
@@ -36,5 +36,38 @@ module.exports = {
         })
     }
 }
+var credentials = {
+    id: '2e911d5a',
+    key: '6d6f6d337087c3872e561bf6b171508f'
+};
 
 
+yummly.search({
+            credentials: credentials,
+            query: {
+                q: 'chicken'
+            }
+        }, (err, res, body) => {
+            if (err) {
+                console.log(err)
+            } else if (res === 200){
+                 yummly.recipe({
+                    credentials: credentials,
+                    id: body.matches[1].id
+                }, (err, res, body) => {
+                    if (err) {
+                        console.log(err)
+                    } else {
+                        console.log({
+                            name: body.name,
+                            description: body.attribution.text,
+                            instructions: body.name,
+                            prepTime: body.totalTime,
+                            ingredients: body.ingredientLines,
+                            rating: body.rating,
+                            url: body.attribution.url
+                        })
+                    }
+                })
+            }
+        })

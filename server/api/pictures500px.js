@@ -8,7 +8,15 @@ module.exports = {
         if (error) {
             console.log(error);
         }
-        console.log(results.photos[0].image_url)
+        var tilesData = results.photos.map((item) => {
+            return {
+                img: item.image_url,
+                title: item.name,
+                description: item.description
+            }
+        })
+        console.log(tilesData)
+        // 100 entries
          })
     }
 }
