@@ -10,9 +10,6 @@ function Header() {
             <Link to="/">Photo Grid</Link>
           </li>
           <li>
-            <Link to="/photo">Photo</Link>
-          </li>
-          <li>
             <Link to="/profile">Profile</Link>
           </li>
         </ul>

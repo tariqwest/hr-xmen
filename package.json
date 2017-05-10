@@ -8,7 +8,8 @@
     "server": "NODE_ENV=production PORT=8080 nodemon ./server/server.js",
     "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js --recursive ./test",
     "test:watch": "npm run test -- --watch",
-    "lint": "eslint src test webpack"
+    "lint": "eslint src test webpack",
+    "database": "mongod --dbpath ./db"
   },
   "keywords": [
     "ExpressJS",
@@ -66,7 +67,9 @@
     "body-parser": "^1.17.1",
     "clarifai": "^2.1.6",
     "express": "^4.13.4",
+    "flux": "^3.1.2",
     "material-ui": "^0.18.0",
+    "mongoose": "^4.9.8",
     "morgan": "^1.8.1",
     "node-emoji": "^1.5.1",
     "nodemon": "^1.11.0",
@@ -81,8 +84,6 @@
     "request": "^2.81.0",
     "request-promise": "^4.2.1",
     "underscore": "^1.8.3",
-    "webpack-hot-middleware": "^2.18.0",
-    "yelp-api-v3": "^1.5.0",
-    "yummly": "^0.2.4"
+    "yelp-api-v3": "^1.5.0"
   }
 }
