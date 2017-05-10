@@ -1,4 +1,6 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
+import { Link } from 'react-router';
 
 import photoStore from '../../stores/photoStore';
 import photoActions from '../../actions/photoActions';
@@ -11,37 +13,20 @@ class Photo extends React.Component {
     super(props)
     this.state = {
       photoList: photoStore.getList(),
-      currentPhoto: []
+      currentPhoto: photoStore.getCurrent()
     }
   }
 
-  componentDidMount() {
-    if (this.state.photoList.length > 0) {
-    this.setState({
-      currentPhoto: this.state.photoList[0][this.props.params.type]
-    })
-    }
-  }
-
-  handleAddItem(newItem) {
-    photoActions.addItem(newItem);
-  }
-
-  handleClick(photoItem){
-    this.handleAddItem(photoItem);
-    this.setState({
-      photoList: photoStore.getList()
-    })
-  }
-
-  _onChange() {
-    this.setState({
-      photoList: photoStore.getList()
-    })
-  }
+  // componentDidMount() {
+  //   if (this.state.photoList.length > 0) {
+  //   this.setState({
+  //     currentPhoto: this.state.photoList[0][this.props.params.type]
+  //   })
+  //   }
+  // }
 
   render() {
-
+    console.log('state: ', this.state.photoList)
     return (
       <div className="photo">
         <h1>Photo</h1>
@@ -55,7 +40,9 @@ class Photo extends React.Component {
             {this.state.currentPhoto.description}
           </CardText>
           <CardActions>
-            <RaisedButton label="GET MORE INFO" primary={true} fullWidth={true}/>
+            <Link to="/photos/photoinfo">
+              <RaisedButton label="GET MORE INFO" primary={true} fullWidth={true}/>
+            </Link>
           </CardActions>
         </Card>
       </div>
