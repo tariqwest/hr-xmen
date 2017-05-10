@@ -7,10 +7,13 @@ function Header() {
       <nav>
         <ul>
           <li>
-            <Link to="/">Photo Grid</Link>
+            <Link to="/app">Photo Grid</Link>
           </li>
           <li>
-            <Link to="/profile">Profile</Link>
+            <Link to="/app/profile">Profile</Link>
+          </li>
+          <li>
+            <Link to="/app/photo">Photo</Link>
           </li>
         </ul>
       </nav>

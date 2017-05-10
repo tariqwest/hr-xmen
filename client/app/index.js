@@ -18,6 +18,7 @@ import './components/bundle.scss';
 
 ReactDOM.render(
   <MuiThemeProvider>
+<<<<<<< HEAD
       <Router onUpdate={() => window.scrollTo(0, 0)} history={browserHistory}>
         <Route path="/" component={App}>
           <IndexRoute component={PhotoGrid} />;
@@ -26,5 +27,14 @@ ReactDOM.render(
           <Route path="/photos/photoinfo" component={PhotoInfo} />
         </Route>
       </Router>
+=======
+    <Router onUpdate={() => window.scrollTo(0, 0)} history={browserHistory}>
+      <Route path="/app" component={App}>
+        <IndexRoute component={PhotoGrid} />;
+        <Route path="/app/photo" component={Photo} />
+        <Route path="/app/profile" component={Profile} />
+      </Route>
+    </Router>
+>>>>>>> Update client routes to work with fb-auth
   </MuiThemeProvider>
   , document.getElementById('react-root'));
