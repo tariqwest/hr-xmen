@@ -3,7 +3,7 @@ var api500px = new FiveHundredPX(process.env.FIVEHUNDREDPX_KEY);
 
 
 module.exports = {
-    searchPhotos: (food) => {
+    searchPhotos: (food, res) => {
         api500px.photos.searchByTerm( food , {'sort': '_score', 'rpp': '100', 'image_size': 440, 'only': 23}, (error, results) => {
         if (error) {
             console.log(error);
@@ -15,9 +15,7 @@ module.exports = {
                 description: item.description
             }
         })
-        console.log(tilesData);
-        // 100 entries
+        res.json(tilesData)
          })
     }
 }
-
