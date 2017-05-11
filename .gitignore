@@ -37,7 +37,7 @@ jspm_packages
 .node_repl_history
 .babel_cache
 
-# Directory for Database 
+# Directory for Database
 db
 
 # Environmental variables & credentials
