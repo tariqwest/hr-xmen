@@ -44,22 +44,12 @@ app.get('/', (req, res) => {
   res.sendFile(`${__dirname}/dist/index.html`);
 });
 
-app.get('/photos', (req, res)=>{
-  console.log('GOT')
-  res.json(dummyData.tilesData)
-  /*
+app.get('/photos', (req, res) => {
+  pictures500px.searchPhotos('food', res)
+});
 
-  request:
-    N/A - get with no params
-
-  response:
-    format: JSON
-    contents:
-      status (success or fail)
-      photos: [ 'url', '...']
-
-  */
-
+app.post('/photos/photo-process-test', (req, res) => {
+  res.json(dummyData)
 });
 
 app.post('/photos/photo-process', (req, res)=>{
