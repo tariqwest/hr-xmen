@@ -1,6 +1,7 @@
 var Promise = require('bluebird');
 var request = require('request-promise');
 var querystring = require('querystring');
+var _ = require('underscore');
 
 module.exports = {
   getMenuItems: (food, postal_code, country) => {

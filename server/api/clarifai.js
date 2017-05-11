@@ -12,7 +12,7 @@ module.exports = {
   getFoodPrediction: (photoURL) => {
     return app.models.predict('bd367be194cf45149e75f01d59f77ba7', photoURL).then(
       function(response) {
-        console.log(response.outputs[0].data);
+        //console.log('*** Clarifai food predictions ***', response.outputs[0].data);
         var combinedPredictions = [];
         for(var i=0; i<2; i++){ 
           combinedPredictions.push(response.outputs[0].data.concepts[i].name);
