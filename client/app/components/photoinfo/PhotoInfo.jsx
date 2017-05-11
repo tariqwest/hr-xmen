@@ -30,8 +30,29 @@ const styles = {
     width: 200,
     margin: 20,
     textAlign: 'center',
+  },
+  anchor: {
+    textDecoration: 'none'
   }
 };
+
+const iconButtonElement = (
+  <IconButton
+    touch={true}
+    tooltip="more"
+    tooltipPosition="bottom-left"
+  >
+    <MoreVertIcon color={grey400} />
+  </IconButton>
+);
+
+const rightIconMenu = (
+  <IconMenu iconButtonElement={iconButtonElement}>
+    <MenuItem>Reply</MenuItem>
+    <MenuItem>Forward</MenuItem>
+    <MenuItem>Delete</MenuItem>
+  </IconMenu>
+);
 
 class PhotoInfo extends React.Component {
   constructor(props) {
@@ -81,9 +102,15 @@ class PhotoInfo extends React.Component {
                   <List className="flex">
                     <h1>Restaurants</h1>
                     {response.data.restaurants.map((restaurant, index) => (
-                    <a href={restaurant.url} target="_blank" key={index}>
                     <ListItem
                       style={styles.divider}
+                      key={index}
+                      rightIconButton={
+                        <IconMenu iconButtonElement={iconButtonElement}>
+                          <a href={restaurant.url} target="_blank" style={styles.anchor}><MenuItem>Learn More</MenuItem></a>
+                          <MenuItem>Favorite</MenuItem>
+                        </IconMenu>
+                      }
                       leftAvatar={<Avatar src={restaurant.image_url} />}
                       primaryText={restaurant.name}
                       secondaryText={
@@ -94,15 +121,20 @@ class PhotoInfo extends React.Component {
                       }
                       secondaryTextLines={2}
                     />
-                    </a>
                     ))}
                   </List>
                   <List className="flex">
                     <h1>Recipes</h1>
                     {response.data.recipes.map((recipe, index) => (
-                    <a href={recipe.url} target="_blank" key={index}>
                     <ListItem
                       style={styles.divider}
+                      key={index}
+                      rightIconButton={
+                        <IconMenu iconButtonElement={iconButtonElement}>
+                          <a href={recipe.url} target="_blank" style={styles.anchor}><MenuItem>Learn More</MenuItem></a>
+                          <MenuItem>Favorite</MenuItem>
+                        </IconMenu>
+                      }
                       primaryText={recipe.name}
                       secondaryText={
                         <p>
@@ -112,7 +144,6 @@ class PhotoInfo extends React.Component {
                       }
                       secondaryTextLines={2}
                     />
-                    </a>
                     ))}
                   </List>
                 </div>
