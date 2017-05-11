@@ -66,6 +66,7 @@
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
     "clarifai": "^2.1.6",
+    "dotenv": "^4.0.0",
     "express": "^4.13.4",
     "flux": "^3.1.2",
     "material-ui": "^0.18.0",
@@ -84,6 +85,7 @@
     "request": "^2.81.0",
     "request-promise": "^4.2.1",
     "underscore": "^1.8.3",
-    "yelp-api-v3": "^1.5.0"
+    "yelp-api-v3": "^1.5.0",
+    "yummly": "^0.2.4"
   }
 }

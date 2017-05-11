@@ -3,8 +3,8 @@ var Promise = require('bluebird');
 
 
 var app = new Clarifai.App(
-  'JOn1_XzoWcbxEa6eSd9girXfNqyKoldxKezj-GkX',
-  '70LqZV0Gl2rKY8XAPmYk3suNwvLvihaZVkpZPBSW'
+  process.env.CLARIFAI_ID,
+  process.env.CLARIFAI_KEY
 );
 
 module.exports = {

@@ -43,6 +43,9 @@ module.exports = {
           recipes.push(recipe);
         }
         return recipes;
+      })
+      .catch((err)=>{
+        throw 'yummly api: ' + err;
       });
     }
   }

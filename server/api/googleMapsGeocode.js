@@ -8,7 +8,7 @@ module.exports = {
       method: 'GET',
       url: 'https://maps.googleapis.com/maps/api/geocode/json',
       qs: {
-        key: process.env.GOOGLEMAPS_KEY || 'AIzaSyAcEoPnIMOVBKVvD00uKpt8yJ7Spur0pUQ',
+        key: process.env.GOOGLEMAPS_KEY,
         latlng: `${lat},${lng}`,
         result_type: 'postal_code'
       },
