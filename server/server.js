@@ -13,18 +13,20 @@ var pictures500px = require('./api/pictures500px');
 var database = require('../db-models/photoHungryDB.js')
 
 // Replace with actual yummly API
-var yummly = { getRecipes: (food)=>{
-  var recipe = {
-    name: food,
-    description: 'description blah blah blah',
-    instructions: 'instructions blah blah blah',
-    prepTime: '30mins',
-    ingredients: 'ingredients blah blah blah',
-    rating: '4.5',
-    url: 'http://yummly.com/recipes/123456'
-  };
-  return [{recipe}, {recipe}, {recipe}];
-}}
+var yummly = {
+  getRecipes: (food) => {
+    var recipe = {
+      name: food,
+      description: 'description blah blah blah',
+      instructions: 'instructions blah blah blah',
+      prepTime: '30mins',
+      ingredients: 'ingredients blah blah blah',
+      rating: '4.5',
+      url: 'http://yummly.com/recipes/123456'
+    };
+    return [{ recipe }, { recipe }, { recipe }];
+  }
+}
 
 const app = express();
 
@@ -62,48 +64,39 @@ app.use(function(req, res, next) {
   next();
 });
 
-const tilesData = [
-  {
-    img: 'http://cdn-image.foodandwine.com/sites/default/files/201111-xl-liege-waffles.jpg',
-    title: 'Liege Waffles',
-    description: 'description',
-  },
-  {
-    img: 'https://static1.squarespace.com/static/50a43af2e4b013b04b877d4e/50a48341e4b06eecde88101c/50c183d0e4b08bba8489d091/1434199989721/_MG_9865.jpg',
-    title: 'Liege Waffles',
-    description: 'description',
-  },
-  {
-    img: 'https://www.sweetashoney.co/wp-content/uploads/DSC_0081.jpg',
-    title: 'Liege Waffles',
-    description: 'description',
-  },
-  {
-    img: 'http://1.bp.blogspot.com/-Zg0XbmBG-NI/VCnq3KYS5RI/AAAAAAAAG1s/ri7467hdlKA/s1600/waffle%2Bcover%2BREVISED.jpg',
-    title: 'Liege Waffles',
-    description: 'description',
-  },
-  {
-    img: 'http://www.europeancuisines.com/sites/default/files/Liege_Waffles_Plated_Up.jpg',
-    title: 'Liege Waffles',
-    description: 'description',
-  },
-  {
-    img: 'https://2.bp.blogspot.com/-gvWAv7FO6wI/Vthl0_-QzUI/AAAAAAAAQ8U/CT20sQq_zJc/s1600/DSC_5768.JPG',
-    title: 'Liege Waffles',
-    description: 'description',
-  },
-  {
-    img: 'https://foodydoody.files.wordpress.com/2015/09/dsc_5130.jpg',
-    title: 'Liege Waffles',
-    description: 'description',
-  },
-  {
-    img: 'http://4.bp.blogspot.com/-Yz0eHsyFtLI/VP5dcZrAMyI/AAAAAAAAPLk/-s2uDvuVlEo/s1600/Caramelized%2BWaffles%2B(Liege%2BWaffles)%2B2.jpg',
-    title: 'Liege Waffles',
-    description: 'description',
-  },
-];
+const tilesData = [{
+  img: 'http://cdn-image.foodandwine.com/sites/default/files/201111-xl-liege-waffles.jpg',
+  title: 'Liege Waffles',
+  description: 'description',
+}, {
+  img: 'https://static1.squarespace.com/static/50a43af2e4b013b04b877d4e/50a48341e4b06eecde88101c/50c183d0e4b08bba8489d091/1434199989721/_MG_9865.jpg',
+  title: 'Liege Waffles',
+  description: 'description',
+}, {
+  img: 'https://www.sweetashoney.co/wp-content/uploads/DSC_0081.jpg',
+  title: 'Liege Waffles',
+  description: 'description',
+}, {
+  img: 'http://1.bp.blogspot.com/-Zg0XbmBG-NI/VCnq3KYS5RI/AAAAAAAAG1s/ri7467hdlKA/s1600/waffle%2Bcover%2BREVISED.jpg',
+  title: 'Liege Waffles',
+  description: 'description',
+}, {
+  img: 'http://www.europeancuisines.com/sites/default/files/Liege_Waffles_Plated_Up.jpg',
+  title: 'Liege Waffles',
+  description: 'description',
+}, {
+  img: 'https://2.bp.blogspot.com/-gvWAv7FO6wI/Vthl0_-QzUI/AAAAAAAAQ8U/CT20sQq_zJc/s1600/DSC_5768.JPG',
+  title: 'Liege Waffles',
+  description: 'description',
+}, {
+  img: 'https://foodydoody.files.wordpress.com/2015/09/dsc_5130.jpg',
+  title: 'Liege Waffles',
+  description: 'description',
+}, {
+  img: 'http://4.bp.blogspot.com/-Yz0eHsyFtLI/VP5dcZrAMyI/AAAAAAAAPLk/-s2uDvuVlEo/s1600/Caramelized%2BWaffles%2B(Liege%2BWaffles)%2B2.jpg',
+  title: 'Liege Waffles',
+  description: 'description',
+}, ];
 
 app.get('/', (req, res) => {
   res.sendFile(`${__dirname}/dist/index.html`);
@@ -111,25 +104,11 @@ app.get('/', (req, res) => {
 
 
 
-app.get('/photos', (req, res)=>{
-  console.log('GOT')
-  var data = pictures500px.searchPhotos('food', res)
-  /*
-
-  request:
-    N/A - get with no params
-
-  response:
-    format: JSON
-    contents:
-      status (success or fail)
-      photos: [ 'url', '...']
-
-  */
-
+app.get('/photos', (req, res) => {
+  pictures500px.searchPhotos('food', res)
 });
 
-app.post('/photos/photo-process', (req, res)=>{
+app.post('/photos/photo-process', (req, res) => {
 
   /*
 
@@ -179,44 +158,44 @@ app.post('/photos/photo-process', (req, res)=>{
   var recipeSearchString;
 
   Promise.resolve(clarifai.getFoodPrediction(req.body.photoURL))
-  .then(({prediction})=>{
-    console.log('*** Result of getFoodPrediction ***', prediction);
-    menuItemSearchString = prediction;
-    return googleMapsGeocode.getPostalCode(req.body.location.lat, req.body.location.lng);
-  })
-  .then(({postalCode, countryCode})=>{
-    console.log('*** Result of getPostalCode ***', postalCode, countryCode);
-    return openMenu.getMenuItems(menuItemSearchString, postalCode, countryCode);
-  })
-  .then((menuItems)=>{
-    console.log('*** Result of getMenuItems ***', menuItems);
-    recipeSearchString = menuItems[0].menu_item_name;
-    return Promise.resolve(menuItems);
-  })
-  .mapSeries((menuItem)=>{
-    return yelp.getRestaurant(`${menuItem.address_1}, ${menuItem.city_town}, ${menuItem.state_province}`, menuItem.restaurant_name);
-  })
-  .then((restaurants)=>{
-    clientResponse.restaurants = yelpRestaurants.sort((a, b)=>{
-      if(b.rating - a.rating === 0){
-        return b.review_count - a.review_count;
-      }
-      return b.rating - a.rating;
-    }).slice(0,3);
-    console.log('*** Result of openMenu + yelp restaurants lookup ***', clientResponse.restaurants);
-  })
-  .then(()=>{
-    clientResponse.recipes = yummly.getRecipes(recipeMenuItem);
-    console.log('*** Result of openMenu + yummly recipes ***', clientResponse.recipes);
-    res.json(clientResponse);
-  })
-  .catch((err)=>{
-    console.log('*** Error while processing photo ***', err);
-    res.status(404).send({statusCode: 404, status: err});
-  });
+    .then(({ prediction }) => {
+      console.log('*** Result of getFoodPrediction ***', prediction);
+      menuItemSearchString = prediction;
+      return googleMapsGeocode.getPostalCode(req.body.location.lat, req.body.location.lng);
+    })
+    .then(({ postalCode, countryCode }) => {
+      console.log('*** Result of getPostalCode ***', postalCode, countryCode);
+      return openMenu.getMenuItems(menuItemSearchString, postalCode, countryCode);
+    })
+    .then((menuItems) => {
+      console.log('*** Result of getMenuItems ***', menuItems);
+      recipeSearchString = menuItems[0].menu_item_name;
+      return Promise.resolve(menuItems);
+    })
+    .mapSeries((menuItem) => {
+      return yelp.getRestaurant(`${menuItem.address_1}, ${menuItem.city_town}, ${menuItem.state_province}`, menuItem.restaurant_name);
+    })
+    .then((restaurants) => {
+      clientResponse.restaurants = yelpRestaurants.sort((a, b) => {
+        if (b.rating - a.rating === 0) {
+          return b.review_count - a.review_count;
+        }
+        return b.rating - a.rating;
+      }).slice(0, 3);
+      console.log('*** Result of openMenu + yelp restaurants lookup ***', clientResponse.restaurants);
+    })
+    .then(() => {
+      clientResponse.recipes = yummly.getRecipes(recipeMenuItem);
+      console.log('*** Result of openMenu + yummly recipes ***', clientResponse.recipes);
+      res.json(clientResponse);
+    })
+    .catch((err) => {
+      console.log('*** Error while processing photo ***', err);
+      res.status(404).send({ statusCode: 404, status: err });
+    });
 });
 
-app.post('/photos/photo-save', (req, res)=>{
+app.post('/photos/photo-save', (req, res) => {
   /*
     Here's an example of how to send the data from the request to the database.
     it still needs to 'get user for this request'.
@@ -244,12 +223,12 @@ app.post('/photos/photo-save', (req, res)=>{
       address: '691 Eddy St Ste 249, San Francisco, CA 94109',
       phone: '1-800-EAT-CHKN',
       menuItemName: 'fried chicken: 8 piece bucket, original recipe',
-      },
+    },
     user_record: 'A Very Hungry Person!'
   });
 
   console.log('photoHungry4DB created');
-  photoHungry4DB.save(function(error){
+  photoHungry4DB.save(function(error) {
     if (error) {
       console.log('error: photoHungry4DB *DID NOT* save to database');
     } else {
@@ -278,12 +257,12 @@ app.post('/photos/photo-save', (req, res)=>{
   */
 });
 
-app.get('/photos/profile', (req, res)=>{
+app.get('/photos/profile', (req, res) => {
   res.json(tilesData)
-  /*
-  Get user's profile info
-  - Saved photos, restaurants, recipes
-  */
+    /*
+    Get user's profile info
+    - Saved photos, restaurants, recipes
+    */
 
 });
 
