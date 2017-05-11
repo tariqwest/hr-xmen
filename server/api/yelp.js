@@ -1,8 +1,8 @@
 var Yelp = require('yelp-api-v3');
 
 var yelp = new Yelp({
-  app_id: '9LE31kYOAIuy86mbA9kTng',
-  app_secret: 'd3RpK8hhVmu2ttplqnkfwnUtn8AihSv6jpnHKw07zsWrBzFKPto6rWtjO9MLpIN5'
+  app_id: process.env.YELP_ID,
+  app_secret: process.env.YELP_KEY
 });
 
 // https://github.com/Yelp/yelp-api-v3/blob/master/docs/api-references/businesses-search.md

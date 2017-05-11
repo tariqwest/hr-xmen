@@ -1,5 +1,5 @@
-var API500px = require('500px'),
-    api500px = new API500px('3rGIwTl7w9aP11gtVGHOS5nwm2P8jPrxpJXDbkgu');
+var FiveHundredPX = require('500px');
+var api500px = new FiveHundredPX(process.env.FIVEHUNDREDPX_KEY);
 
 
 module.exports = {
@@ -15,7 +15,7 @@ module.exports = {
                 description: item.description
             }
         })
-        console.log(tilesData)
+        console.log(tilesData);
         // 100 entries
          })
     }

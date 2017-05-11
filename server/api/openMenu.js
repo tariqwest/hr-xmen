@@ -1,6 +1,7 @@
 var Promise = require('bluebird');
 var request = require('request-promise');
 var querystring = require('querystring');
+var _ = require('underscore');
 
 module.exports = {
   getMenuItems: (food, postal_code, country) => {
@@ -8,7 +9,7 @@ module.exports = {
       method: 'GET',
       url: 'https://openmenu.com/api/v2/search.php',
       qs: {
-        key: process.env.OPENMENU_KEY || '5b17ec42-2f8c-11e7-a91a-00163eeae34c',
+        key: process.env.OPENMENU_KEY,
         s: food,
         postal_code: postal_code,
         country: country,
