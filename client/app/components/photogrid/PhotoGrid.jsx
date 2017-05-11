@@ -1,5 +1,5 @@
 import React from 'react';
-import { AxiosProvider, Request, Get, Delete, Head, Post, Put, Patch } from 'react-axios'
+import { AxiosProvider, Request, Get, Delete, Head, Post, Put, Patch } from 'react-axios';
 import { Link } from 'react-router';
 
 import photoStore from '../../stores/photoStore';
