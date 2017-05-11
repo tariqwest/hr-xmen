@@ -38,7 +38,7 @@ app.use(function(req, res, next) {
   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
   res.setHeader('Access-Control-Allow-Credentials', true);
   next();
-}); 
+});
 
 app.get('/', (req, res) => {
   res.sendFile(`${__dirname}/dist/index.html`);
@@ -118,16 +118,16 @@ app.post('/photos/photo-process', (req, res)=>{
 });
 
 app.post('/photos/photo-save', (req, res)=>{
-  /* 
+  /*
     Here's an example of how to send the data from the request to the database.
     it still needs to 'get user for this request'.
   */
   console.log("received POST request on /photos/photo-save");
-  
+
   // var photoHungry4DB = new database.foodinfo({
   //   picture_url: req.body.picture_url,
   //   recipe_url: req.body.recipe_url,
-  //   restaurant: { 
+  //   restaurant: {
   //     name: req.body.restaurant.name,
   //     address: req.body.restaurant.address,
   //     phone: req.body.restaurant.phone,
@@ -140,7 +140,7 @@ app.post('/photos/photo-save', (req, res)=>{
   var photoHungry4DB = new database.fsresult({
     picture_url: 'http://leitesculinaria.com/89229/recipes-batter-fried-chicken.html',
     recipe_url: 'http://leitesculinaria.com/89229/recipes-batter-fried-chicken.html',
-    restaurant: { 
+    restaurant: {
       name: 'KFC',
       address: '691 Eddy St Ste 249, San Francisco, CA 94109',
       phone: '1-800-EAT-CHKN',
@@ -175,7 +175,7 @@ app.post('/photos/photo-save', (req, res)=>{
       format: JSON
       contents:
         status (success or fail)
-      
+
   */
 });
 
