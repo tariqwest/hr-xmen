@@ -38,7 +38,8 @@ module.exports = {
             ingredients: recipeResult.ingredients,
             rating: recipeResult.rating,
             source: recipeResult.sourceDisplayName,
-            url: `http://www.yummly.co/#recipe/${recipeResult.id}`
+            url: `http://www.yummly.co/#recipe/${recipeResult.id}`,
+            image_url: recipeResult.smallImageUrls[0] || null
           }
           recipes.push(recipe);
         }

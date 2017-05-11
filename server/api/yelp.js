@@ -9,7 +9,7 @@ var yelp = new Yelp({
 
 module.exports = {
 	getRestaurant: (restaurantAddr, restaurantName) => {
-	return yelp.search({term: `${restaurantName}`, location: `${restaurantAddr}`, limit: 1})
+	return yelp.search({term: `${restaurantName}`, location: `${restaurantAddr}`, limit: 1, actionlinks: true})
 	.then(function (data) {
 		data = JSON.parse(data);
 		var restaurant = data.businesses[0];
@@ -21,7 +21,9 @@ module.exports = {
 			url: restaurant.url,
 			name: restaurant.name,
 			location : restaurant.location.display_address.join(' '),
-			categories : restaurant.categories
+			categories : restaurant.categories,
+			ordering_url: restaurant.eat24_url || null,
+			reservation_url: restaurant.reservation_url	|| null
 		};
 		//console.log('*** Result of yelp search', restYelpInfo);
 		return restaurantInfo;
