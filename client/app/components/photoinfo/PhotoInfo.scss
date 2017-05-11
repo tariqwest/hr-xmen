@@ -4,9 +4,7 @@
   }
   padding: 0 10% 0 10%;
   text-align: center;
-  .foodImg {
-    height: 40em;
-  }
+
   a {
     color: inherit;
     text-decoration: none;
@@ -26,5 +24,14 @@
   .flex {
     width: 50%;
     margin: 1em;
+  }
+
+  .banner {
+    display: flex;
+  }
+
+  .bannerinfo {
+    flex-wrap: wrap;
+    text-align: left;
   }
 }

@@ -19,84 +19,17 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import CircularProgress from 'material-ui/CircularProgress';
-
-const yelpData = [{
-  image_url: 'http://s.eatthis-cdn.com/media/images/ext/842849976/greasy-fast-food.jpg',
-  review_count: '151 reviews',
-  rating: '4 stars',
-  url: 'https://www.yelp.com/biz/everest-indian-restaurant-petaluma?osq=Himalayan',
-  name: 'Everest Indian Restaurant',
-  location: 'Petaluma, CA',
-  categories: 'Himalayan'
-},
-{
-  image_url: 'http://s.eatthis-cdn.com/media/images/ext/842849976/greasy-fast-food.jpg',
-  review_count: '151 reviews',
-  rating: '4 stars',
-  url: 'https://www.yelp.com/biz/everest-indian-restaurant-petaluma?osq=Himalayan',
-  name: 'Everest Indian Restaurant',
-  location: 'Petaluma, CA',
-  categories: 'Himalayan'
-},
-{
-  image_url: 'http://s.eatthis-cdn.com/media/images/ext/842849976/greasy-fast-food.jpg',
-  review_count: '151 reviews',
-  rating: '4 stars',
-  url: 'https://www.yelp.com/biz/everest-indian-restaurant-petaluma?osq=Himalayan',
-  name: 'Everest Indian Restaurant',
-  location: 'Petaluma, CA',
-  categories: 'Himalayan'
-},
-{
-  image_url: 'http://s.eatthis-cdn.com/media/images/ext/842849976/greasy-fast-food.jpg',
-  review_count: '151 reviews',
-  rating: '4 stars',
-  url: 'https://www.yelp.com/biz/everest-indian-restaurant-petaluma?osq=Himalayan',
-  name: 'Everest Indian Restaurant',
-  location: 'Petaluma, CA',
-  categories: 'Himalayan'
-}]
-
-const yummplyData = [{
-  name: 'Pizza',
-  description: 'description',
-  instructions: 'instructions',
-  prepTime: '2 hours',
-  ingredients: 'ingredients',
-  rating: '5 stars',
-  url: 'http://www.foodnetwork.com/recipes/alton-brown/pizza-pizzas-recipe4'
-},
-{
-  name: 'Pizza',
-  description: 'description',
-  instructions: 'instructions',
-  prepTime: '2 hours',
-  ingredients: 'ingredients',
-  rating: '5 stars',
-  url: 'http://www.foodnetwork.com/recipes/alton-brown/pizza-pizzas-recipe4'
-},
-{
-  name: 'Pizza',
-  description: 'description',
-  instructions: 'instructions',
-  prepTime: '2 hours',
-  ingredients: 'ingredients',
-  rating: '5 stars',
-  url: 'http://www.foodnetwork.com/recipes/alton-brown/pizza-pizzas-recipe4'
-},
-{
-  name: 'Pizza',
-  description: 'description',
-  instructions: 'instructions',
-  prepTime: '2 hours',
-  ingredients: 'ingredients',
-  rating: '5 stars',
-  url: 'http://www.foodnetwork.com/recipes/alton-brown/pizza-pizzas-recipe4'
-}]
+import Paper from 'material-ui/Paper';
 
 const styles = {
   divider: {
     'borderBottom': '1px solid rgba(140,139,139, 0.2)'
+  },
+  paper: {
+    height: 200,
+    width: 200,
+    margin: 20,
+    textAlign: 'center',
   }
 };
 
@@ -121,18 +54,15 @@ class PhotoInfo extends React.Component {
     });
     return (
       <div className="photoinfo">
-        <h1>PhotoInfo</h1>
-        <Card>
-          <CardMedia overlay={<CardTitle title={this.state.current.title || defaultData.currentDefault.title} />} >
-          <img src={this.state.current.img || defaultData.currentDefault.img} className="foodImg"/>
-          </CardMedia>
-          <CardTitle title={this.state.current.title || defaultData.currentDefault.title} />
-          <CardText>
-          {this.state.current.description || defaultData.currentDefault.description}
-          </CardText>
-          <CardActions>
-          </CardActions>
-        </Card>
+        <div className="banner">
+          <Paper style={styles.paper} zDepth={4} rounded={true}>
+            <img src={this.state.current.img || defaultData.currentDefault.img} height="200" width="200" />
+          </Paper>
+          <div className="bannerinfo">
+            <h1>{this.state.current.title || defaultData.currentDefault.title}</h1>
+            <h4>{this.state.current.description || defaultData.currentDefault.description}</h4>
+          </div>
+        </div>
         <Post url="http://127.0.0.1:8080/photos/photo-process-test" instance={axiosInstance}>
           {(error, response, isLoading) => {
             if(error) {
@@ -149,7 +79,7 @@ class PhotoInfo extends React.Component {
               return (
                 <div className="flex-container">
                   <List className="flex">
-                    <Subheader>Restaurants</Subheader>
+                    <h1>Restaurants</h1>
                     {response.data.restaurants.map((restaurant, index) => (
                     <a href={restaurant.url} target="_blank" key={index}>
                     <ListItem
@@ -168,7 +98,7 @@ class PhotoInfo extends React.Component {
                     ))}
                   </List>
                   <List className="flex">
-                    <Subheader>Recipes</Subheader>
+                    <h1>Recipes</h1>
                     {response.data.recipes.map((recipe, index) => (
                     <a href={recipe.url} target="_blank" key={index}>
                     <ListItem
