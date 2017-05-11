@@ -30,27 +30,14 @@ class PhotoGrid extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      photoList: photoStore.getList(),
-      currentPhoto: photoStore.getCurrent()
+      list: photoStore.getList(),
+      current: photoStore.getCurrent()
     }
   }
 
-  // componentDidMount(){
-  //   photoStore.addChangeListener(this._onChange);
-  // }
-
-  handleAddItem(newItem) {
-    photoActions.addItem(newItem);
-  }
-
-  handleAddCurrent(newCurrent) {
-    photoActions.addCurrent(newCurrent);
-  }
-
-  handleClick(photoItems, index){
-    console.log(photoItems[index])
-    this.handleAddItem(photoItems);
-    this.handleAddCurrent(photoItems[index]);
+  handleClick(item, index){
+    photoActions.addItem(item);
+    photoActions.addCurrent(item[index]);
   }
 
   render() {
@@ -78,11 +65,13 @@ class PhotoGrid extends React.Component {
                           <Subheader>Food</Subheader>
                           {response.data.map((tile, index) => (
                           <Link
-                          to={'/photo/' + index}
-                          className="ripple"
-                          onClick={this.handleClick.bind(this, response.data, index)}
-                          key={tile.img}>
+                            to={'/photo/' + index}
+                            className="ripple"
+                            onClick={this.handleClick.bind(this, response.data, index)}
+                            key={tile.img}>
                             <GridTile
+                              key={tile.img}
+                              onClick={this.handleClick.bind(this, response.data, index)}
                               className="ripple"
                               title={tile.title}
                               subtitle={<span><b>{tile.description}</b></span>}

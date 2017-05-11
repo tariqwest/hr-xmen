@@ -2,17 +2,17 @@ var AppDispatcher = require('../dispatcher/AppDispatcher');
 var appConstants = require('../constants/appConstants');
 
 var photoActions = {
-  addPhotos: function(item){
+  addItem: function(item){
     AppDispatcher.handleAction({
-      actionType: appConstants.ADD_PHOTOS,
+      actionType: appConstants.ADD_ITEM,
       data: item
     });
   },
-  addCurrent: function(item){
+  addCurrent: function(current){
     AppDispatcher.handleAction({
       actionType: appConstants.ADD_CURRENT,
-      data: item
-    });
+      data: current
+    })
   }
 };
 
