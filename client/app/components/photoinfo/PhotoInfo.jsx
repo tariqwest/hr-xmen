@@ -2,6 +2,7 @@ import React from 'react';
 
 import photoStore from '../../stores/photoStore';
 import photoActions from '../../actions/photoActions';
+import defaultData from '../../default.js'
 
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -110,12 +111,12 @@ class PhotoInfo extends React.Component {
       <div className="photoinfo">
         <h1>PhotoInfo</h1>
         <Card>
-          <CardMedia overlay={<CardTitle title={this.state.current.title} />} >
-          <img src={this.state.current.img} className="foodImg"/>
+          <CardMedia overlay={<CardTitle title={this.state.current.title || defaultData.currentDefault.title} />} >
+          <img src={this.state.current.img || defaultData.currentDefault.img} className="foodImg"/>
           </CardMedia>
-          <CardTitle title={this.state.current.title} />
+          <CardTitle title={this.state.current.title || defaultData.currentDefault.title} />
           <CardText>
-          {this.state.current.description}
+          {this.state.current.description || defaultData.currentDefault.description}
           </CardText>
           <CardActions>
           </CardActions>
