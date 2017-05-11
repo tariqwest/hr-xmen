@@ -133,7 +133,7 @@ class PhotoInfo extends React.Component {
           <CardActions>
           </CardActions>
         </Card>
-        <Post url="http://127.0.0.1:8080/photos/photo-process-test">
+        <Post url="http://127.0.0.1:8080/photos/photo-process-test" instance={axiosInstance}>
           {(error, response, isLoading) => {
             if(error) {
               return (<div>Something bad happened: {error.message}</div>)

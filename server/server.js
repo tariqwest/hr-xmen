@@ -49,6 +49,7 @@ app.get('/photos', (req, res) => {
 });
 
 app.post('/photos/photo-process-test', (req, res) => {
+  console.log(req.body)
   res.json(dummyData)
 });
 
