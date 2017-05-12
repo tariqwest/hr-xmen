@@ -13,7 +13,7 @@ function Header() {
             <Link to="/app/profile">Profile</Link>
           </li>
           <li>
-            <Link to="/app/photo">Photo</Link>
+            <Link to="/app/photo/0">Photo</Link>
           </li>
         </ul>
       </nav>
