@@ -10,7 +10,6 @@ const dummyData = require('./dummyData');
 // Middleware
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-//const webpackHotMiddleware = require('webpack-hot-middleware');
 const session = require('express-session');
 //const cookieParser = require('cookie-parser');
 const passport = require('passport');
@@ -52,7 +51,7 @@ app.use(function(req, res, next) {
 passport.use(new fbStrategy({
     clientID: process.env.FACEBOOK_ID,
     clientSecret: process.env.FACEBOOK_KEY,
-    callbackURL: `http://localhost:${process.env.PORT || 3000}/login/facebook/callback`,
+    callbackURL: `${process.env.ENV_URL || 'http://localhost'}:${process.env.PORT || 8080}/login/facebook/callback`,
     profileFields: ['id', 'email', 'first_name', 'last_name'],
   },
   (token, refreshToken, profile, done) => {
@@ -101,7 +100,7 @@ app.use('/app', ensureLoggedIn('/login'));
 
 app.use('/app', express.static(__dirname + '/../dist'));
 
-app.get('/', ensureLoggedIn('/auth/login'), function(req, res) {
+app.get('/', ensureLoggedIn('/login'), function(req, res) {
   res.redirect('/app');
 });
 

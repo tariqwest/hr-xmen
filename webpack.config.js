@@ -1,3 +1,4 @@
+require('dotenv').config(); // import environmental variables from .env file
 var Path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var Webpack = require('webpack');
@@ -9,7 +10,7 @@ var isProduction = process.env.NODE_ENV === 'production';
 var cssOutputPath = '/styles/app.css';
 var jsOutputPath = '/scripts/app.js';
 var ExtractSASS = new ExtractTextPlugin(cssOutputPath);
-var port = isProduction ? process.env.PORT || 8080 : process.env.PORT || 3000;
+var port = isProduction ? process.env.PORT || 8080 : process.env.DEV_PORT || 3000;
 
 // ------------------------------------------
 // Base
@@ -22,6 +23,8 @@ var webpackConfig = {
     new Webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(isProduction ? 'production' : 'development'),
+        ENV_URL: JSON.stringify(process.env.ENV_URL || 'http://localhost'),
+        PORT: JSON.stringify(process.env.PORT || 8080)
       },
     }),
     new HtmlWebpackPlugin({
