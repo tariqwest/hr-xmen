@@ -10,7 +10,7 @@ const dummyData = require('./dummyData');
 // Middleware
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-const webpackHotMiddleware = require('webpack-hot-middleware');
+//const webpackHotMiddleware = require('webpack-hot-middleware');
 const session = require('express-session');
 //const cookieParser = require('cookie-parser');
 const passport = require('passport');
