@@ -1,16 +1,21 @@
 // Core & utilities
-require('dotenv').config();
+require('dotenv').config(); // import environmental variables from .env file
 const express = require('express');
-var Promise = require('bluebird');
-var _ = require('underscore');
-var emoji = require('node-emoji');
-var database = require('../db-models/photoHungryDB.js')
-var dummyData = require('./dummyData');
+const Promise = require('bluebird');
+const _ = require('underscore');
+const emoji = require('node-emoji');
+const database = require('../db-models/photoHungryDB.js')
+const dummyData = require('./dummyData');
 
 // Middleware
-var morgan = require('morgan');
-var bodyParser = require('body-parser');
-var webpackHotMiddleware = require('webpack-hot-middleware');
+const morgan = require('morgan');
+const bodyParser = require('body-parser');
+const webpackHotMiddleware = require('webpack-hot-middleware');
+const session = require('express-session');
+//const cookieParser = require('cookie-parser');
+const passport = require('passport');
+const fbStrategy = require('passport-facebook').Strategy;
+const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 
 // APIs
 var clarifai = require('./api/clarifai');
@@ -20,16 +25,19 @@ var googleMapsGeocode = require('./api/googleMapsGeocode');
 var fiveHundredPX = require('./api/fiveHundredPX');
 var yummly = require('./api/yummly');
 
-
 // Initialize app
 const app = express();
 
 // Setup middleware
-app.use(bodyParser.json());
 app.use(morgan('tiny'));
-app.use(express.static('./'));
-app.use(express.static('dist'));
-
+// app.use(express.static('./'));
+// app.use(express.static('dist'));
+app.use(bodyParser.json())
+  .use(bodyParser.urlencoded());
+//app.use(cookieParser());
+app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
 
 // Set response headers for all requests
 app.use(function(req, res, next) {
@@ -40,20 +48,84 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.get('/', (req, res) => {
-  res.sendFile(`${__dirname}/dist/index.html`);
+// Facebook login using passport + fb-passport + express-sessions modules
+passport.use(new fbStrategy({
+    clientID: process.env.FACEBOOK_ID,
+    clientSecret: process.env.FACEBOOK_KEY,
+    callbackURL: `http://localhost:${process.env.PORT || 3000}/login/facebook/callback`,
+    profileFields: ['id', 'email', 'first_name', 'last_name'],
+  },
+  (token, refreshToken, profile, done) => {
+    console.log('*** Facebook auth success ***', token, profile);
+    // process.nextTick(() => {
+    //   // Search for existing user
+    //   User.findOne({ 'fbID': profile.id })
+    //     .then(function(user, err) {
+    //       if (err) {
+    //         return done(err);
+    //       }
+    //       if (user) {
+    //         return done(null, user._id);
+    //       } else {
+    //         var newUser = new User();
+    //         newUser.fbID = profile.id;
+    //         newUser.fbToken = token;
+    //         newUser.fbFirstName = profile.name.givenName 
+    //         newUser.fbLastName = profile.name.familyName;
+    //         //newUser.fbEmail = (profile.emails[0].value || '').toLowerCase();
+
+    //         newUser.save(function(err) {
+    //           if (err) {
+    //             //throw err;
+    //           }
+    //           console.log('** New user created **', newUser);
+    //           return done(null, newUser._id);
+    //         });
+    //       }
+    //     });
+    // });
+    done(null, profile.id);
+  }));
+
+// configure passport authenticated session persistence.
+passport.serializeUser(function(userID, cb) {
+  cb(null, userID);
 });
 
-app.get('/photos', (req, res) => {
+passport.deserializeUser(function(user, cb) {
+  cb(null, user);
+});
+
+// Routes setup
+app.use('/app', ensureLoggedIn('/login'));
+
+app.use('/app', express.static(__dirname + '/../dist'));
+
+app.get('/', ensureLoggedIn('/auth/login'), function(req, res) {
+  res.redirect('/app');
+});
+
+app.use('/login', express.static(__dirname + '/../static/login'));
+
+app.get('/login/facebook',
+  passport.authenticate('facebook'));
+
+app.get('/login/facebook/callback',
+  passport.authenticate('facebook', { failureRedirect: '/login' }),
+  function(req, res) {
+    res.redirect('/');
+  });
+
+app.get('/api/photos', (req, res) => {
   fiveHundredPX.searchPhotos('food', res)
 });
 
-app.post('/photos/photo-process-test', (req, res) => {
+app.post('/api/photos/photo-process-test', (req, res) => {
   console.log(req.body)
   res.json(dummyData)
 });
 
-app.post('/photos/photo-process', (req, res)=>{
+app.post('/api/photos/photo-process', (req, res)=>{
 
   var clientResponse = {};
 
@@ -108,7 +180,7 @@ app.post('/photos/photo-process', (req, res)=>{
   });
 });
 
-app.post('/photos/photo-save', (req, res)=>{
+app.post('/api/photos/photo-save', (req, res)=>{
   /*
     Here's an example of how to send the data from the request to the database.
     it still needs to 'get user for this request'.
@@ -170,7 +242,7 @@ app.post('/photos/photo-save', (req, res)=>{
   */
 });
 
-app.get('/photos/profile', (req, res)=>{
+app.get('/api/photos/profile', (req, res)=>{
   res.json(dummyData.tilesData)
   /*
   Get user's profile info

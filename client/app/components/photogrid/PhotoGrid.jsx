@@ -45,7 +45,7 @@ class PhotoGrid extends React.Component {
       <div className="container photogrid">
         <h1>Photo Grid</h1>
           <div>
-            <Get url="http://127.0.0.1:8080/photos">
+            <Get url="http://127.0.0.1:8080/api/photos">
               {(error, response, isLoading) => {
                 if(error) {
                   return (<div>Something bad happened: {error.message}</div>)
@@ -65,7 +65,7 @@ class PhotoGrid extends React.Component {
                           <Subheader>Food</Subheader>
                           {response.data.map((tile, index) => (
                           <Link
-                            to={'/photo/' + index}
+                            to={'/app/photo/' + index}
                             className="ripple"
                             onClick={this.handleClick.bind(this, response.data, index)}
                             key={tile.img}>

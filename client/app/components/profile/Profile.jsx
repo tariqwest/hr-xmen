@@ -27,7 +27,7 @@ function Profile() {
     <div className="container profile">
       <h1>Profile</h1>
       <h1 className="favoriteTitle">Favorites: </h1>
-          <Get url="http://127.0.0.1:8080/photos/profile">
+          <Get url="http://127.0.0.1:8080/api/photos/profile">
             {(error, response, isLoading) => {
               if(error) {
                 return (<div>Something bad happened: {error.message}</div>)

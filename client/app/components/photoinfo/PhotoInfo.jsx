@@ -76,7 +76,7 @@ class PhotoInfo extends React.Component {
             <h4>{this.state.current.description || defaultData.currentDefault.description}</h4>
           </div>
         </div>
-        <Post url="http://127.0.0.1:8080/photos/photo-process-test" instance={axiosInstance}>
+        <Post url="http://127.0.0.1:8080/api/photos/photo-process-test" instance={axiosInstance}>
           {(error, response, isLoading) => {
             if(error) {
               return (<div>Something bad happened: {error.message}</div>)

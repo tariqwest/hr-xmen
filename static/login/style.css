@@ -1,0 +1,23 @@
+@import url(https://fonts.googleapis.com/css?family=Nunito:400,300);
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Nunito, sans-serif;
+  font-size: 16px
+}
+
+.container {
+  width: 100%;
+  text-align: center
+}
+
+.container h1 {
+  color: #288feb
+}
+
+.login {
+  width: 320px;
+}
+
+
+/*# sourceMappingURL=app.dd7810f307d011d77a5f.css.map*/

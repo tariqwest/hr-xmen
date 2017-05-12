@@ -34,7 +34,7 @@ class Photo extends React.Component {
             {this.state.current.description || defaultData.currentDefault.description}
             </CardText>
             <CardActions>
-              <Link to="/photos/photoinfo">
+              <Link to="/app/photos/photoinfo">
                 <RaisedButton label="GET MORE INFO" primary={true} fullWidth={true}/>
               </Link>
             </CardActions>

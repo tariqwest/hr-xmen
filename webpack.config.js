@@ -4,8 +4,10 @@ var Webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 var isProduction = process.env.NODE_ENV === 'production';
-var cssOutputPath = isProduction ? '/styles/app.[hash].css' : '/styles/app.css';
-var jsOutputPath = isProduction ? '/scripts/app.[hash].js' : '/scripts/app.js';
+// var cssOutputPath = isProduction ? '/styles/app.[hash].css' : '/styles/app.css';
+// var jsOutputPath = isProduction ? '/scripts/app.[hash].js' : '/scripts/app.js';
+var cssOutputPath = '/styles/app.css';
+var jsOutputPath = '/scripts/app.js';
 var ExtractSASS = new ExtractTextPlugin(cssOutputPath);
 var port = isProduction ? process.env.PORT || 8080 : process.env.PORT || 3000;
 
@@ -48,6 +50,7 @@ webpackConfig.entry = !isProduction
 // Bundle output
 // ------------------------------------------
 webpackConfig.output = {
+  publicPath: '/app',
   path: Path.join(__dirname, './dist'),
   filename: jsOutputPath,
 };
