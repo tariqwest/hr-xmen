@@ -1,11 +1,32 @@
 .profile {
-
   h1 {
-    color: $light-green;
+    color: $light-blue;
   }
-
-  .favoriteTitle {
-    text-align: left;
-    padding-left: 10%;
+  .banner {
+    display: flex;
+  }
+  .bannerinfo {
+    flex-wrap: wrap;
+    text-align: center;
+  }
+  .flex-container {
+    display: flex;
+    min-height: 100vh;
+  }
+  @media screen and (max-width: 600px) {
+    .flex-container {
+      flex-wrap: wrap;
+    }
+  }
+  .flex {
+    width: 50%;
+    margin: 1em;
+  }
+  img {
+    border-radius: 50%;
+  }
+  .list {
+    width: 100%;
+    margin: 0 5% 0 5%;
   }
 }
