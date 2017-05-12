@@ -14,10 +14,10 @@ module.exports = {
       function(response) {
         //console.log('*** Clarifai food predictions ***', response.outputs[0].data);
         var combinedPredictions = [];
-        for(var i=0; i<2; i++){ 
+        for(var i=0; i<5; i++){
           combinedPredictions.push(response.outputs[0].data.concepts[i].name);
         }
-        return Promise.resolve({err: null, prediction: combinedPredictions.join(' ')}); 
+        return Promise.resolve({err: null, prediction: combinedPredictions});
       },
       function(err) {
         //console.error(err);

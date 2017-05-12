@@ -20,15 +20,15 @@ module.exports = {
     return request(options)
     .then((result)=>{
       if(JSON.parse(result).response.result.errors){
-        // console.log('*** Open menu error ***', result);
+        console.log('*** Open menu error ***', result);
         throw JSON.parse(result).response.result.errors[0];
       }
       result = JSON.parse(result).response.result.items;
       result = _.uniq(result, false, (item)=>{
         return item.address_1;
       });
-      // console.log('*** Open menu result ***', result);
-      return result; 
+      console.log('*** Open menu result ***', result);
+      return result;
     })
     .catch((err)=>{
       throw 'openmenu api: ' + err;

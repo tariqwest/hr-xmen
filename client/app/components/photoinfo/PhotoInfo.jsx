@@ -107,7 +107,7 @@ class PhotoInfo extends React.Component {
                       primaryText={restaurant.name}
                       secondaryText={
                         <p>
-                          <span style={{color: darkBlack}}>{restaurant.rating} -- {restaurant.categories}</span>
+                          <span style={{color: darkBlack}}>{restaurant.rating} -- {restaurant.categories[0].title}</span>
                             <br/> {restaurant.location}
                         </p>
                       }
@@ -130,7 +130,7 @@ class PhotoInfo extends React.Component {
                       primaryText={recipe.name}
                       secondaryText={
                         <p>
-                          <span style={{color: darkBlack}}>{recipe.rating} -- {recipe.description}</span>
+                          <span style={{color: darkBlack}}>{recipe.rating} -- ingredients</span>
                             <br/> {recipe.prepTime}
                         </p>
                       }

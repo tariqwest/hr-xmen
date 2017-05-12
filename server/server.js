@@ -71,7 +71,7 @@ passport.use(new fbStrategy({
     //         var newUser = new User();
     //         newUser.fbID = profile.id;
     //         newUser.fbToken = token;
-    //         newUser.fbFirstName = profile.name.givenName 
+    //         newUser.fbFirstName = profile.name.givenName
     //         newUser.fbLastName = profile.name.familyName;
     //         //newUser.fbEmail = (profile.emails[0].value || '').toLowerCase();
 
@@ -126,29 +126,28 @@ app.post('/api/photos/photo-process-test', (req, res) => {
   res.json(dummyData)
 });
 
+// openMenu.getMenuItems('milk', 94117, 'US');
+
+// clarifai.getFoodPrediction('https://drscdn.500px.org/photo/121835289/w%3D440_h%3D440/3cc831ecc8cc6cfcfb15f0a7876acbae?v=5')
+
 app.post('/api/photos/photo-process', (req, res)=>{
 
   var clientResponse = {};
-
-  clientResponse.photoURL = req.body.photoURL;
-
-  clientResponse.status = 'success';
-
-  clientResponse.statusCode = 200;
-
-  var menuItemSearchString;
-
+  var menuItemSearchArray;
   var recipeSearchString;
+  clientResponse.photoURL = req.body.photoURL;
+  clientResponse.status = 'success';
+  clientResponse.statusCode = 200;
 
   Promise.resolve(clarifai.getFoodPrediction(req.body.photoURL))
   .then(({prediction})=>{
     console.log('*** Result of getFoodPrediction ***', prediction);
-    menuItemSearchString = prediction;
+    menuItemSearchArray = prediction;
     return googleMapsGeocode.getPostalCode(req.body.location.lat, req.body.location.lng);
   })
   .then(({postalCode, countryCode})=>{
     console.log('*** Result of getPostalCode ***', postalCode, countryCode);
-    return openMenu.getMenuItems(menuItemSearchString, postalCode, countryCode);
+    return openMenu.getMenuItems(menuItemSearchArray[0], postalCode, countryCode);
   })
   .then((menuItems)=>{
     console.log('*** Result of getMenuItems ***', menuItems.length);
