@@ -6,11 +6,16 @@ var EventEmitter = require('events').EventEmitter;
 var CHANGE_EVENT = 'change';
 
 var _store = {
-  photoList: []
+  list: [],
+  current: []
 };
 
 var addItem = function(item){
-  _store.photoList.push(item);
+  _store.list = item;
+};
+
+var addCurrent = function(current){
+  _store.current = current;
 };
 
 var photoStore = Object.assign({}, EventEmitter.prototype, {
@@ -18,7 +23,10 @@ var photoStore = Object.assign({}, EventEmitter.prototype, {
     this.on(CHANGE_EVENT, cb);
   },
   getList: function(){
-    return _store.photoList;
+    return _store.list;
+  },
+  getCurrent: function(){
+    return _store.current;
   },
 });
 
@@ -27,6 +35,10 @@ AppDispatcher.register(function(payload){
   switch(action.actionType){
     case appConstants.ADD_ITEM:
       addItem(action.data);
+      photoStore.emit(CHANGE_EVENT);
+      break;
+    case appConstants.ADD_CURRENT:
+      addCurrent(action.data);
       photoStore.emit(CHANGE_EVENT);
       break;
     default:

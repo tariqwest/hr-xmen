@@ -12,6 +12,7 @@ import App from './components/App';
 import PhotoGrid from './components/photogrid/PhotoGrid';
 import Photo from './components/photo/Photo';
 import Profile from './components/profile/Profile';
+import PhotoInfo from './components/photoinfo/PhotoInfo';
 
 import './components/bundle.scss';
 
@@ -22,6 +23,7 @@ ReactDOM.render(
           <IndexRoute component={PhotoGrid} />;
           <Route path="/photo/:type" component={Photo} />
           <Route path="/profile" component={Profile} />
+          <Route path="/photos/photoinfo" component={PhotoInfo} />
         </Route>
       </Router>
   </MuiThemeProvider>

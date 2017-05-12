@@ -7,6 +7,12 @@ var photoActions = {
       actionType: appConstants.ADD_ITEM,
       data: item
     });
+  },
+  addCurrent: function(current){
+    AppDispatcher.handleAction({
+      actionType: appConstants.ADD_CURRENT,
+      data: current
+    })
   }
 };
 

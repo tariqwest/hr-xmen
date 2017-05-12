@@ -1,5 +1,5 @@
 import React from 'react';
-import { AxiosProvider, Request, Get, Delete, Head, Post, Put, Patch } from 'react-axios'
+import { AxiosProvider, Request, Get, Delete, Head, Post, Put, Patch } from 'react-axios';
 import { Link } from 'react-router';
 
 import photoStore from '../../stores/photoStore';
@@ -30,25 +30,14 @@ class PhotoGrid extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      photoList: photoStore.getList()
+      list: photoStore.getList(),
+      current: photoStore.getCurrent()
     }
   }
 
-  handleAddItem(newItem) {
-    photoActions.addItem(newItem);
-  }
-
-  handleClick(photoItem){
-    this.handleAddItem(photoItem);
-    this.setState({
-      photoList: photoStore.getList()
-    })
-  }
-
-  _onChange() {
-    this.setState({
-      photoList: photoStore.getList()
-    })
+  handleClick(item, index){
+    photoActions.addItem(item);
+    photoActions.addCurrent(item[index]);
   }
 
   render() {
@@ -76,18 +65,20 @@ class PhotoGrid extends React.Component {
                           <Subheader>Food</Subheader>
                           {response.data.map((tile, index) => (
                           <Link
-                          to={'/photo/' + index}
-                          className="ripple"
-                          onClick={this.handleClick.bind(this, response.data)}
-                          key={tile.img}>
-                          <GridTile
+                            to={'/photo/' + index}
                             className="ripple"
-                            title={tile.title}
-                            subtitle={<span><b>{tile.description}</b></span>}
-                            actionIcon={<IconButton><StarBorder color="white" /></IconButton>}
-                            >
-                          <img src={tile.img} />
-                          </GridTile>
+                            onClick={this.handleClick.bind(this, response.data, index)}
+                            key={tile.img}>
+                            <GridTile
+                              key={tile.img}
+                              onClick={this.handleClick.bind(this, response.data, index)}
+                              className="ripple"
+                              title={tile.title}
+                              subtitle={<span><b>{tile.description}</b></span>}
+                              actionIcon={<IconButton><StarBorder color="white" /></IconButton>}
+                              >
+                            <img src={tile.img} />
+                            </GridTile>
                           </Link>
                           ))}
                         </GridList>
