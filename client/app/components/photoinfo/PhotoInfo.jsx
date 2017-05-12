@@ -76,7 +76,7 @@ class PhotoInfo extends React.Component {
             <h4>{this.state.current.description || defaultData.currentDefault.description}</h4>
           </div>
         </div>
-        <Post url={`${process.env.ENV_URL}:${process.env.PORT}/api/photos/photo-process-test`} instance={axiosInstance}>
+        <Post url={`${process.env.ENV_URL}:${process.env.PORT}/api/photos/photo-process`} instance={axiosInstance}>
           {(error, response, isLoading) => {
             if(error) {
               return (<div>Something bad happened: {error.message}</div>)

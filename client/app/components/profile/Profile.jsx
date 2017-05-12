@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { AxiosProvider, Request, Get, Delete, Head, Post, Put, Patch } from 'react-axios';
+import _ from 'underscore';
 
 import photoStore from '../../stores/photoStore';
 import photoActions from '../../actions/photoActions';
@@ -30,13 +31,14 @@ const styles = {
     color: 'rgb(0, 188, 212)',
   },
   paper: {
-    height: 200,
-    width: 200,
+    height: '100%',
+    width: '100%',
     margin: 20,
     textAlign: 'center',
   },
   anchor: {
-    textDecoration: 'none'
+    textDecoration: 'none',
+    fontSize: '.8em'
   }
 };
 
@@ -55,22 +57,25 @@ class Profile extends React.Component{
     super(props)
     this.state = {
       list: photoStore.getList(),
-      current: photoStore.getCurrent()
+      current: photoStore.getCurrent(),
+      colorCount: 0
     }
   }
 
+
   render() {
+
+    const colorClass = ['item--blue', 'item--green', 'item--darkblue', 'item--red', 'item--orange', 'item--pink'];
+
     return (
       <div className="container profile">
         <h1>Profile</h1>
         <div className="banner">
-            <Paper style={styles.paper} zDepth={4} circle={true}>
-              <img src="https://upload.wikimedia.org/wikipedia/commons/3/3e/Fried-Chicken-Leg.jpg" height="200" width="200" />
-            </Paper>
             <div className="bannerinfo">
               <h1>USERNAME</h1>
             </div>
           </div>
+
             <Get url={`${process.env.ENV_URL}:${process.env.PORT}/api/photos/profile`}>
               {(error, response, isLoading) => {
                 if(error) {
@@ -85,34 +90,23 @@ class Profile extends React.Component{
                 }
                 else if(response !== null) {
                   return (
-                    <div className="flex-container">
-                      <List>
-                        <h1>Favorites</h1>
+                      <div>
+                      <h1>Favorites</h1>
+                      <div className='row'>
                         {response.data.restaurants.map((restaurant, index) => (
-
-                        <ListItem
-                          className="flex"
-                          style={styles.divider}
-                          key={index}
-                          rightIconButton={
-                            <IconMenu iconButtonElement={iconButtonElement}>
-                              <a href={restaurant.url} target="_blank" style={styles.anchor}><MenuItem>Learn More</MenuItem></a>
-                              <MenuItem>Favorite</MenuItem>
-                            </IconMenu>
-                          }
-                          leftAvatar={<Avatar src={restaurant.image_url} />}
-                          primaryText={restaurant.name}
-                          secondaryText={
-                            <p>
-                              <span style={{color: darkBlack}}>{restaurant.rating} -- {restaurant.categories}</span>
-                                <br/> {restaurant.location}
-                            </p>
-                          }
-                          secondaryTextLines={2}
-                        />
+                        <div className={colorClass[_.random(5)]} key={index}>
+                          <div className='item_inner'>
+                            <img src={restaurant.image_url} width='250'/>
+                            <p>{restaurant.name}</p>
+                            <p>{restaurant.location}</p>
+                            <p>{restaurant.rating}</p>
+                            <p>{restaurant.categories}</p>
+                            <a href={restaurant.url} className='button' target='_blank' style={styles.anchor}>Learn More</a>
+                          </div>
+                        </div>
                         ))}
-                      </List>
-                    </div>
+                      </div>
+                      </div>
                   )
                 }
                 return (<div>Default message before request is made.</div>)

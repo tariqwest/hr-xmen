@@ -243,7 +243,7 @@ app.post('/api/photos/photo-save', (req, res)=>{
 });
 
 app.get('/api/photos/profile', (req, res)=>{
-  res.json(dummyData.tilesData)
+  res.json(dummyData)
   /*
   Get user's profile info
   - Saved photos, restaurants, recipes
