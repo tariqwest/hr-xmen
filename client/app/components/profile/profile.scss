@@ -2,6 +2,9 @@
   h1 {
     color: $light-blue;
   }
+  h2 {
+    color: $light-green;
+  }
   .banner {
     display: flex;
   }
@@ -26,14 +29,9 @@
     border-radius: 5%;
     margin-bottom: 10%;
   }
-  // Variables
-  $bg-color: #EEE5E9;
-  $blue-card: #28cbc7;
-  $orange-card: #EF6F6C;
-  $red-card: #E84855;
-  $green-card: #28cb75;
-  $darkblue-card: #288feb;
-  $pink-card: #db4b97;
+  /*=============================================
+CARDS STYLES
+=============================================*/
   // Mixins
   @mixin diagBg($color) {
     // background: linear-gradient(-45deg, $color 90%, rgba(255, 255, 255, 0.5) 10%);
@@ -53,12 +51,10 @@
     flex-flow: row wrap;
   }
   .item {
-    box-shadow: 1px 5px 15px #CCC;
     max-width: 15em;
     height: auto;
     border-radius: 3px;
     padding: 2em;
-    margin: 1em;
     overflow: hidden;
     position: relative;
     flex: auto;

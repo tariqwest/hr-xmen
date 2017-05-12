@@ -31,8 +31,8 @@ const styles = {
     color: 'rgb(0, 188, 212)',
   },
   paper: {
-    height: '100%',
-    width: '100%',
+    maxWidth: '15em',
+    height: 'auto',
     margin: 20,
     textAlign: 'center',
   },
@@ -69,34 +69,29 @@ class Profile extends React.Component{
 
     return (
       <div className="container profile">
-        <h1>Profile</h1>
-        <div className="banner">
-            <div className="bannerinfo">
-              <h1>USERNAME</h1>
-            </div>
-          </div>
-
-            <Get url={`${process.env.ENV_URL}:${process.env.PORT}/api/photos/profile`}>
-              {(error, response, isLoading) => {
-                if(error) {
-                  return (<div>Something bad happened: {error.message}</div>)
-                }
-                else if(isLoading) {
-                  return (
+        <h1>Profile/USERNAME</h1>
+          <Get url={`${process.env.ENV_URL}:${process.env.PORT}/api/photos/profile`}>
+            {(error, response, isLoading) => {
+              if(error) {
+                return (<div>Something bad happened: {error.message}</div>)
+              }
+              else if(isLoading) {
+                return (
+                  <div>
+                    <CircularProgress size={80} thickness={5} />
+                  </div>
+                )
+              }
+              else if(response !== null) {
+                return (
                     <div>
-                      <CircularProgress size={80} thickness={5} />
-                    </div>
-                  )
-                }
-                else if(response !== null) {
-                  return (
-                      <div>
-                      <h1>Favorites</h1>
-                      <div className='row'>
-                        {response.data.restaurants.map((restaurant, index) => (
+                    <h2>Favorites</h2>
+                    <div className='row'>
+                      {response.data.restaurants.map((restaurant, index) => (
+                      <Paper style={styles.paper} zDepth={4} rounded={true}>
                         <div className={colorClass[_.random(5)]} key={index}>
                           <div className='item_inner'>
-                            <img src={restaurant.image_url} width='250'/>
+                            <img src={restaurant.image_url} width='250' className='z-depth-3'/>
                             <p>{restaurant.name}</p>
                             <p>{restaurant.location}</p>
                             <p>{restaurant.rating}</p>
@@ -104,14 +99,15 @@ class Profile extends React.Component{
                             <a href={restaurant.url} className='button' target='_blank' style={styles.anchor}>Learn More</a>
                           </div>
                         </div>
-                        ))}
-                      </div>
-                      </div>
-                  )
-                }
-                return (<div>Default message before request is made.</div>)
-              }}
-            </Get>
+                      </Paper>
+                      ))}
+                    </div>
+                    </div>
+                )
+              }
+              return (<div>Default message before request is made.</div>)
+            }}
+          </Get>
       </div>
     )
   }
