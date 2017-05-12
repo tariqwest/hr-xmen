@@ -17,7 +17,7 @@ var clarifai = require('./api/clarifai');
 var openMenu = require('./api/openMenu');
 var yelp = require('./api/yelp');
 var googleMapsGeocode = require('./api/googleMapsGeocode');
-var fineHundredPX = require('./api/fiveHundredPX');
+var fiveHundredPX = require('./api/fiveHundredPX');
 var yummly = require('./api/yummly');
 
 
@@ -45,7 +45,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/photos', (req, res) => {
-  pictures500px.searchPhotos('food', res)
+  fiveHundredPX.searchPhotos('food', res)
 });
 
 app.post('/photos/photo-process-test', (req, res) => {
