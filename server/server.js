@@ -52,7 +52,7 @@ app.use(function(req, res, next) {
 passport.use(new fbStrategy({
     clientID: process.env.FACEBOOK_ID,
     clientSecret: process.env.FACEBOOK_KEY,
-    callbackURL: `http://localhost:${process.env.PORT || 3000}/auth/login/facebook/callback`,
+    callbackURL: `http://localhost:${process.env.PORT || 3000}/login/facebook/callback`,
     profileFields: ['id', 'email', 'first_name', 'last_name'],
   },
   (token, refreshToken, profile, done) => {
@@ -97,7 +97,7 @@ passport.deserializeUser(function(user, cb) {
 });
 
 // Routes setup
-app.use('/app', ensureLoggedIn('/auth/login'));
+app.use('/app', ensureLoggedIn('/login'));
 
 app.use('/app', express.static(__dirname + '/../dist'));
 
@@ -105,12 +105,12 @@ app.get('/', ensureLoggedIn('/auth/login'), function(req, res) {
   res.redirect('/app');
 });
 
-app.use('/auth/login', express.static(__dirname + '/login.html'));
+app.use('/login', express.static(__dirname + '/../static/login'));
 
-app.get('/auth/login/facebook',
-  passport.authenticate('facebook', { scope: ['user_posts', 'user_photos', 'publish_actions'] }));
+app.get('/login/facebook',
+  passport.authenticate('facebook'));
 
-app.get('/auth/login/facebook/callback',
+app.get('/login/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/login' }),
   function(req, res) {
     res.redirect('/');
@@ -180,7 +180,7 @@ app.post('/api/photos/photo-process', (req, res)=>{
   });
 });
 
-app.post('/photos/photo-save', (req, res)=>{
+app.post('/api/photos/photo-save', (req, res)=>{
   /*
     Here's an example of how to send the data from the request to the database.
     it still needs to 'get user for this request'.
@@ -242,7 +242,7 @@ app.post('/photos/photo-save', (req, res)=>{
   */
 });
 
-app.get('/photos/profile', (req, res)=>{
+app.get('/api/photos/profile', (req, res)=>{
   res.json(dummyData.tilesData)
   /*
   Get user's profile info
