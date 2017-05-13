@@ -48,10 +48,12 @@ app.use(function(req, res, next) {
 });
 
 // Facebook login using passport + fb-passport + express-sessions modules
+var callbackURL = process.env.NODE_ENV === 'production' ? `${process.env.ENV_URL}/login/facebook/callback` : `${process.env.ENV_URL || 'http://localhost'}:${process.env.PORT || 8080}/login/facebook/callback`;
+
 passport.use(new fbStrategy({
     clientID: process.env.FACEBOOK_ID,
     clientSecret: process.env.FACEBOOK_KEY,
-    callbackURL: `${process.env.ENV_URL || 'http://localhost'}:${process.env.PORT || 8080}/login/facebook/callback`,
+    callbackURL: callbackURL,
     profileFields: ['id', 'email', 'first_name', 'last_name'],
   },
   (token, refreshToken, profile, done) => {
