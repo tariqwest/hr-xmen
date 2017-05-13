@@ -34,7 +34,6 @@ CARDS STYLES
 =============================================*/
   // Mixins
   @mixin diagBg($color) {
-    // background: linear-gradient(-45deg, $color 90%, rgba(255, 255, 255, 0.5) 10%);
     background: $color;
   }
   * {
@@ -52,7 +51,7 @@ CARDS STYLES
   }
   .item {
     max-width: 15em;
-    height: auto;
+    height: 100%;
     border-radius: 3px;
     padding: 2em;
     overflow: hidden;

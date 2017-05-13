@@ -192,16 +192,16 @@ app.post('/api/photos/photo-save', (req, res)=>{
   Promise.resolve(database.dbuser.find({ fbID: testfbID }))
     .then((result) => {
       console.log('find fbID operation returns : ', result[0]._id);
-      // var photoHungry4DB = new database.saveditem({
-      //   photoURL: req.body.imgURL,
-      //   savedItem: req.body.recipeORRestaurant, // restaurant or recipe
-      //   userID: result[0]._id
-      // });
       var photoHungry4DB = new database.saveditem({
-        photoURL: 'https://www.bettycrocker.com/recipes/cornbread/8990e15c-fc1d-4a8d-b8b3-4b37f45eca49',
-        savedItem: { "title": "CornBread", "recipe": "fluffy cornbread that's baked to perfection"}, // restaurant or recipe
+        photoURL: req.body.imgURL,
+        savedItem: req.body.recipeORRestaurant, // restaurant or recipe
         userID: result[0]._id
       });
+      // var photoHungry4DB = new database.saveditem({
+      //   photoURL: 'https://www.bettycrocker.com/recipes/cornbread/8990e15c-fc1d-4a8d-b8b3-4b37f45eca49',
+      //   savedItem: { "title": "CornBread", "recipe": "fluffy cornbread that's baked to perfection"}, // restaurant or recipe
+      //   userID: result[0]._id
+      // });
       console.log('photoHungry4DB created');
       return (photoHungry4DB);
     }).catch((err) => {
@@ -238,7 +238,7 @@ app.post('/api/photos/photo-save', (req, res)=>{
 app.get('/api/photos/profile', (req, res)=>{
 
   console.log("received GET request on /photos/profile");
-  Promise.resolve(database.dbuser.find({ fbID: "ColonelSanders" }))
+  Promise.resolve(database.dbuser.find({ fbID: "BugsBunny" }))
     .then((result) => {
       console.log('find fbID operation returns : ', result[0]._id);
       return (result[0]._id);

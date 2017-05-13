@@ -93,7 +93,7 @@ class Profile extends React.Component{
                           <div className='item_inner'>
                             <img src={item.photoURL} width='250' className='z-depth-3'/>
                             <p>{item.savedItem.name}</p>
-                            <p>{item.savedItem.rating}</p>
+                            <p>{item.savedItem.rating} Stars</p>
                             <p>{item.savedItem.location || item.savedItem.prepTime}</p>
                             <a href={item.savedItem.url} className='button' target='_blank' style={styles.anchor}>Learn More</a>
                           </div>
