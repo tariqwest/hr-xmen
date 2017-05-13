@@ -87,16 +87,15 @@ class Profile extends React.Component{
                     <div>
                     <h2>Favorites</h2>
                     <div className='row'>
-                      {response.data.restaurants.map((restaurant, index) => (
-                      <Paper style={styles.paper} zDepth={4} rounded={true}>
+                      {response.data.map((item, index) => (
+                      <Paper style={styles.paper} zDepth={4} rounded={true} key={index}>
                         <div className={colorClass[_.random(5)]} key={index}>
                           <div className='item_inner'>
-                            <img src={restaurant.image_url} width='250' className='z-depth-3'/>
-                            <p>{restaurant.name}</p>
-                            <p>{restaurant.location}</p>
-                            <p>{restaurant.rating}</p>
-                            <p>{restaurant.categories}</p>
-                            <a href={restaurant.url} className='button' target='_blank' style={styles.anchor}>Learn More</a>
+                            <img src={item.photoURL} width='250' className='z-depth-3'/>
+                            <p>{item.savedItem.name}</p>
+                            <p>{item.savedItem.rating}</p>
+                            <p>{item.savedItem.location || item.savedItem.prepTime}</p>
+                            <a href={item.savedItem.url} className='button' target='_blank' style={styles.anchor}>Learn More</a>
                           </div>
                         </div>
                       </Paper>

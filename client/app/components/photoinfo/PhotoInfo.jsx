@@ -55,8 +55,17 @@ class PhotoInfo extends React.Component {
     }
   }
 
-  handleSave() {
-    axios.post()
+  handleSave(recipeORRestaurant, imgURL) {
+    console.log('CLICKED')
+    axios.post(process.env.NODE_ENV === 'production' ? `${process.env.ENV_URL}/api/photos/photo-save` : `${process.env.ENV_URL}:${process.env.PORT}/api/photos/photo-save`, {
+      recipeORRestaurant: recipeORRestaurant,
+      imgURL: imgURL
+    }).then(res => {
+      console.log(res)
+    })
+    .catch(err => {
+      console.log(err)
+    })
   }
 
   render() {
@@ -80,7 +89,7 @@ class PhotoInfo extends React.Component {
             <h4>{this.state.current.description || defaultData.currentDefault.description}</h4>
           </div>
         </div>
-        <Post url={ process.env.NODE_ENV === 'production' ? `${process.env.ENV_URL}/api/photos/photo-process-test` : `${process.env.ENV_URL}:${process.env.PORT}/api/photos/photo-process-test` } instance={axiosInstance}>
+        <Post url={ process.env.NODE_ENV === 'production' ? `${process.env.ENV_URL}/api/photos/photo-process` : `${process.env.ENV_URL}:${process.env.PORT}/api/photos/photo-process` } instance={axiosInstance}>
           {(error, response, isLoading) => {
             if(error) {
               return (<div>Something bad happened: {error.message}</div>)
@@ -104,7 +113,7 @@ class PhotoInfo extends React.Component {
                       rightIconButton={
                         <IconMenu iconButtonElement={iconButtonElement}>
                           <a href={restaurant.url} target="_blank" style={styles.anchor}><MenuItem>Learn More</MenuItem></a>
-                          <MenuItem onClick={this.handleSave}>Favorite</MenuItem>
+                          <MenuItem onClick={this.handleSave.bind(this, restaurant, this.state.current.img || defaultData.currentDefault.img)}>Favorite</MenuItem>
                         </IconMenu>
                       }
                       leftAvatar={<Avatar src={restaurant.image_url} />}
@@ -128,7 +137,7 @@ class PhotoInfo extends React.Component {
                       rightIconButton={
                         <IconMenu iconButtonElement={iconButtonElement}>
                           <a href={recipe.url} target="_blank" style={styles.anchor}><MenuItem>Learn More</MenuItem></a>
-                          <MenuItem>Favorite</MenuItem>
+                          <MenuItem onClick={this.handleSave.bind(this, recipe, this.state.current.img || defaultData.currentDefault.img)}>Favorite</MenuItem>
                         </IconMenu>
                       }
                       primaryText={recipe.name}
