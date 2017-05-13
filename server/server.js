@@ -187,40 +187,27 @@ app.post('/api/photos/photo-save', (req, res)=>{
   */
   console.log("received POST request on /photos/photo-save");
 
-  // var photoHungry4DB = new database.foodinfo({
-  //   picture_url: req.body.picture_url,
-  //   recipe_url: req.body.recipe_url,
-  //   restaurant: {
-  //     name: req.body.restaurant.name,
-  //     address: req.body.restaurant.address,
-  //     phone: req.body.restaurant.phone,
-  //     menuItemName: req.body.restaurant.menuItemName,
-  //     },
-  //   user_record: req.body.user_record
-  // });
-
-  // The following is just a hardcoded example to test write to the database.
-  var photoHungry4DB = new database.fsresult({
-    picture_url: 'http://leitesculinaria.com/89229/recipes-batter-fried-chicken.html',
-    recipe_url: 'http://leitesculinaria.com/89229/recipes-batter-fried-chicken.html',
-    restaurant: {
-      name: 'KFC',
-      address: '691 Eddy St Ste 249, San Francisco, CA 94109',
-      phone: '1-800-EAT-CHKN',
-      menuItemName: 'fried chicken: 8 piece bucket, original recipe',
-      },
-    user_record: 'A Very Hungry Person!'
-  });
-
-  console.log('photoHungry4DB created');
-  photoHungry4DB.save(function(error){
-    if (error) {
-      console.log('error: photoHungry4DB *DID NOT* save to database');
-    } else {
-      console.log('success: photoHungry4DB saved to database');
-    }
-  });
-  res.end();
+  var testfbID = "ColonelSanders";
+  Promise.resolve(database.dbuser.find({ fbID: testfbID }))
+    .then((result) => {
+      console.log('find fbID operation returns : ', result[0]._id);
+      var photoHungry4DB = new database.saveditem({ 
+        photoURL: "http://leitesculinaria.com/89229/recipes-batter-fried-chicken.html", 
+        savedItem: { "restaurant" : "KFC", "address" : "691 Eddy St Ste 249, San Francisco, CA 94109", "phone": "1-800-EAT-CHKN" }, // restaurant or recipe
+        userID: result[0]._id
+      });
+      console.log('photoHungry4DB created');
+      return (photoHungry4DB);
+    }).catch((err) => { 
+      console.log("find fbID failed");
+    })
+    .then((photoHungry4DB) => {
+      photoHungry4DB.save()
+    })
+    .then(() => {
+      console.log("\"saveditem\" saved to database")
+      res.end("success");
+    });
   /*
     process:
       receive post request from client
@@ -243,7 +230,30 @@ app.post('/api/photos/photo-save', (req, res)=>{
 });
 
 app.get('/api/photos/profile', (req, res)=>{
-  res.json(dummyData)
+
+  console.log("received GET request on /photos/profile");
+  Promise.resolve(database.dbuser.find({ fbID: "BugsBunny" }))
+    .then((result) => {
+      console.log('find fbID operation returns : ', result[0]._id);
+      return (result[0]._id);
+    }).catch((err) => { 
+      console.log("find fbID failed");
+    })
+    .then((userID4Profile) => {
+      console.log ("userID4Profile = ", userID4Profile);
+      return (database.saveditem.find({ userID: userID4Profile}));
+    })
+    .then((userProfile) => {
+      console.log("returned user profile: ", userProfile);
+      res.json(userProfile);
+      res.end("success");
+    })
+    .catch((err) => { 
+      console.log("failed to retrieve profile");
+      res.end("failure");
+    });
+
+  //res.json(dummyData.tilesData)
   /*
   Get user's profile info
   - Saved photos, restaurants, recipes

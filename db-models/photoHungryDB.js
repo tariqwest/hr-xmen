@@ -11,22 +11,26 @@ db.once('open', function() {
   console.log('mongoose connected successfully');
 });
 
-var photoHungrySchema = mongoose.Schema(
-  {   
-  	picture_url: 'String',
-    recipe_url: 'String',
-    restaurant: { 
-      name: 'String',
-      phone: 'String',
-      address: 'String',
-      menuItemName: 'String',
-      },
-    user_record: 'String',
+var userSchema = mongoose.Schema(
+  {
+    fbID: 'String',
+    fbFirstName: 'String',
+    fbLastName: 'String',
+    fbToken: 'String'
   }
 );
 
-var fsresult = mongoose.model('fsresult', photoHungrySchema);
+var photoHungrySchema = mongoose.Schema(
+  {   
+    photoURL: 'String', 
+    savedItem: 'Object', // restaurant or recipe
+    userID: 'String' // _id from a user in user collection
+  }
+);
 
-module.exports.fsresult = fsresult;
+var dbuser = mongoose.model('photohungryuser', userSchema);
 
+var saveditem = mongoose.model('saveditem', photoHungrySchema);
 
+module.exports.saveditem = saveditem;
+module.exports.dbuser = dbuser;
