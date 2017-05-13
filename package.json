@@ -4,11 +4,11 @@
   "description": "Starter for Express, React, Redux, SCSS applications",
   "scripts": {
     "build-dev": "rimraf dist && webpack --watch  --colors --config webpack.dev.config",
-    "dev-server": "NODE_ENV=development PORT=8080 nodemon ./server/server.js",
+    "dev-server": "nodemon ./server/server.js",
     "dev-database": "mongod --dbpath ./db",
     "client-dev-server": "CLIENT_DEV=true CLIENT_DEV_PORT=3000 webpack-dev-server --watch --colors --config webpack.dev.config --port 3000",
     "build-prod": "rimraf dist && webpack --colors -p --config webpack.prod.config",
-    "prod-server":"node ./server/server.js",
+    "prod-server": "node ./server/server.js",
     "heroku-postbuild": "npm run build-prod",
     "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js --recursive ./test",
     "test:watch": "npm run test -- --watch",
@@ -30,7 +30,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/hr-xmen/hr-xmen.git"
   },
   "author": "hr-xmen",
   "license": "MIT",
@@ -66,9 +66,9 @@
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
     "clarifai": "^2.1.6",
-    "dotenv": "^4.0.0",
     "connect-ensure-login": "^0.1.1",
     "cookie-parser": "^1.4.3",
+    "dotenv": "^4.0.0",
     "express": "^4.13.4",
     "express-session": "^1.15.2",
     "extract-text-webpack-plugin": "^1.0.1",
@@ -91,6 +91,7 @@
     "redux": "^3.5.2",
     "request": "^2.81.0",
     "request-promise": "^4.2.1",
+    "rimraf": "^2.6.1",
     "underscore": "^1.8.3",
     "webpack": "^1.13.0",
     "yelp-api-v3": "^1.5.0",
