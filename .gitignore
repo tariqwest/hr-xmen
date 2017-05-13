@@ -42,3 +42,6 @@ db
 
 # Environmental variables & credentials
 .env
+
+# Webpack hotupdate files
+*.hot-update.*
