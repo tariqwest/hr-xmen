@@ -63,6 +63,7 @@
   "dependencies": {
     "500px": "^0.5.1",
     "axios": "^0.16.1",
+    "babel": "^6.23.0",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
     "clarifai": "^2.1.6",
@@ -72,6 +73,7 @@
     "express": "^4.13.4",
     "express-session": "^1.15.2",
     "extract-text-webpack-plugin": "^1.0.1",
+    "file-loader": "^0.11.1",
     "flux": "^3.1.2",
     "html-webpack-plugin": "^2.16.1",
     "material-ui": "^0.18.0",
