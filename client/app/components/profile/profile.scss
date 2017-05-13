@@ -1,11 +1,140 @@
 .profile {
-
   h1 {
+    color: $light-blue;
+  }
+  h2 {
     color: $light-green;
   }
-
-  .favoriteTitle {
-    text-align: left;
-    padding-left: 10%;
+  .banner {
+    display: flex;
+  }
+  .bannerinfo {
+    flex-wrap: wrap;
+    text-align: center;
+  }
+  .flex-container {
+    display: flex;
+    min-height: 100vh;
+  }
+  @media screen and (max-width: 600px) {
+    .flex-container {
+      flex-wrap: wrap;
+    }
+  }
+  .flex {
+    width: 50%;
+    margin: 1em;
+  }
+  img {
+    border-radius: 5%;
+    margin-bottom: 10%;
+  }
+  /*=============================================
+CARDS STYLES
+=============================================*/
+  // Mixins
+  @mixin diagBg($color) {
+    // background: linear-gradient(-45deg, $color 90%, rgba(255, 255, 255, 0.5) 10%);
+    background: $color;
+  }
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-weight: 700;
+  }
+  .row {
+    width: 100%;
+    justify-content: flex-start;
+    display: flex;
+    flex-flow: row wrap;
+  }
+  .item {
+    max-width: 15em;
+    height: auto;
+    border-radius: 3px;
+    padding: 2em;
+    overflow: hidden;
+    position: relative;
+    flex: auto;
+    &--blue {
+      @extend .item;
+      @include diagBg($blue-card);
+    }
+    &--orange {
+      @extend .item;
+      @include diagBg($orange-card);
+    }
+    &--red {
+      @extend .item;
+      @include diagBg($red-card);
+    }
+    &--green {
+      @extend .item;
+      @include diagBg($green-card);
+    }
+    &--darkblue {
+      @extend .item;
+      @include diagBg($darkblue-card);
+    }
+    &--pink {
+      @extend .item;
+      @include diagBg($pink-card);
+    }
+    img {
+      max-width: 100%;
+      height: auto !important;
+      text-align: center;
+    }
+    &_inner {
+      display: flex;
+      align-items: center;
+      flex-flow: column wrap;
+      p {
+        color: rgba(255, 255, 255, 0.9);
+      }
+      .button {
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        color: #FFF;
+        border-radius: 3px;
+        padding: 1em 3em;
+        margin: 1em 0 0 0;
+        background: none;
+        cursor: pointer;
+        transition: background ease-in .25s;
+        &:hover {
+          background: rgba(255, 255, 255, 1);
+          color: #2B2D42;
+        }
+        &:hover:before {
+          color: #2B2D42;
+        }
+      }
+    }
+    &_overlay {
+      background: rgba(255, 255, 255, 0.9);
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      transform: translateY(-500px);
+      opacity: 0;
+      display: flex;
+      flex-flow: column wrap;
+      justify-content: center;
+      align-items: center;
+      h2 {
+        color: rgba(43, 45, 66, 0.7);
+        font-size: 1.2em;
+        margin: 1em 0;
+      }
+      i {
+        color: rgba(43, 45, 66, 0.7);
+        font-size: 1.5em;
+      }
+    }
   }
 }

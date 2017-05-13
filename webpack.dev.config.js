@@ -49,7 +49,7 @@ webpackConfig.entry = process.env.CLIENT_DEV === 'true'
 // Bundle output
 // ------------------------------------------
 webpackConfig.output = {
-  publicPath: '/app',
+  // publicPath: '/app',
   path: Path.join(__dirname, './dist'),
   filename: jsOutputPath,
 };

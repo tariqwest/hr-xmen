@@ -1,10 +1,25 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { AxiosProvider, Request, Get, Delete, Head, Post, Put, Patch } from 'react-axios';
+import _ from 'underscore';
+
+import photoStore from '../../stores/photoStore';
+import photoActions from '../../actions/photoActions';
+import defaultData from '../../default.js'
 
 import {GridList, GridTile} from 'material-ui/GridList';
-import IconButton from 'material-ui/IconButton';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 import CircularProgress from 'material-ui/CircularProgress';
+import {List, ListItem} from 'material-ui/List';
+import Divider from 'material-ui/Divider';
+import Subheader from 'material-ui/Subheader';
+import Avatar from 'material-ui/Avatar';
+import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
+import IconButton from 'material-ui/IconButton';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import Paper from 'material-ui/Paper';
 
 const styles = {
   root: {
@@ -12,21 +27,49 @@ const styles = {
     flexWrap: 'wrap',
     justifyContent: 'space-around',
   },
-  gridList: {
-    display: 'flex',
-    flexWrap: 'nowrap',
-    overflowX: 'auto',
-  },
   titleStyle: {
     color: 'rgb(0, 188, 212)',
   },
+  paper: {
+    maxWidth: '15em',
+    height: 'auto',
+    margin: 20,
+    textAlign: 'center',
+  },
+  anchor: {
+    textDecoration: 'none',
+    fontSize: '.8em'
+  }
 };
 
-function Profile() {
-  return (
-    <div className="container profile">
-      <h1>Profile</h1>
-      <h1 className="favoriteTitle">Favorites: </h1>
+const iconButtonElement = (
+  <IconButton
+    touch={true}
+    tooltip="more"
+    tooltipPosition="bottom-left"
+  >
+    <MoreVertIcon color={grey400} />
+  </IconButton>
+);
+
+class Profile extends React.Component{
+  constructor(props) {
+    super(props)
+    this.state = {
+      list: photoStore.getList(),
+      current: photoStore.getCurrent(),
+      colorCount: 0
+    }
+  }
+
+
+  render() {
+
+    const colorClass = ['item--blue', 'item--green', 'item--darkblue', 'item--red', 'item--orange', 'item--pink'];
+
+    return (
+      <div className="container profile">
+        <h1>Profile/USERNAME</h1>
           <Get url={`${process.env.ENV_URL}:${process.env.PORT}/api/photos/profile`}>
             {(error, response, isLoading) => {
               if(error) {
@@ -41,28 +84,33 @@ function Profile() {
               }
               else if(response !== null) {
                 return (
-                 <div style={styles.root}>
-                    <GridList style={styles.gridList} cols={2.2}>
-                      {response.data.map((tile) => (
-                        <GridTile
-                          key={tile.img}
-                          title={tile.title}
-                          actionIcon={<IconButton><StarBorder color="rgb(0, 188, 212)" /></IconButton>}
-                          titleStyle={styles.titleStyle}
-                          titleBackground="linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)"
-                        >
-                          <img src={tile.img} />
-                        </GridTile>
+                    <div>
+                    <h2>Favorites</h2>
+                    <div className='row'>
+                      {response.data.restaurants.map((restaurant, index) => (
+                      <Paper style={styles.paper} zDepth={4} rounded={true}>
+                        <div className={colorClass[_.random(5)]} key={index}>
+                          <div className='item_inner'>
+                            <img src={restaurant.image_url} width='250' className='z-depth-3'/>
+                            <p>{restaurant.name}</p>
+                            <p>{restaurant.location}</p>
+                            <p>{restaurant.rating}</p>
+                            <p>{restaurant.categories}</p>
+                            <a href={restaurant.url} className='button' target='_blank' style={styles.anchor}>Learn More</a>
+                          </div>
+                        </div>
+                      </Paper>
                       ))}
-                    </GridList>
-                  </div>
+                    </div>
+                    </div>
                 )
               }
               return (<div>Default message before request is made.</div>)
             }}
           </Get>
-    </div>
-  )
+      </div>
+    )
+  }
 }
 
 export default Profile;

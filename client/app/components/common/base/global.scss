@@ -1,5 +1,4 @@
 @import url(https://fonts.googleapis.com/css?family=Nunito:400,300);
-
 body {
   margin: 0;
   padding: 0;
@@ -11,3 +10,21 @@ body {
   width: 100%;
   text-align: center;
 }
+
+.z-depth-3 {
+  box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12), 0 3px 5px -1px rgba(0, 0, 0, 0.3);
+}
+
+.z-depth-4 {
+  box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.3);
+}
+
+
+// Variables
+$bg-color: #EEE5E9;
+$blue-card: #28cbc7;
+$orange-card: #EF6F6C;
+$red-card: #E84855;
+$green-card: #28cb75;
+$darkblue-card: #288feb;
+$pink-card: #db4b97;

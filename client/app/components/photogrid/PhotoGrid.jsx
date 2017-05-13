@@ -70,7 +70,6 @@ class PhotoGrid extends React.Component {
                             onClick={this.handleClick.bind(this, response.data, index)}
                             key={tile.img}>
                             <GridTile
-                              key={tile.img}
                               onClick={this.handleClick.bind(this, response.data, index)}
                               className="ripple"
                               title={tile.title}
