@@ -4,14 +4,16 @@ const express = require('express');
 const Promise = require('bluebird');
 const _ = require('underscore');
 const emoji = require('node-emoji');
-const database = require('../db-models/photoHungryDB.js')
 const dummyData = require('./dummyData');
+const database = require('../db-models/photoHungryDB.js')
+const User = database.dbuser;
+const SavedItem = database.saveditem;
 
 // Middleware
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-//const cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const fbStrategy = require('passport-facebook').Strategy;
 const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
@@ -33,7 +35,7 @@ app.use(morgan('tiny'));
 // app.use(express.static('dist'));
 app.use(bodyParser.json())
   .use(bodyParser.urlencoded());
-//app.use(cookieParser());
+app.use(cookieParser());
 app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
@@ -58,39 +60,40 @@ passport.use(new fbStrategy({
   },
   (token, refreshToken, profile, done) => {
     console.log('*** Facebook auth success ***', token, profile);
-    // process.nextTick(() => {
-    //   // Search for existing user
-    //   User.findOne({ 'fbID': profile.id })
-    //     .then(function(user, err) {
-    //       if (err) {
-    //         return done(err);
-    //       }
-    //       if (user) {
-    //         return done(null, user._id);
-    //       } else {
-    //         var newUser = new User();
-    //         newUser.fbID = profile.id;
-    //         newUser.fbToken = token;
-    //         newUser.fbFirstName = profile.name.givenName
-    //         newUser.fbLastName = profile.name.familyName;
-    //         //newUser.fbEmail = (profile.emails[0].value || '').toLowerCase();
+    process.nextTick(() => {
+      // Search for existing user
+      User.findOne({ 'fbID': profile.id })
+        .then(function(user, err) {
+          if (err) {
+            return done(err);
+          }
+          if (user) {
+            console.log('** Existing user found **', user);
+            return done(null, user);
+          } else {
+            var newUser = new User();
+            newUser.fbID = profile.id;
+            newUser.fbToken = token;
+            newUser.fbFirstName = profile.name.givenName
+            newUser.fbLastName = profile.name.familyName;
+            //newUser.fbEmail = (profile.emails[0].value || '').toLowerCase();
 
-    //         newUser.save(function(err) {
-    //           if (err) {
-    //             //throw err;
-    //           }
-    //           console.log('** New user created **', newUser);
-    //           return done(null, newUser._id);
-    //         });
-    //       }
-    //     });
-    // });
-    done(null, profile.id);
+            newUser.save(function(err) {
+              if (err) {
+                return done(err);
+              }
+              console.log('** New user created **', newUser);
+              return done(null, newUser);
+            });
+          }
+        });
+    });
+    //done(null, profile.id);
   }));
 
 // configure passport authenticated session persistence.
-passport.serializeUser(function(userID, cb) {
-  cb(null, userID);
+passport.serializeUser(function(user, cb) {
+  cb(null, user);
 });
 
 passport.deserializeUser(function(user, cb) {
@@ -180,15 +183,18 @@ app.post('/api/photos/photo-process', (req, res)=>{
   });
 });
 
+  // change fbID to userID
+  // get userID from req.session.passport.user._id
 app.post('/api/photos/photo-save', (req, res)=>{
   /*
     Here's an example of how to send the data from the request to the database.
     it still needs to 'get user for this request'.
   */
 
-  console.log("received POST request on /photos/photo-save");
+]  console.log("received POST request on /photos/photo-save");
   console.log(req.body);
   var testfbID = "BugsBunny";
+  
   Promise.resolve(database.dbuser.find({ fbID: testfbID }))
     .then((result) => {
       console.log('find fbID operation returns : ', result[0]._id);
@@ -219,23 +225,23 @@ app.post('/api/photos/photo-save', (req, res)=>{
       receive post request from client
       get user for this request
       add request photo to DB with owner set to request user
-
     request:
       format: JSON
       contents:
         photoURL ''
         restaurants [{ / see above / }, {...}]
         recipes [{ / see above / }, {...}]
-
     response:
       format: JSON
       contents:
         status (success or fail)
-
   */
 });
 
 app.get('/api/photos/profile', (req, res)=>{
+
+  // change fbID to userID
+  // get userID from req.session.passport.user._id
 
   console.log("received GET request on /photos/profile");
   Promise.resolve(database.dbuser.find({ fbID: "BugsBunny" }))
