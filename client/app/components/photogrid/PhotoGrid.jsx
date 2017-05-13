@@ -45,7 +45,7 @@ class PhotoGrid extends React.Component {
       <div className="container photogrid">
         <h1>Photo Grid</h1>
           <div>
-            <Get url={`${process.env.ENV_URL}:${process.env.PORT}/api/photos`}>
+            <Get url={ process.env.NODE_ENV === 'production' ? `${process.env.ENV_URL}/api/photos` : `${process.env.ENV_URL}:${process.env.PORT}/api/photos` } >
               {(error, response, isLoading) => {
                 if(error) {
                   return (<div>Something bad happened: {error.message}</div>)

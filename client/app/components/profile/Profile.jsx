@@ -70,7 +70,7 @@ class Profile extends React.Component{
     return (
       <div className="container profile">
         <h1>Profile/USERNAME</h1>
-          <Get url={`${process.env.ENV_URL}:${process.env.PORT}/api/photos/profile`}>
+          <Get url={ process.env.NODE_ENV === 'production' ? `${process.env.ENV_URL}/api/photos/profile` : `${process.env.ENV_URL}:${process.env.PORT}/api/photos/profile` } >
             {(error, response, isLoading) => {
               if(error) {
                 return (<div>Something bad happened: {error.message}</div>)
