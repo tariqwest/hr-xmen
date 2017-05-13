@@ -55,6 +55,10 @@ class PhotoInfo extends React.Component {
     }
   }
 
+  handleSave() {
+    axios.post()
+  }
+
   render() {
     const axiosInstance = axios.create({
       data: {
@@ -100,7 +104,7 @@ class PhotoInfo extends React.Component {
                       rightIconButton={
                         <IconMenu iconButtonElement={iconButtonElement}>
                           <a href={restaurant.url} target="_blank" style={styles.anchor}><MenuItem>Learn More</MenuItem></a>
-                          <MenuItem>Favorite</MenuItem>
+                          <MenuItem onClick={this.handleSave}>Favorite</MenuItem>
                         </IconMenu>
                       }
                       leftAvatar={<Avatar src={restaurant.image_url} />}
