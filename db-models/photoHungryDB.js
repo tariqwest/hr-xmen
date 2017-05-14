@@ -1,17 +1,17 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 mongoose.connect(process.env.ENV_DB);
 
-var db = mongoose.connection;
+const db = mongoose.connection;
 
-db.on('error', function () {
+db.on('error', () => {
   console.log('mongoose connection error');
 });
 
-db.once('open', function () {
+db.once('open', () => {
   console.log('mongoose connected successfully');
 });
 
-var userSchema = mongoose.Schema(
+const userSchema = mongoose.Schema(
   {
     fbID: 'String',
     fbFirstName: 'String',
@@ -20,7 +20,7 @@ var userSchema = mongoose.Schema(
   }
 );
 
-var photoHungrySchema = mongoose.Schema(
+const photoHungrySchema = mongoose.Schema(
   {
     photoURL: 'String',
     savedItem: 'Object', // restaurant or recipe
@@ -28,9 +28,9 @@ var photoHungrySchema = mongoose.Schema(
   }
 );
 
-var dbuser = mongoose.model('photohungryuser', userSchema);
+const dbuser = mongoose.model('photohungryuser', userSchema);
 
-var saveditem = mongoose.model('saveditem', photoHungrySchema);
+const saveditem = mongoose.model('saveditem', photoHungrySchema);
 
 module.exports.saveditem = saveditem;
 module.exports.dbuser = dbuser;

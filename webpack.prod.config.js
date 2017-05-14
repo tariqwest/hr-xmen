@@ -1,17 +1,17 @@
 require('dotenv').config(); // import environmental variables from .env file
-var Path = require('path');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var Webpack = require('webpack');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var cssOutputPath = '/styles/app.css';
-var jsOutputPath = '/scripts/app.js';
-var ExtractSASS = new ExtractTextPlugin(cssOutputPath);
+const Path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const Webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const cssOutputPath = '/styles/app.css';
+const jsOutputPath = '/scripts/app.js';
+const ExtractSASS = new ExtractTextPlugin(cssOutputPath);
 
 
 // ------------------------------------------
 // Base
 // ------------------------------------------
-var webpackConfig = {
+const webpackConfig = {
   resolve: {
     extensions: ['', '.js', '.jsx'],
   },

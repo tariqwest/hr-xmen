@@ -5,22 +5,22 @@ const EventEmitter = require('events').EventEmitter;
 
 const CHANGE_EVENT = 'change';
 
-const _store = {
+const store = {
   list: [],
   current: [],
   location: {},
 };
 
 const addItem = function (item) {
-  _store.list = item;
+  store.list = item;
 };
 
 const addCurrent = function (current) {
-  _store.current = current;
+  store.current = current;
 };
 
 const addLocation = function (location) {
-  _store.location = location;
+  store.location = location;
 };
 
 const photoStore = Object.assign({}, EventEmitter.prototype, {
@@ -28,17 +28,17 @@ const photoStore = Object.assign({}, EventEmitter.prototype, {
     this.on(CHANGE_EVENT, cb);
   },
   getList() {
-    return _store.list;
+    return store.list;
   },
   getCurrent() {
-    return _store.current;
+    return store.current;
   },
   getLocation() {
-    return _store.location;
+    return store.location;
   },
 });
 
-AppDispatcher.register(function (payload) {
+AppDispatcher.register(payload => {
   const action = payload.action;
   switch (action.actionType) {
     case appConstants.ADD_ITEM:
@@ -52,6 +52,7 @@ AppDispatcher.register(function (payload) {
     case appConstants.ADD_LOCATION:
       addLocation(action.data);
       photoStore.emit(CHANGE_EVENT);
+      break;
     default:
       return true;
   }

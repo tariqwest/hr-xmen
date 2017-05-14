@@ -63,17 +63,13 @@ class PhotoInfo extends React.Component {
   render() {
     const axiosInstance = axios.create({
       data: {
-          photoURL: this.state.current.img || defaultData.currentDefault.img,
-          location: {
-              lat: this.state.location.latitude,
-              lng: this.state.location.longitude,
-          },
+        photoURL: this.state.current.img || defaultData.currentDefault.img,
+        location: { lat: this.state.location.latitude, lng: this.state.location.longitude },
       },
     });
     return (
       <div className="photoinfo">
         <div className="banner">
-            <p>{this.state.latitude}</p>
           <Paper style={styles.paper} zDepth={4}>
             <img src={this.state.current.img || defaultData.currentDefault.img} height="200" width="200" alt="food" />
           </Paper>
@@ -147,7 +143,7 @@ class PhotoInfo extends React.Component {
                 }
                 return (<div>Default message before request is made.</div>);
               }}
-            </Post>
+        </Post>
       </div>
     );
   }

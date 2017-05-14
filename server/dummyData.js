@@ -31,7 +31,7 @@ module.exports = {
     img: 'http://4.bp.blogspot.com/-Yz0eHsyFtLI/VP5dcZrAMyI/AAAAAAAAPLk/-s2uDvuVlEo/s1600/Caramelized%2BWaffles%2B(Liege%2BWaffles)%2B2.jpg',
     title: 'Liege Waffles',
     description: 'description',
-  }, ],
+  }],
 
   restaurants: [{
     image_url: 'http://s.eatthis-cdn.com/media/images/ext/842849976/greasy-fast-food.jpg',
