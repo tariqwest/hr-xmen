@@ -26,6 +26,7 @@ class Photo extends React.Component {
     this.state = {
       list: photoStore.getList(),
       current: photoStore.getCurrent(),
+      location: photoStore.getLocation(),
     };
   }
 

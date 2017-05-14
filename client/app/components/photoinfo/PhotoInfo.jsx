@@ -45,36 +45,35 @@ class PhotoInfo extends React.Component {
     this.state = {
       list: photoStore.getList(),
       current: photoStore.getCurrent(),
+      location: photoStore.getLocation(),
     };
     this.handleSave = this.handleSave.bind(this);
   }
 
   handleSave(recipeORRestaurant, imgURL) {
-    console.log('CLICKED');
     axios.post(process.env.NODE_ENV === 'production' ? `${process.env.ENV_URL}/api/photos/photo-save` : `${process.env.ENV_URL}:${process.env.PORT}/api/photos/photo-save`, {
       recipeORRestaurant,
       imgURL,
-    }).then(res => {
-      console.log(res);
     })
     .catch(err => {
-      console.log(err);
+      throw err;
     });
   }
 
   render() {
     const axiosInstance = axios.create({
       data: {
-        photoURL: this.state.current.img || defaultData.currentDefault.img,
-        location: {
-          lat: 37.773972,
-          lng: -122.431297,
-        },
+          photoURL: this.state.current.img || defaultData.currentDefault.img,
+          location: {
+              lat: this.state.location.latitude,
+              lng: this.state.location.longitude,
+          },
       },
     });
     return (
       <div className="photoinfo">
         <div className="banner">
+            <p>{this.state.latitude}</p>
           <Paper style={styles.paper} zDepth={4}>
             <img src={this.state.current.img || defaultData.currentDefault.img} height="200" width="200" alt="food" />
           </Paper>
@@ -84,71 +83,71 @@ class PhotoInfo extends React.Component {
           </div>
         </div>
         <Post url={process.env.NODE_ENV === 'production' ? `${process.env.ENV_URL}/api/photos/photo-process` : `${process.env.ENV_URL}:${process.env.PORT}/api/photos/photo-process`} instance={axiosInstance}>
-          {(error, response, isLoading) => {
-            if (error) {
-              return (<div>Something bad happened: {error.message}</div>);
-            } else if (isLoading) {
-              return (
-                <div>
-                  <CircularProgress size={80} thickness={5} />
-                </div>
-              );
-            } else if (response !== null) {
-              return (
-                <div className="flex-container">
-                  <List className="flex">
-                    <h1>Restaurants</h1>
-                    {response.data.restaurants.map((restaurant, index) => (
-                      <ListItem
-                        style={styles.divider}
-                        key={index}
-                        rightIconButton={
-                          <IconMenu iconButtonElement={iconButtonElement}>
-                            <a href={restaurant.url} target="_blank" style={styles.anchor}><MenuItem>Learn More</MenuItem></a>
-                            <MenuItem onClick={() => this.handleSave(restaurant, this.state.current.img || defaultData.currentDefault.img)}>Favorite</MenuItem>
-                          </IconMenu>
-                        }
-                        leftAvatar={<Avatar src={restaurant.image_url} />}
-                        primaryText={restaurant.name}
-                        secondaryText={
-                          <p>
-                            <span style={{ color: darkBlack }}>{restaurant.rating} -- {restaurant.categories[0].title}</span>
-                            <br /> {restaurant.location}
-                          </p>
-                        }
-                        secondaryTextLines={2}
-                      />
-                    ))}
-                  </List>
-                  <List className="flex">
-                    <h1>Recipes</h1>
-                    {response.data.recipes.map((recipe, index) => (
-                      <ListItem
-                        style={styles.divider}
-                        key={index}
-                        rightIconButton={
-                          <IconMenu iconButtonElement={iconButtonElement}>
-                            <a href={recipe.url} target="_blank" style={styles.anchor}><MenuItem>Learn More</MenuItem></a>
-                            <MenuItem onClick={() => this.handleSave(recipe, this.state.current.img || defaultData.currentDefault.img)}>Favorite</MenuItem>
-                          </IconMenu>
-                        }
-                        primaryText={recipe.name}
-                        secondaryText={
-                          <p>
-                            <span style={{ color: darkBlack }}>{recipe.rating} -- ingredients</span>
-                            <br /> {recipe.prepTime}
-                          </p>
-                        }
-                        secondaryTextLines={2}
-                      />
-                    ))}
-                  </List>
-                </div>
-              );
-            }
-            return (<div>Default message before request is made.</div>);
-          }}
-        </Post>
+              {(error, response, isLoading) => {
+                if (error) {
+                  return (<div>Something bad happened: {error.message}</div>);
+                } else if (isLoading) {
+                  return (
+                    <div>
+                      <CircularProgress size={80} thickness={5} />
+                    </div>
+                  );
+                } else if (response !== null) {
+                  return (
+                    <div className="flex-container">
+                      <List className="flex">
+                        <h1>Restaurants</h1>
+                        {response.data.restaurants.map((restaurant, index) => (
+                          <ListItem
+                            style={styles.divider}
+                            key={index}
+                            rightIconButton={
+                              <IconMenu iconButtonElement={iconButtonElement}>
+                                <a href={restaurant.url} target="_blank" style={styles.anchor}><MenuItem>Learn More</MenuItem></a>
+                                <MenuItem onClick={() => this.handleSave(restaurant, this.state.current.img || defaultData.currentDefault.img)}>Favorite</MenuItem>
+                              </IconMenu>
+                            }
+                            leftAvatar={<Avatar src={restaurant.image_url} />}
+                            primaryText={restaurant.name}
+                            secondaryText={
+                              <p>
+                                <span style={{ color: darkBlack }}>{restaurant.rating} -- {restaurant.categories[0].title}</span>
+                                <br /> {restaurant.location}
+                              </p>
+                            }
+                            secondaryTextLines={2}
+                          />
+                        ))}
+                      </List>
+                      <List className="flex">
+                        <h1>Recipes</h1>
+                        {response.data.recipes.map((recipe, index) => (
+                          <ListItem
+                            style={styles.divider}
+                            key={index}
+                            rightIconButton={
+                              <IconMenu iconButtonElement={iconButtonElement}>
+                                <a href={recipe.url} target="_blank" style={styles.anchor}><MenuItem>Learn More</MenuItem></a>
+                                <MenuItem onClick={() => this.handleSave(recipe, this.state.current.img || defaultData.currentDefault.img)}>Favorite</MenuItem>
+                              </IconMenu>
+                            }
+                            primaryText={recipe.name}
+                            secondaryText={
+                              <p>
+                                <span style={{ color: darkBlack }}>{recipe.rating} -- ingredients</span>
+                                <br /> {recipe.prepTime}
+                              </p>
+                            }
+                            secondaryTextLines={2}
+                          />
+                        ))}
+                      </List>
+                    </div>
+                  );
+                }
+                return (<div>Default message before request is made.</div>);
+              }}
+            </Post>
       </div>
     );
   }

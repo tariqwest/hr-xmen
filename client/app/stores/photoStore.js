@@ -1,24 +1,29 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var appConstants = require('../constants/appConstants');
+const AppDispatcher = require('../dispatcher/AppDispatcher');
+const appConstants = require('../constants/appConstants');
 // var objectAssign = require('react/lib/Object.assign');
-var EventEmitter = require('events').EventEmitter;
+const EventEmitter = require('events').EventEmitter;
 
-var CHANGE_EVENT = 'change';
+const CHANGE_EVENT = 'change';
 
-var _store = {
+const _store = {
   list: [],
   current: [],
+  location: {},
 };
 
-var addItem = function (item) {
+const addItem = function (item) {
   _store.list = item;
 };
 
-var addCurrent = function (current) {
+const addCurrent = function (current) {
   _store.current = current;
 };
 
-var photoStore = Object.assign({}, EventEmitter.prototype, {
+const addLocation = function (location) {
+  _store.location = location;
+};
+
+const photoStore = Object.assign({}, EventEmitter.prototype, {
   addChangeListener(cb) {
     this.on(CHANGE_EVENT, cb);
   },
@@ -28,10 +33,13 @@ var photoStore = Object.assign({}, EventEmitter.prototype, {
   getCurrent() {
     return _store.current;
   },
+  getLocation() {
+    return _store.location;
+  },
 });
 
 AppDispatcher.register(function (payload) {
-  var action = payload.action;
+  const action = payload.action;
   switch (action.actionType) {
     case appConstants.ADD_ITEM:
       addItem(action.data);
@@ -41,6 +49,9 @@ AppDispatcher.register(function (payload) {
       addCurrent(action.data);
       photoStore.emit(CHANGE_EVENT);
       break;
+    case appConstants.ADD_LOCATION:
+      addLocation(action.data);
+      photoStore.emit(CHANGE_EVENT);
     default:
       return true;
   }

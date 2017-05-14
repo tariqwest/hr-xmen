@@ -1,7 +1,7 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var appConstants = require('../constants/appConstants');
+const AppDispatcher = require('../dispatcher/AppDispatcher');
+const appConstants = require('../constants/appConstants');
 
-var photoActions = {
+const photoActions = {
   addItem(item) {
     AppDispatcher.handleAction({
       actionType: appConstants.ADD_ITEM,
@@ -12,6 +12,12 @@ var photoActions = {
     AppDispatcher.handleAction({
       actionType: appConstants.ADD_CURRENT,
       data: current,
+    });
+  },
+  addLocation(location) {
+    AppDispatcher.handleAction({
+      actionType: appConstants.ADD_LOCATION,
+      data: location,
     });
   },
 };

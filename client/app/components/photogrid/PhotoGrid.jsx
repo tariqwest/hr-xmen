@@ -30,9 +30,29 @@ class PhotoGrid extends React.Component {
     this.state = {
       list: photoStore.getList(),
       current: photoStore.getCurrent(),
+      location: photoStore.getLocation(),
     };
     this.handleClick = this.handleClick.bind(this);
   }
+  componentWillMount() {
+      const geolocation = navigator.geolocation;
+
+      const location = new Promise((resolve, reject) => {
+          if (!geolocation) {
+              reject(new Error('Not Supported'));
+          }
+
+          geolocation.getCurrentPosition((position) => {
+              // this.setState({
+              //     latitude: position.coords.latitude,
+              //     longitude: position.coords.longitude,
+              // });
+            photoActions.addLocation(position.coords);
+          }, () => {
+              reject (new Error('Permission denied'));
+          });
+      });
+    }
 
   handleClick(item, index) {
     console.log(item);

@@ -141,6 +141,7 @@ app.post('/api/photos/photo-process', (req, res)=>{
     .then(({prediction})=>{
       console.log('*** Result of getFoodPrediction ***', prediction);
       menuItemSearchArray = prediction;
+      console.log(req.body.location)
       return googleMapsGeocode.getPostalCode(req.body.location.lat, req.body.location.lng);
     })
     .then(({postalCode, countryCode})=>{
