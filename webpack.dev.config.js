@@ -1,17 +1,14 @@
 require('dotenv').config(); // import environmental variables from .env file
-var Path = require('path');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var Webpack = require('webpack');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var cssOutputPath = '/styles/app.css';
-var jsOutputPath = '/scripts/app.js';
-var ExtractSASS = new ExtractTextPlugin(cssOutputPath);
+const Path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const Webpack = require('webpack');
+const jsOutputPath = '/scripts/app.js';
 
 
 // ------------------------------------------
 // Base
 // ------------------------------------------
-var webpackConfig = {
+const webpackConfig = {
   resolve: {
     extensions: ['', '.js', '.jsx'],
   },
@@ -20,7 +17,7 @@ var webpackConfig = {
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
         ENV_URL: JSON.stringify(process.env.ENV_URL || 'http://localhost'),
-        PORT: JSON.stringify(process.env.PORT || 8080)
+        PORT: JSON.stringify(process.env.PORT || 8080),
       },
     }),
     new HtmlWebpackPlugin({
@@ -40,7 +37,7 @@ var webpackConfig = {
 // Entry points
 // ------------------------------------------
 webpackConfig.entry = process.env.CLIENT_DEV === 'true'
-  ? ['webpack-dev-server/client?http://localhost:' + process.env.CLIENT_DEV_PORT,
+  ? [`webpack-dev-server/client?http://localhost:${process.env.CLIENT_DEV_PORT}`,
      'webpack/hot/dev-server',
      Path.join(__dirname, './client/app/index')]
   : [Path.join(__dirname, './client/app/index')];
