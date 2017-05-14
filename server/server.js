@@ -185,20 +185,26 @@ app.post('/api/photos/photo-save', (req, res)=>{
     Here's an example of how to send the data from the request to the database.
     it still needs to 'get user for this request'.
   */
-  console.log("received POST request on /photos/photo-save");
 
-  var testfbID = "ColonelSanders";
+  console.log("received POST request on /photos/photo-save");
+  console.log(req.body);
+  var testfbID = "BugsBunny";
   Promise.resolve(database.dbuser.find({ fbID: testfbID }))
     .then((result) => {
       console.log('find fbID operation returns : ', result[0]._id);
-      var photoHungry4DB = new database.saveditem({ 
-        photoURL: "http://leitesculinaria.com/89229/recipes-batter-fried-chicken.html", 
-        savedItem: { "restaurant" : "KFC", "address" : "691 Eddy St Ste 249, San Francisco, CA 94109", "phone": "1-800-EAT-CHKN" }, // restaurant or recipe
+      var photoHungry4DB = new database.saveditem({
+        photoURL: req.body.imgURL,
+        savedItem: req.body.recipeORRestaurant, // restaurant or recipe
         userID: result[0]._id
       });
+      // var photoHungry4DB = new database.saveditem({
+      //   photoURL: 'https://www.bettycrocker.com/recipes/cornbread/8990e15c-fc1d-4a8d-b8b3-4b37f45eca49',
+      //   savedItem: { "title": "CornBread", "recipe": "fluffy cornbread that's baked to perfection"}, // restaurant or recipe
+      //   userID: result[0]._id
+      // });
       console.log('photoHungry4DB created');
       return (photoHungry4DB);
-    }).catch((err) => { 
+    }).catch((err) => {
       console.log("find fbID failed");
     })
     .then((photoHungry4DB) => {
@@ -236,7 +242,7 @@ app.get('/api/photos/profile', (req, res)=>{
     .then((result) => {
       console.log('find fbID operation returns : ', result[0]._id);
       return (result[0]._id);
-    }).catch((err) => { 
+    }).catch((err) => {
       console.log("find fbID failed");
     })
     .then((userID4Profile) => {
@@ -248,12 +254,12 @@ app.get('/api/photos/profile', (req, res)=>{
       res.json(userProfile);
       res.end("success");
     })
-    .catch((err) => { 
+    .catch((err) => {
       console.log("failed to retrieve profile");
       res.end("failure");
     });
 
-  //res.json(dummyData.tilesData)
+  // res.json(dummyData)
   /*
   Get user's profile info
   - Saved photos, restaurants, recipes
