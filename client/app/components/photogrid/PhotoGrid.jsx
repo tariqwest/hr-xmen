@@ -34,6 +34,7 @@ class PhotoGrid extends React.Component {
     };
     this.handleClick = this.handleClick.bind(this);
   }
+
   componentWillMount() {
     const geolocation = navigator.geolocation;
 
@@ -43,6 +44,7 @@ class PhotoGrid extends React.Component {
       }
 
       geolocation.getCurrentPosition((position) => {
+        console.log('position', position);
         photoActions.addLocation(position.coords);
       }, () => {
         reject(new Error('Permission denied'));
