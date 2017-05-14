@@ -88,7 +88,6 @@ passport.use(new fbStrategy({
           }
         });
     });
-    //done(null, profile.id);
   }));
 
 // configure passport authenticated session persistence.
@@ -128,10 +127,6 @@ app.post('/api/photos/photo-process-test', (req, res) => {
   console.log(req.body)
   res.json(dummyData)
 });
-
-// openMenu.getMenuItems('milk', 94117, 'US');
-
-// clarifai.getFoodPrediction('https://drscdn.500px.org/photo/121835289/w%3D440_h%3D440/3cc831ecc8cc6cfcfb15f0a7876acbae?v=5')
 
 app.post('/api/photos/photo-process', (req, res)=>{
 
@@ -183,35 +178,23 @@ app.post('/api/photos/photo-process', (req, res)=>{
   });
 });
 
-  // change fbID to userID
-  // get userID from req.session.passport.user._id
 app.post('/api/photos/photo-save', (req, res)=>{
-  /*
-    Here's an example of how to send the data from the request to the database.
-    it still needs to 'get user for this request'.
-  */
-
-]  console.log("received POST request on /photos/photo-save");
-  console.log(req.body);
-  var testfbID = "BugsBunny";
+  console.log("received POST request on /photos/photo-save");
+  console.log('** Photo save request body **', req.body);
+  console.log('** Photo save request session **', req.session);
   
-  Promise.resolve(database.dbuser.find({ fbID: testfbID }))
+  Promise.resolve(database.dbuser.find({ _id: req.session.passport.user._id }))
     .then((result) => {
-      console.log('find fbID operation returns : ', result[0]._id);
+      console.log('find user operation returns : ', result[0]);
       var photoHungry4DB = new database.saveditem({
         photoURL: req.body.imgURL,
         savedItem: req.body.recipeORRestaurant, // restaurant or recipe
         userID: result[0]._id
       });
-      // var photoHungry4DB = new database.saveditem({
-      //   photoURL: 'https://www.bettycrocker.com/recipes/cornbread/8990e15c-fc1d-4a8d-b8b3-4b37f45eca49',
-      //   savedItem: { "title": "CornBread", "recipe": "fluffy cornbread that's baked to perfection"}, // restaurant or recipe
-      //   userID: result[0]._id
-      // });
       console.log('photoHungry4DB created');
       return (photoHungry4DB);
     }).catch((err) => {
-      console.log("find fbID failed");
+      console.log("find user failed");
     })
     .then((photoHungry4DB) => {
       photoHungry4DB.save()
@@ -220,36 +203,16 @@ app.post('/api/photos/photo-save', (req, res)=>{
       console.log("\"saveditem\" saved to database")
       res.end("success");
     });
-  /*
-    process:
-      receive post request from client
-      get user for this request
-      add request photo to DB with owner set to request user
-    request:
-      format: JSON
-      contents:
-        photoURL ''
-        restaurants [{ / see above / }, {...}]
-        recipes [{ / see above / }, {...}]
-    response:
-      format: JSON
-      contents:
-        status (success or fail)
-  */
 });
 
 app.get('/api/photos/profile', (req, res)=>{
-
-  // change fbID to userID
-  // get userID from req.session.passport.user._id
-
   console.log("received GET request on /photos/profile");
-  Promise.resolve(database.dbuser.find({ fbID: "BugsBunny" }))
+  Promise.resolve(database.dbuser.find({ _id: req.session.passport.user._id }))
     .then((result) => {
-      console.log('find fbID operation returns : ', result[0]._id);
+      console.log('find user operation returns : ', result[0]);
       return (result[0]._id);
     }).catch((err) => {
-      console.log("find fbID failed");
+      console.log("find user failed");
     })
     .then((userID4Profile) => {
       console.log ("userID4Profile = ", userID4Profile);
@@ -264,13 +227,6 @@ app.get('/api/photos/profile', (req, res)=>{
       console.log("failed to retrieve profile");
       res.end("failure");
     });
-
-  // res.json(dummyData)
-  /*
-  Get user's profile info
-  - Saved photos, restaurants, recipes
-  */
-
 });
 
 const port = process.env.PORT || 8080;
