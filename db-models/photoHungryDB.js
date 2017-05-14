@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/photoHungryDB');
+mongoose.connect(process.env.ENV_DB);
 
 var db = mongoose.connection;
 
