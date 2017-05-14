@@ -3,11 +3,11 @@ mongoose.connect(process.env.ENV_DB);
 
 var db = mongoose.connection;
 
-db.on('error', function() {
+db.on('error', function () {
   console.log('mongoose connection error');
 });
 
-db.once('open', function() {
+db.once('open', function () {
   console.log('mongoose connected successfully');
 });
 
@@ -16,15 +16,15 @@ var userSchema = mongoose.Schema(
     fbID: 'String',
     fbFirstName: 'String',
     fbLastName: 'String',
-    fbToken: 'String'
+    fbToken: 'String',
   }
 );
 
 var photoHungrySchema = mongoose.Schema(
-  {   
-    photoURL: 'String', 
+  {
+    photoURL: 'String',
     savedItem: 'Object', // restaurant or recipe
-    userID: 'String' // _id from a user in user collection
+    userID: 'String', // _id from a user in user collection
   }
 );
 

@@ -1,19 +1,13 @@
 import React from 'react';
 import axios from 'axios';
-import { AxiosProvider, Request, Get, Delete, Head, Post, Put, Patch } from 'react-axios';
+import { Post } from 'react-axios';
 
 import photoStore from '../../stores/photoStore';
-import photoActions from '../../actions/photoActions';
 import defaultData from '../../default.js';
 
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-import RaisedButton from 'material-ui/RaisedButton';
-// import MobileTearSheet from '../../../MobileTearSheet';
-import {List, ListItem} from 'material-ui/List';
-import Divider from 'material-ui/Divider';
-import Subheader from 'material-ui/Subheader';
+import { List, ListItem } from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
-import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
+import { grey400, darkBlack } from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import IconMenu from 'material-ui/IconMenu';
@@ -23,7 +17,7 @@ import Paper from 'material-ui/Paper';
 
 const styles = {
   divider: {
-    'borderBottom': '1px solid rgba(140,139,139, 0.2)'
+    borderBottom: '1px solid rgba(140,139,139, 0.2)',
   },
   paper: {
     height: 200,
@@ -32,13 +26,12 @@ const styles = {
     textAlign: 'center',
   },
   anchor: {
-    textDecoration: 'none'
-  }
+    textDecoration: 'none',
+  },
 };
 
 const iconButtonElement = (
   <IconButton
-    touch={true}
     tooltip="more"
     tooltipPosition="bottom-left"
   >
@@ -48,24 +41,25 @@ const iconButtonElement = (
 
 class PhotoInfo extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       list: photoStore.getList(),
-      current: photoStore.getCurrent()
-    }
+      current: photoStore.getCurrent(),
+    };
+    this.handleSave = this.handleSave.bind(this);
   }
 
   handleSave(recipeORRestaurant, imgURL) {
-    console.log('CLICKED')
+    console.log('CLICKED');
     axios.post(process.env.NODE_ENV === 'production' ? `${process.env.ENV_URL}/api/photos/photo-save` : `${process.env.ENV_URL}:${process.env.PORT}/api/photos/photo-save`, {
-      recipeORRestaurant: recipeORRestaurant,
-      imgURL: imgURL
+      recipeORRestaurant,
+      imgURL,
     }).then(res => {
-      console.log(res)
+      console.log(res);
     })
     .catch(err => {
-      console.log(err)
-    })
+      console.log(err);
+    });
   }
 
   render() {
@@ -74,91 +68,89 @@ class PhotoInfo extends React.Component {
         photoURL: this.state.current.img || defaultData.currentDefault.img,
         location: {
           lat: 37.773972,
-          lng: -122.431297
-        }
-      }
+          lng: -122.431297,
+        },
+      },
     });
     return (
       <div className="photoinfo">
         <div className="banner">
-          <Paper style={styles.paper} zDepth={4} rounded={true}>
-            <img src={this.state.current.img || defaultData.currentDefault.img} height="200" width="200" />
+          <Paper style={styles.paper} zDepth={4}>
+            <img src={this.state.current.img || defaultData.currentDefault.img} height="200" width="200" alt="food" />
           </Paper>
           <div className="bannerinfo">
             <h1>{this.state.current.title || defaultData.currentDefault.title}</h1>
             <h4>{this.state.current.description || defaultData.currentDefault.description}</h4>
           </div>
         </div>
-        <Post url={ process.env.NODE_ENV === 'production' ? `${process.env.ENV_URL}/api/photos/photo-process` : `${process.env.ENV_URL}:${process.env.PORT}/api/photos/photo-process` } instance={axiosInstance}>
+        <Post url={process.env.NODE_ENV === 'production' ? `${process.env.ENV_URL}/api/photos/photo-process` : `${process.env.ENV_URL}:${process.env.PORT}/api/photos/photo-process`} instance={axiosInstance}>
           {(error, response, isLoading) => {
-            if(error) {
-              return (<div>Something bad happened: {error.message}</div>)
-            }
-            else if(isLoading) {
+            if (error) {
+              return (<div>Something bad happened: {error.message}</div>);
+            } else if (isLoading) {
               return (
                 <div>
                   <CircularProgress size={80} thickness={5} />
                 </div>
-              )
-            }
-            else if(response !== null) {
+              );
+            } else if (response !== null) {
               return (
                 <div className="flex-container">
                   <List className="flex">
                     <h1>Restaurants</h1>
                     {response.data.restaurants.map((restaurant, index) => (
-                    <ListItem
-                      style={styles.divider}
-                      key={index}
-                      rightIconButton={
-                        <IconMenu iconButtonElement={iconButtonElement}>
-                          <a href={restaurant.url} target="_blank" style={styles.anchor}><MenuItem>Learn More</MenuItem></a>
-                          <MenuItem onClick={this.handleSave.bind(this, restaurant, this.state.current.img || defaultData.currentDefault.img)}>Favorite</MenuItem>
-                        </IconMenu>
-                      }
-                      leftAvatar={<Avatar src={restaurant.image_url} />}
-                      primaryText={restaurant.name}
-                      secondaryText={
-                        <p>
-                          <span style={{color: darkBlack}}>{restaurant.rating} -- {restaurant.categories[0].title}</span>
-                            <br/> {restaurant.location}
-                        </p>
-                      }
-                      secondaryTextLines={2}
-                    />
+                      <ListItem
+                        style={styles.divider}
+                        key={index}
+                        rightIconButton={
+                          <IconMenu iconButtonElement={iconButtonElement}>
+                            <a href={restaurant.url} target="_blank" style={styles.anchor}><MenuItem>Learn More</MenuItem></a>
+                            <MenuItem onClick={() => this.handleSave(restaurant, this.state.current.img || defaultData.currentDefault.img)}>Favorite</MenuItem>
+                          </IconMenu>
+                        }
+                        leftAvatar={<Avatar src={restaurant.image_url} />}
+                        primaryText={restaurant.name}
+                        secondaryText={
+                          <p>
+                            <span style={{ color: darkBlack }}>{restaurant.rating} -- {restaurant.categories[0].title}</span>
+                            <br /> {restaurant.location}
+                          </p>
+                        }
+                        secondaryTextLines={2}
+                      />
                     ))}
                   </List>
                   <List className="flex">
                     <h1>Recipes</h1>
                     {response.data.recipes.map((recipe, index) => (
-                    <ListItem
-                      style={styles.divider}
-                      key={index}
-                      rightIconButton={
-                        <IconMenu iconButtonElement={iconButtonElement}>
-                          <a href={recipe.url} target="_blank" style={styles.anchor}><MenuItem>Learn More</MenuItem></a>
-                          <MenuItem onClick={this.handleSave.bind(this, recipe, this.state.current.img || defaultData.currentDefault.img)}>Favorite</MenuItem>
-                        </IconMenu>
-                      }
-                      primaryText={recipe.name}
-                      secondaryText={
-                        <p>
-                          <span style={{color: darkBlack}}>{recipe.rating} -- ingredients</span>
-                            <br/> {recipe.prepTime}
-                        </p>
-                      }
-                      secondaryTextLines={2}
-                    />
+                      <ListItem
+                        style={styles.divider}
+                        key={index}
+                        rightIconButton={
+                          <IconMenu iconButtonElement={iconButtonElement}>
+                            <a href={recipe.url} target="_blank" style={styles.anchor}><MenuItem>Learn More</MenuItem></a>
+                            <MenuItem onClick={() => this.handleSave(recipe, this.state.current.img || defaultData.currentDefault.img)}>Favorite</MenuItem>
+                          </IconMenu>
+                        }
+                        primaryText={recipe.name}
+                        secondaryText={
+                          <p>
+                            <span style={{ color: darkBlack }}>{recipe.rating} -- ingredients</span>
+                            <br /> {recipe.prepTime}
+                          </p>
+                        }
+                        secondaryTextLines={2}
+                      />
                     ))}
                   </List>
                 </div>
-              )
+              );
             }
-            return (<div>Default message before request is made.</div>)
+            return (<div>Default message before request is made.</div>);
           }}
         </Post>
-    </div>
-    )
+      </div>
+    );
   }
 }
 

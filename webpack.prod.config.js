@@ -20,7 +20,7 @@ var webpackConfig = {
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'production'),
         ENV_URL: JSON.stringify(process.env.ENV_URL || 'http://hr-xmen.herokuapp.com'),
-        PORT: JSON.stringify(process.env.PORT || 80)
+        PORT: JSON.stringify(process.env.PORT || 80),
       },
     }),
     new HtmlWebpackPlugin({

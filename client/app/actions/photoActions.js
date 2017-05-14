@@ -2,18 +2,18 @@ var AppDispatcher = require('../dispatcher/AppDispatcher');
 var appConstants = require('../constants/appConstants');
 
 var photoActions = {
-  addItem: function(item){
+  addItem(item) {
     AppDispatcher.handleAction({
       actionType: appConstants.ADD_ITEM,
-      data: item
+      data: item,
     });
   },
-  addCurrent: function(current){
+  addCurrent(current) {
     AppDispatcher.handleAction({
       actionType: appConstants.ADD_CURRENT,
-      data: current
-    })
-  }
+      data: current,
+    });
+  },
 };
 
 module.exports = photoActions;

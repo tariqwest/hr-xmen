@@ -138,51 +138,51 @@ app.post('/api/photos/photo-process', (req, res)=>{
   clientResponse.statusCode = 200;
 
   Promise.resolve(clarifai.getFoodPrediction(req.body.photoURL))
-  .then(({prediction})=>{
-    console.log('*** Result of getFoodPrediction ***', prediction);
-    menuItemSearchArray = prediction;
-    return googleMapsGeocode.getPostalCode(req.body.location.lat, req.body.location.lng);
-  })
-  .then(({postalCode, countryCode})=>{
-    console.log('*** Result of getPostalCode ***', postalCode, countryCode);
-    return openMenu.getMenuItems(menuItemSearchArray[0], postalCode, countryCode);
-  })
-  .then((menuItems)=>{
-    console.log('*** Result of getMenuItems ***', menuItems.length);
-    recipeSearchString = menuItems[0].menu_item_name;
-    return Promise.resolve(menuItems);
-  })
-  .mapSeries((menuItem)=>{
-    return yelp.getRestaurant(`${menuItem.address_1}, ${menuItem.city_town}, ${menuItem.state_province}`, menuItem.restaurant_name);
-  })
-  .then((restaurants)=>{
-    clientResponse.restaurants = restaurants.sort((a, b)=>{
-      if(b.rating === a.rating){
-        return b.review_count - a.review_count;
-      }
-      return b.rating - a.rating;
-    }).slice(0,3);
-    console.log('*** Result of openMenu + yelp restaurants lookup ***', clientResponse.restaurants.length);
-  })
-  .then(()=>{
-    return yummly.getRecipes(recipeSearchString);
-  })
-  .then((recipes)=>{
-    clientResponse.recipes = recipes;
-    console.log('*** Result of openMenu + yummly recipes ***', clientResponse.recipes.length);
-    res.json(clientResponse);
-  })
-  .catch((err)=>{
-    console.log('*** Error while processing photo ***', err);
-    res.status(404).send({statusCode: 404, status: err});
-  });
+    .then(({prediction})=>{
+      console.log('*** Result of getFoodPrediction ***', prediction);
+      menuItemSearchArray = prediction;
+      return googleMapsGeocode.getPostalCode(req.body.location.lat, req.body.location.lng);
+    })
+    .then(({postalCode, countryCode})=>{
+      console.log('*** Result of getPostalCode ***', postalCode, countryCode);
+      return openMenu.getMenuItems(menuItemSearchArray[0], postalCode, countryCode);
+    })
+    .then((menuItems)=>{
+      console.log('*** Result of getMenuItems ***', menuItems.length);
+      recipeSearchString = menuItems[0].menu_item_name;
+      return Promise.resolve(menuItems);
+    })
+    .mapSeries((menuItem)=>{
+      return yelp.getRestaurant(`${menuItem.address_1}, ${menuItem.city_town}, ${menuItem.state_province}`, menuItem.restaurant_name);
+    })
+    .then((restaurants)=>{
+      clientResponse.restaurants = restaurants.sort((a, b)=>{
+        if(b.rating === a.rating){
+          return b.review_count - a.review_count;
+        }
+        return b.rating - a.rating;
+      }).slice(0,3);
+      console.log('*** Result of openMenu + yelp restaurants lookup ***', clientResponse.restaurants.length);
+    })
+    .then(()=>{
+      return yummly.getRecipes(recipeSearchString);
+    })
+    .then((recipes)=>{
+      clientResponse.recipes = recipes;
+      console.log('*** Result of openMenu + yummly recipes ***', clientResponse.recipes.length);
+      res.json(clientResponse);
+    })
+    .catch((err)=>{
+      console.log('*** Error while processing photo ***', err);
+      res.status(404).send({statusCode: 404, status: err});
+    });
 });
 
 app.post('/api/photos/photo-save', (req, res)=>{
   console.log("received POST request on /photos/photo-save");
   console.log('** Photo save request body **', req.body);
   console.log('** Photo save request session **', req.session);
-  
+
   Promise.resolve(database.dbuser.find({ _id: req.session.passport.user._id }))
     .then((result) => {
       console.log('find user operation returns : ', result[0]);
@@ -194,8 +194,8 @@ app.post('/api/photos/photo-save', (req, res)=>{
       console.log('photoHungry4DB created');
       return (photoHungry4DB);
     }).catch((err) => {
-      console.log("find user failed");
-    })
+    console.log("find user failed");
+  })
     .then((photoHungry4DB) => {
       photoHungry4DB.save()
     })
@@ -212,8 +212,8 @@ app.get('/api/photos/profile', (req, res)=>{
       console.log('find user operation returns : ', result[0]);
       return (result[0]._id);
     }).catch((err) => {
-      console.log("find user failed");
-    })
+    console.log("find user failed");
+  })
     .then((userID4Profile) => {
       console.log ("userID4Profile = ", userID4Profile);
       return (database.saveditem.find({ userID: userID4Profile}));

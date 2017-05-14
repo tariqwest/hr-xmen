@@ -20,7 +20,7 @@ var webpackConfig = {
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
         ENV_URL: JSON.stringify(process.env.ENV_URL || 'http://localhost'),
-        PORT: JSON.stringify(process.env.PORT || 8080)
+        PORT: JSON.stringify(process.env.PORT || 8080),
       },
     }),
     new HtmlWebpackPlugin({

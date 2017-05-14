@@ -7,32 +7,32 @@ var CHANGE_EVENT = 'change';
 
 var _store = {
   list: [],
-  current: []
+  current: [],
 };
 
-var addItem = function(item){
+var addItem = function (item) {
   _store.list = item;
 };
 
-var addCurrent = function(current){
+var addCurrent = function (current) {
   _store.current = current;
 };
 
 var photoStore = Object.assign({}, EventEmitter.prototype, {
-  addChangeListener: function(cb){
+  addChangeListener(cb) {
     this.on(CHANGE_EVENT, cb);
   },
-  getList: function(){
+  getList() {
     return _store.list;
   },
-  getCurrent: function(){
+  getCurrent() {
     return _store.current;
   },
 });
 
-AppDispatcher.register(function(payload){
+AppDispatcher.register(function (payload) {
   var action = payload.action;
-  switch(action.actionType){
+  switch (action.actionType) {
     case appConstants.ADD_ITEM:
       addItem(action.data);
       photoStore.emit(CHANGE_EVENT);
