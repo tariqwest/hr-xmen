@@ -77,11 +77,11 @@ class PhotoGrid extends React.Component {
                     <div style={styles.root}>
                       <GridList cellHeight={280} cols={3} style={styles.gridList}>
                         <Subheader>Food</Subheader>
-                        {response.data.map((tile, index) => (
+                        {response.data.photos.map((tile, index) => (
                           <Link
                             to={`/app/photo/${index}`}
                             className="ripple"
-                            onClick={() => this.handleClick(response.data, index)}
+                            onClick={() => this.handleClick(response.data.photos, index)}
                             key={tile.img}
                           >
                             <GridTile

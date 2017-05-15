@@ -1,21 +1,23 @@
 const FiveHundredPX = require('500px');
-const api500px = new FiveHundredPX(process.env.FIVEHUNDREDPX_KEY);
-
+const Promise = require('bluebird');
+const fiveHundredPX = new FiveHundredPX(process.env.FIVEHUNDREDPX_KEY);
+fiveHundredPX.photos.searchByTermAsync = Promise.promisify(fiveHundredPX.photos.searchByTerm);
 
 module.exports = {
-  searchPhotos: (food, res) => {
-    api500px.photos.searchByTerm(food, { sort: '_score', rpp: '100', image_size: 440, only: 23 }, (error, results) => {
-      if (error) {
-        throw error;
-      }
-      const tilesData = results.photos.map((item) => {
-        return {
-          img: item.image_url,
-          title: item.name,
-          description: item.description,
-        };
+  searchPhotos: (food) => {
+    return fiveHundredPX.photos.searchByTermAsync(food, { sort: '_score', rpp: '100', image_size: 440, only: 23 })
+      .then((result) => {
+        let photos = result.photos.map((item) => {
+          return {
+            img: item.image_url,
+            title: item.name,
+            description: item.description,
+          };
+        });
+        return photos;
+      })
+      .catch((err) => {
+        throw `500px api: ${err}`;
       });
-      res.json(tilesData);
-    });
   },
 };

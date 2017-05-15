@@ -5,15 +5,14 @@ const yelp = new Yelp({
   app_secret: process.env.YELP_KEY,
 });
 
-// https://github.com/Yelp/yelp-api-v3/blob/master/docs/api-references/businesses-search.md
-
 module.exports = {
   getRestaurant: (restaurantAddr, restaurantName) => {
     return yelp.search({ term: `${restaurantName}`, location: `${restaurantAddr}`, limit: 1 })
-      .then(function (data) {
+      .then(function(data) {
         data = JSON.parse(data);
-        const restaurant = data.businesses[0];
-        const restaurantInfo = {
+        let restaurant = data.businesses[0];
+        restaurant.categories = restaurant.categories.length > 1 ? restaurant.categories : ['no category'];
+        let restaurantInfo = {
           id: restaurant.id,
           image_url: restaurant.image_url,
           review_count: restaurant.review_count,
@@ -22,12 +21,11 @@ module.exports = {
           name: restaurant.name,
           location: restaurant.location.display_address.join(' '),
           categories: restaurant.categories,
-		};
-		// console.log('*** Result of yelp search', restYelpInfo)
-  return restaurantInfo;
-	})
-	.catch(err => {
-  throw `yelp api: ${err}`;
-	});
+        };
+        return restaurantInfo;
+      })
+      .catch(err => {
+        throw `yelp api: ${err}`;
+      });
   },
 };
