@@ -123,7 +123,8 @@ app.get('/api/photos', (req, res) => {
   clientResponse.status = 'success';
   clientResponse.statusCode = 200;
 
-  fiveHundredPX.searchPhotos('/food')
+
+  fiveHundredPX.searchPhotos('food meal')
   .then((photos)=>{
     clientResponse.photos = photos;
     res.send(clientResponse);
@@ -152,10 +153,10 @@ app.post('/api/photos/photo-process', (req, res)=>{
     return googleMapsGeocode.getPostalCode(req.body.location.lat || 37.773972, req.body.location.lng || -122.431297);
   })
   .then(({postalCode, countryCode})=>{
-    return openMenu.getMenuItems(menuItemSearchArray[0], postalCode, countryCode);
+    return openMenu.getMenuItems(req.body.title.split(' ').slice(0,2).join(' '), postalCode, countryCode);
   })
   .then((menuItems)=>{
-    recipeSearchString = menuItems[0].menu_item_name;
+    recipeSearchString = req.body.title;
     return Promise.resolve(menuItems);
   })
   .mapSeries((menuItem)=>{

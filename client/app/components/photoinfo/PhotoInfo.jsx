@@ -68,6 +68,7 @@ class PhotoInfo extends React.Component {
       data: {
         photoURL: this.state.current.img || defaultData.currentDefault.img,
         location: { lat: this.state.location.latitude, lng: this.state.location.longitude },
+        title: this.state.current.title,
       },
     });
     return (
