@@ -12,6 +12,7 @@ const User = database.dbuser;
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const fbStrategy = require('passport-facebook').Strategy;
@@ -33,7 +34,11 @@ app.use(morgan('tiny'));
 app.use(bodyParser.json())
   .use(bodyParser.urlencoded());
 app.use(cookieParser());
-app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+app.use(session({
+    secret: 'lalaland',
+    store: new MongoStore({ mongooseConnection: database.db })
+}));
+//app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 
