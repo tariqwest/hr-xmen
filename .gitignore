@@ -38,7 +38,7 @@ jspm_packages
 .babel_cache
 
 # Directory for Database
-db
+/database/db/*
 
 # Environmental variables & credentials
 .env

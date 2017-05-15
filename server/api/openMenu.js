@@ -3,7 +3,7 @@ const _ = require('underscore');
 
 module.exports = {
   getMenuItems: (food, postal_code, country) => {
-    var options = {
+    const options = {
       method: 'GET',
       url: 'https://openmenu.com/api/v2/search.php',
       qs: {

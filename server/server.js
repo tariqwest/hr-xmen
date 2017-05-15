@@ -4,7 +4,7 @@ const express = require('express');
 const Promise = require('bluebird');
 const _ = require('underscore');
 const emoji = require('node-emoji');
-const db = require('../database/db');
+const db = require('../database/models');
 const Users = db.Users;
 const Favorites = db.Favorites;
 
@@ -73,7 +73,7 @@ passport.use(new fbStrategy({
             return done(null, user);
           } else {
 
-            let newUser = new Users();
+            const newUser = new Users();
             newUser.fbID = profile.id;
             newUser.fbToken = token;
             newUser.fbFirstName = profile.name.givenName;
