@@ -34,3 +34,4 @@ const saveditem = mongoose.model('saveditem', photoHungrySchema);
 
 module.exports.saveditem = saveditem;
 module.exports.dbuser = dbuser;
+module.exports.db = db; 
