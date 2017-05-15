@@ -40,15 +40,29 @@ git clone https://github.com/alexitaylor/express-react-redux-boilerplate
 npm install dependencies
 
 ````
-express-react-redux-boilerplate
 
 npm install
 ````
 
-### Start development server with hot reloading
+### Build Development Environment
 
 ````
-npm run dev
+
+npm run build-dev
+````
+
+### Start the database
+
+````
+
+npm run dev-database
+````
+
+### Start development server
+
+````
+
+npm run dev-server
 ````
 
 ### Testing
@@ -78,17 +92,14 @@ npm run lint
 Build for production
 
 ````
-npm run build
+npm run build-prod
 ````
 
 Start production server
 
 ````
-npm run start
+npm run prod-server
 ````
-
-Note: I'm using pm2 for production server, you should install it on server via 'npm install pm2 -g'.
-if you don't want to use pm2, just change pm2 with node in package.json file in scripts section.
 
 ### Roadmap
 
