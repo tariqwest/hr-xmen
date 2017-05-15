@@ -1,6 +1,7 @@
 import React from 'react';
 import { Get } from 'react-axios';
 import _ from 'underscore';
+import axios from 'axios';
 
 import photoStore from '../../stores/photoStore';
 
@@ -35,7 +36,21 @@ class Profile extends React.Component {
       list: photoStore.getList(),
       current: photoStore.getCurrent(),
       colorCount: 0,
+      userName: null,
     };
+  }
+
+  componentDidMount() {
+    axios.get(process.env.NODE_ENV === 'production' ? `${process.env.ENV_URL}/api/user` : `${process.env.ENV_URL}:${process.env.PORT}/api/user`)
+    .then(res => {
+      console.log(res);
+      this.setState({
+          userName: res.data.user.firstName,
+      });
+    })
+    .catch(err => {
+      throw err;
+    });
   }
 
 
@@ -43,7 +58,7 @@ class Profile extends React.Component {
     const colorClass = ['item--blue', 'item--green', 'item--darkblue', 'item--red', 'item--orange', 'item--pink'];
     return (
       <div className="container profile">
-        <h1>Profile</h1>
+        <h1>{this.state.userName}</h1>
         <Get url={ process.env.NODE_ENV === 'production' ? `${process.env.ENV_URL}/api/user/profile` : `${process.env.ENV_URL}:${process.env.PORT}/api/user/profile` } >
           {(error, response, isLoading) => {
             if (error) {
