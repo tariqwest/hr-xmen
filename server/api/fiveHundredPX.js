@@ -7,7 +7,7 @@ module.exports = {
   searchPhotos: (food) => {
     return fiveHundredPX.photos.searchByTermAsync(food, { sort: '_score', rpp: '100', image_size: 440, only: 23 })
       .then((result) => {
-        let photos = result.photos.map((item) => {
+        const photos = result.photos.map((item) => {
           return {
             img: item.image_url,
             title: item.name,

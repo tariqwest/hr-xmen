@@ -5,7 +5,7 @@
   "scripts": {
     "build-dev": "rimraf dist && webpack --watch  --colors --config webpack.dev.config",
     "dev-server": "nodemon ./server/server.js",
-    "dev-database": "mongod --dbpath ./db",
+    "dev-database": "mongod --dbpath ./database/db",
     "client-dev-server": "CLIENT_DEV=true CLIENT_DEV_PORT=3000 webpack-dev-server --watch --colors --config webpack.dev.config --port 3000",
     "build-prod": "rimraf dist && webpack --colors -p --config webpack.prod.config",
     "prod-server": "node ./server/server.js",

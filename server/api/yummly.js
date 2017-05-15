@@ -24,7 +24,7 @@ module.exports = {
         }).slice(0, 3);
 
         for (let recipeResult of recipeResults) {
-          let recipe = {
+          const recipe = {
             name: recipeResult.recipeName,
             prepTime: `${Math.floor(recipeResult.totalTimeInSeconds / 60)} mins`,
             ingredients: recipeResult.ingredients,
