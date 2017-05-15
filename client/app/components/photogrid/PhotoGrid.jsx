@@ -56,7 +56,6 @@ class PhotoGrid extends React.Component {
   componentDidMount() {
     axios.get(process.env.NODE_ENV === 'production' ? `${process.env.ENV_URL}/api/user` : `${process.env.ENV_URL}:${process.env.PORT}/api/user`)
     .then(res => {
-      console.log(res.data.user);
       photoActions.addUsername(res.data.user);
     })
     .catch(err => {
