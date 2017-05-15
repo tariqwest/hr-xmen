@@ -52,7 +52,7 @@ class PhotoInfo extends React.Component {
 
   handleSave(savedItem, photoURL) {
     console.log('CLICKED');
-    axios.post(process.env.NODE_ENV === 'production' ? `${process.env.ENV_URL}/api/photos/photo-save` : `${process.env.ENV_URL}:${process.env.PORT}/api/photos/photo-save`, {
+    axios.post(process.env.NODE_ENV === 'production' ? `${process.env.ENV_URL}/api/user/favorite` : `${process.env.ENV_URL}:${process.env.PORT}/api/user/favorite`, {
       savedItem: savedItem,
       photoURL: photoURL
     }).then(res => {

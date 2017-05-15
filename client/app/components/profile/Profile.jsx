@@ -43,7 +43,7 @@ class Profile extends React.Component {
     const colorClass = ['item--blue', 'item--green', 'item--darkblue', 'item--red', 'item--orange', 'item--pink'];
     return (
       <div className="container profile">
-        <h1>Profile/USERNAME</h1>
+        <h1>Profile</h1>
         <Get url={ process.env.NODE_ENV === 'production' ? `${process.env.ENV_URL}/api/user/profile` : `${process.env.ENV_URL}:${process.env.PORT}/api/user/profile` } >
           {(error, response, isLoading) => {
             if (error) {

@@ -165,7 +165,7 @@ app.post('/api/photos/photo-process', (req, res)=>{
   });
 });
 
-app.post('/api/photos/photo-save', (req, res)=>{
+app.post('/api/user/favorite', (req, res)=>{
 
   const clientResponse = {};
   clientResponse.status = 'success';
