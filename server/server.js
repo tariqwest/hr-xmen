@@ -4,9 +4,9 @@ const express = require('express');
 const Promise = require('bluebird');
 const _ = require('underscore');
 const emoji = require('node-emoji');
-const dummyData = require('./dummyData');
-const database = require('../db-models/photoHungryDB.js');
-const User = database.dbuser;
+const db = require('../database/db');
+const Users = db.Users;
+const Favorites = db.Favorites;
 
 // Middleware
 const morgan = require('morgan');
@@ -38,7 +38,7 @@ app.use(session({
     secret: 'lalaland',
     resave: true, 
     saveUninitialized: true,
-    store: new MongoStore({ mongooseConnection: database.db })
+    store: new MongoStore({ mongooseConnection: db.connection })
 }));
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
@@ -52,7 +52,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Setup Facebook login
+// Setup Facebook login / use creation
 const callbackURL = process.env.NODE_ENV === 'production' ? `${process.env.ENV_URL}/login/facebook/callback` : `${process.env.ENV_URL || 'http://localhost'}:${process.env.PORT || 8080}/login/facebook/callback`;
 
 passport.use(new fbStrategy({
@@ -64,7 +64,7 @@ passport.use(new fbStrategy({
   (token, refreshToken, profile, done) => {
     process.nextTick(() => {
       // Search for existing user
-      User.findOne({ 'fbID': profile.id })
+      Users.findOne({ 'fbID': profile.id })
         .then((user, err) => {
           if (err) {
             return done(err);
@@ -73,7 +73,7 @@ passport.use(new fbStrategy({
             return done(null, user);
           } else {
 
-            let newUser = new User();
+            let newUser = new Users();
             newUser.fbID = profile.id;
             newUser.fbToken = token;
             newUser.fbFirstName = profile.name.givenName;
@@ -132,7 +132,7 @@ app.get('/api/photos', (req, res) => {
     console.log('*** Error while retrieving photos ***', err);
     clientResponse.status = 'fail: ' + err;
     clientResponse.statusCode = 404;
-    res.send(clientResponse);
+    res.status(404).send(clientResponse);
   });
 });
 
@@ -190,14 +190,14 @@ app.post('/api/user/favorite', (req, res)=>{
   clientResponse.status = 'success';
   clientResponse.statusCode = 200;
   
-  Promise.resolve(database.dbuser.findOne({ _id: req.session.passport.user._id }))
+  Promise.resolve(Users.findOne({ _id: req.session.passport.user._id }))
     .then((user) => {
-      let newSavedItem = new database.saveditem({
+      let newFavorite = new Favorites({
         photoURL: req.body.photoURL,
         savedItem: req.body.savedItem, // restaurant or recipe
         userID: user._id
       });
-      return (newSavedItem.save());
+      return (newFavorite.save());
     })
     .then(() => {
       res.send(clientResponse);
@@ -206,7 +206,7 @@ app.post('/api/user/favorite', (req, res)=>{
       console.log('*** Error while processing saved item ***', err);
       clientResponse.status = 'fail: ' + err;
       clientResponse.statusCode = 404;
-      res.send(clientResponse);
+      res.status(404).send(clientResponse);
     });
 });
 
@@ -216,10 +216,10 @@ app.get('/api/user/profile', (req, res)=>{
   clientResponse.status = 'success';
   clientResponse.statusCode = 200;
   
-  Promise.resolve(database.dbuser.findOne({ _id: req.session.passport.user._id }))
+  Promise.resolve(Users.findOne({ _id: req.session.passport.user._id }))
     .then((user) => {
       clientResponse.user = {firstName: user.fbFirstName, lastName: user.fbLastName};
-      return (database.saveditem.find({ userID: user._id}));
+      return (Favorites.find({ userID: user._id}));
     })
     .then((favorites) => {
       clientResponse.favorites = favorites;
@@ -229,7 +229,7 @@ app.get('/api/user/profile', (req, res)=>{
       console.log('*** Error while retrieving user profile ***', err);
       clientResponse.status = 'fail: ' + err;
       clientResponse.statusCode = 404;
-      res.send(clientResponse);
+      res.status(404).send(clientResponse);
     });
 });
 
@@ -239,7 +239,7 @@ app.get('/api/user', (req, res)=>{
   clientResponse.status = 'success';
   clientResponse.statusCode = 200;
   
-  Promise.resolve(database.dbuser.findOne({ _id: req.session.passport.user._id }))
+  Promise.resolve(Users.findOne({ _id: req.session.passport.user._id }))
     .then((result) => {
       clientResponse.user = {firstName: result.fbFirstName, lastName: result.fbLastName};
       res.send(clientResponse);
@@ -248,7 +248,7 @@ app.get('/api/user', (req, res)=>{
       console.log('*** Error while retrieving user ***', err);
       clientResponse.statusCode = 404;
       clientResponse.status = 'fail: ' + err;
-      res.send(clientResponse);
+      res.status(404).send(clientResponse);
     });
 });
 

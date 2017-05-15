@@ -16,17 +16,17 @@ module.exports = {
       useQuerystring: true,
     };
     return request(options)
-      .then((result)=>{
+      .then((result) => {
         if (JSON.parse(result).response.result.errors) {
           throw JSON.parse(result).response.result.errors[0];
         }
         result = JSON.parse(result).response.result.items;
-        result = _.uniq(result, false, (item)=>{
+        result = _.uniq(result, false, (item) => {
           return item.address_1;
         });
         return result;
       })
-      .catch((err)=>{
+      .catch((err) => {
         throw `openmenu api: ${err}`;
       })
   },

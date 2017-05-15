@@ -9,11 +9,11 @@ const credentials = {
 module.exports = {
   getRecipes: query => {
     return yummlySearchAsync({
-      credentials,
-      query: {
-        q: query,
-      },
-    })
+        credentials,
+        query: {
+          q: query,
+        },
+      })
       .then(([status, body]) => {
         const recipes = [];
         const recipeResults = body.matches.sort((a, b) => {
