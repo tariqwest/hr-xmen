@@ -7,9 +7,7 @@ import photoStore from '../../stores/photoStore';
 import photoActions from '../../actions/photoActions';
 
 import { GridList, GridTile } from 'material-ui/GridList';
-import IconButton from 'material-ui/IconButton';
 import Subheader from 'material-ui/Subheader';
-import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 import CircularProgress from 'material-ui/CircularProgress';
 
 const styles = {
@@ -71,7 +69,7 @@ class PhotoGrid extends React.Component {
   render() {
     return (
       <div className="container photogrid">
-        <h1>Photo Grid</h1>
+        <h1>Photo Hungry</h1>
         <div>
           <Get url={process.env.NODE_ENV === 'production' ? `${process.env.ENV_URL}/api/photos` : `${process.env.ENV_URL}:${process.env.PORT}/api/photos`} >
             {(error, response, isLoading) => {
@@ -88,7 +86,6 @@ class PhotoGrid extends React.Component {
                   <div className="container photogrid">
                     <div style={styles.root}>
                       <GridList cellHeight={280} cols={3} style={styles.gridList}>
-                        <Subheader>Food</Subheader>
                         {response.data.photos.map((tile, index) => (
                           <Link
                             to={`/app/photo/${index}`}
@@ -100,7 +97,6 @@ class PhotoGrid extends React.Component {
                               className="ripple"
                               title={tile.title}
                               subtitle={<span><b>{tile.description}</b></span>}
-                              actionIcon={<IconButton><StarBorder color="white" /></IconButton>}
                             >
                               <img src={tile.img} alt="food" />
                             </GridTile>

@@ -35,13 +35,10 @@ class Header extends React.Component {
               <div className="user right">Hi,  <div className={colorClass[_.random(5)]}>{this.state.firstName} {this.state.lastName}</div></div>
             </li>
             <li>
-              <Link to="/app">Photo</Link>
+              <Link to="/app">Photo Hungry</Link>
             </li>
             <li>
-              <Link to="/app/profile">Profile</Link>
-            </li>
-            <li>
-              <Link to="/app/photo/0">Photo</Link>
+              <Link to="/app/profile">My Favorites</Link>
             </li>
           </ul>
         </nav>
