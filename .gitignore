@@ -39,6 +39,7 @@ jspm_packages
 
 # Directory for Database
 /database/db/*
+!.gitkeep
 
 # Environmental variables & credentials
 .env
