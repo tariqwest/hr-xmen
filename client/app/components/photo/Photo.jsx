@@ -39,8 +39,8 @@ class Photo extends React.Component {
           <div className={colorClass[_.random(5)]}>
             <div className="item_inner">
               <img src={this.state.current.img || defaultData.currentDefault.img} className="z-depth-4" width="70%" alt="food" />
-              <h1>{this.state.current.title || defaultData.currentDefault.title}</h1>
-              <p>{this.state.current.description || defaultData.currentDefault.description}</p>
+              <h1>{this.state.current.title}</h1>
+              <p>{this.state.current.description}</p>
               <Link to="/app/photos/photoinfo">
                 <a className="button" target="_blank" style={styles.anchor}>GET MORE INFO</a>
               </Link>

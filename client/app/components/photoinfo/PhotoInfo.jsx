@@ -14,6 +14,7 @@ import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import CircularProgress from 'material-ui/CircularProgress';
 import Paper from 'material-ui/Paper';
+import FontIcon from 'material-ui/FontIcon';
 
 const styles = {
   divider: {
@@ -63,7 +64,6 @@ class PhotoInfo extends React.Component {
   }
 
   render() {
-      console.log(this.state.location.latitude);
     const axiosInstance = axios.create({
       data: {
         photoURL: this.state.current.img || defaultData.currentDefault.img,
@@ -77,8 +77,8 @@ class PhotoInfo extends React.Component {
             <img src={this.state.current.img || defaultData.currentDefault.img} height="200" width="200" alt="food" />
           </Paper>
           <div className="bannerinfo">
-            <h1>{this.state.current.title || defaultData.currentDefault.title}</h1>
-            <h4>{this.state.current.description || defaultData.currentDefault.description}</h4>
+            <h1>{this.state.current.title}</h1>
+            <h4>{this.state.current.description}</h4>
           </div>
         </div>
         <Post url={process.env.NODE_ENV === 'production' ? `${process.env.ENV_URL}/api/photos/photo-process` : `${process.env.ENV_URL}:${process.env.PORT}/api/photos/photo-process`} instance={axiosInstance}>
@@ -110,7 +110,7 @@ class PhotoInfo extends React.Component {
                             primaryText={restaurant.name}
                             secondaryText={
                               <p>
-                                <span style={{ color: darkBlack }}>{restaurant.rating} -- {restaurant.categories[0].title}</span>
+                                <span style={{ color: darkBlack }}>{restaurant.rating} Stars</span>
                                 <br /> {restaurant.location}
                               </p>
                             }
@@ -133,7 +133,7 @@ class PhotoInfo extends React.Component {
                             primaryText={recipe.name}
                             secondaryText={
                               <p>
-                                <span style={{ color: darkBlack }}>{recipe.rating} -- ingredients</span>
+                                <span style={{ color: darkBlack }}>{recipe.rating} Stars</span>
                                 <br /> {recipe.prepTime}
                               </p>
                             }
