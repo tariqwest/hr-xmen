@@ -36,9 +36,10 @@ app.use(bodyParser.json())
 app.use(cookieParser());
 app.use(session({
     secret: 'lalaland',
+    resave: true, 
+    saveUninitialized: true,
     store: new MongoStore({ mongooseConnection: database.db })
 }));
-//app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 
@@ -51,7 +52,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Facebook login using passport + fb-passport + express-sessions modules
+// Setup Facebook login
 const callbackURL = process.env.NODE_ENV === 'production' ? `${process.env.ENV_URL}/login/facebook/callback` : `${process.env.ENV_URL || 'http://localhost'}:${process.env.PORT || 8080}/login/facebook/callback`;
 
 passport.use(new fbStrategy({
@@ -89,7 +90,6 @@ passport.use(new fbStrategy({
     });
   }));
 
-// Configure passport authenticated session persistence
 passport.serializeUser(function (user, cb) {
   cb(null, user);
 });
@@ -119,7 +119,21 @@ app.get('/login/facebook/callback',
   });
 
 app.get('/api/photos', (req, res) => {
-  fiveHundredPX.searchPhotos('food', res);
+  const clientResponse = {};
+  clientResponse.status = 'success';
+  clientResponse.statusCode = 200;
+
+  fiveHundredPX.searchPhotos('food')
+  .then((photos)=>{
+    clientResponse.photos = photos;
+    res.send(clientResponse);
+  })
+  .catch((err)=>{
+    console.log('*** Error while retrieving photos ***', err);
+    clientResponse.status = 'fail: ' + err;
+    clientResponse.statusCode = 404;
+    res.send(clientResponse);
+  });
 });
 
 app.post('/api/photos/photo-process', (req, res)=>{
@@ -209,7 +223,7 @@ app.get('/api/user/profile', (req, res)=>{
     })
     .then((favorites) => {
       clientResponse.favorites = favorites;
-      res.json(clientResponse);
+      res.send(clientResponse);
     })
     .catch((err) => {
       console.log('*** Error while retrieving user profile ***', err);

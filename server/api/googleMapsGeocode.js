@@ -14,24 +14,22 @@ module.exports = {
       useQuerystring: true,
     };
     return request(options)
-    .then((result) => {
-      // console.log('*** Google API response body ***', result)
-      let postalCode;
-      let countryCode;
-      for (const component of JSON.parse(result).results[0].address_components) {
-        if (component.types[0] === 'postal_code') {
-          postalCode = component.short_name;
+      .then((result) => {
+        let postalCode;
+        let countryCode;
+        for (let component of JSON.parse(result).results[0].address_components) {
+          if (component.types[0] === 'postal_code') {
+            postalCode = component.short_name;
+          }
+          if (component.types[0] === 'country') {
+            countryCode = component.short_name;
+          }
         }
-        if (component.types[0] === 'country') {
-          countryCode = component.short_name;
-        }
-      }
-      // console.log('*** Parsed postal code and country ***', {postalCode, countryCode}, )
-      return Promise.resolve({ postalCode, countryCode });
-    })
-    .catch((err) => {
-      throw `google maps geocode api: ${err}`;
-    });
+        return Promise.resolve({ postalCode, countryCode });
+      })
+      .catch((err) => {
+        throw `google maps geocode api: ${err}`;
+      });
   },
 };
 

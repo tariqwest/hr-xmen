@@ -12,8 +12,8 @@ module.exports = {
     return yelp.search({ term: `${restaurantName}`, location: `${restaurantAddr}`, limit: 1 })
       .then(function (data) {
         data = JSON.parse(data);
-        const restaurant = data.businesses[0];
-        const restaurantInfo = {
+        let restaurant = data.businesses[0];
+        let restaurantInfo = {
           id: restaurant.id,
           image_url: restaurant.image_url,
           review_count: restaurant.review_count,

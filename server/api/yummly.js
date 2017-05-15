@@ -1,15 +1,10 @@
 const Promise = require('bluebird');
 const yummlySearchAsync = Promise.promisify(require('yummly').search, { multiArgs: true });
-// var yummly = require('yummly');
 
 const credentials = {
   id: process.env.YUMMLY_ID,
   key: process.env.YUMMLY_KEY,
 };
-
-// first API call to return a search result.. 2nd call to return details of search result
-// query === search request
-// returns first result from yummly
 
 module.exports = {
   getRecipes: query => {
@@ -27,10 +22,9 @@ module.exports = {
           }
           return b.rating - a.rating;
         }).slice(0, 3);
-        // console.log('*** Recipes from yummly ***', recipes.length);
 
-        for (const recipeResult of recipeResults) {
-          const recipe = {
+        for (let recipeResult of recipeResults) {
+          let recipe = {
             name: recipeResult.recipeName,
             prepTime: `${Math.floor(recipeResult.totalTimeInSeconds / 60)} mins`,
             ingredients: recipeResult.ingredients,
