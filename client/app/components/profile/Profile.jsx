@@ -43,7 +43,7 @@ class Profile extends React.Component {
     const colorClass = ['item--blue', 'item--green', 'item--darkblue', 'item--red', 'item--orange', 'item--pink'];
     return (
       <div className="container profile">
-        <h1>{this.state.username.firstName}</h1>
+        <h1>{this.state.username.firstName}'s Favorites</h1>
         <Get url={ process.env.NODE_ENV === 'production' ? `${process.env.ENV_URL}/api/user/profile` : `${process.env.ENV_URL}:${process.env.PORT}/api/user/profile` } >
           {(error, response, isLoading) => {
             if (error) {
@@ -57,7 +57,6 @@ class Profile extends React.Component {
             } else if (response !== null) {
               return (
                 <div>
-                  <h2>Favorites</h2>
                   <div className="row">
                     {response.data.favorites.map((item, index) => (
                       <Paper style={styles.paper} zDepth={4} key={index}>
