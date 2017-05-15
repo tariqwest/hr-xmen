@@ -43,8 +43,8 @@ class Profile extends React.Component {
     const colorClass = ['item--blue', 'item--green', 'item--darkblue', 'item--red', 'item--orange', 'item--pink'];
     return (
       <div className="container profile">
-        <h1>Profile/USERNAME</h1>
-        <Get url={process.env.NODE_ENV === 'production' ? `${process.env.ENV_URL}/api/photos/profile` : `${process.env.ENV_URL}:${process.env.PORT}/api/photos/profile`} >
+        <h1>Profile</h1>
+        <Get url={ process.env.NODE_ENV === 'production' ? `${process.env.ENV_URL}/api/user/profile` : `${process.env.ENV_URL}:${process.env.PORT}/api/user/profile` } >
           {(error, response, isLoading) => {
             if (error) {
               return (<div>Something bad happened: {error.message}</div>);
@@ -59,7 +59,7 @@ class Profile extends React.Component {
                 <div>
                   <h2>Favorites</h2>
                   <div className="row">
-                    {response.data.map((item, index) => (
+                    {response.data.favorites.map((item, index) => (
                       <Paper style={styles.paper} zDepth={4} key={index}>
                         <div className={colorClass[_.random(5)]} key={index}>
                           <div className="item_inner">
