@@ -123,7 +123,7 @@ app.get('/api/photos', (req, res) => {
   clientResponse.status = 'success';
   clientResponse.statusCode = 200;
 
-  fiveHundredPX.searchPhotos('food')
+  fiveHundredPX.searchPhotos('/food')
   .then((photos)=>{
     clientResponse.photos = photos;
     res.send(clientResponse);
