@@ -20,6 +20,12 @@ const photoActions = {
       data: location,
     });
   },
+  addUsername(username) {
+    AppDispatcher.handleAction({
+      actionType: appConstants.ADD_USERNAME,
+      data: username,
+    });
+  },
 };
 
 module.exports = photoActions;

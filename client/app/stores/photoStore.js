@@ -9,6 +9,7 @@ const store = {
   list: [],
   current: [],
   location: {},
+  username: {},
 };
 
 const addItem = function (item) {
@@ -23,6 +24,10 @@ const addLocation = function (location) {
   store.location = location;
 };
 
+const addUsername = function (username) {
+  store.username = username;
+};
+
 const photoStore = Object.assign({}, EventEmitter.prototype, {
   addChangeListener(cb) {
     this.on(CHANGE_EVENT, cb);
@@ -35,6 +40,9 @@ const photoStore = Object.assign({}, EventEmitter.prototype, {
   },
   getLocation() {
     return store.location;
+  },
+  getUsername() {
+    return store.username;
   },
 });
 
@@ -51,6 +59,10 @@ AppDispatcher.register(payload => {
       break;
     case appConstants.ADD_LOCATION:
       addLocation(action.data);
+      photoStore.emit(CHANGE_EVENT);
+      break;
+    case appConstants.ADD_USERNAME:
+      addUsername(action.data);
       photoStore.emit(CHANGE_EVENT);
       break;
     default:
