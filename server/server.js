@@ -134,13 +134,13 @@ app.post('/api/photos/photo-process', (req, res) => {
   clientResponse.photoURL = req.body.photoURL;
   clientResponse.status = 'success';
   clientResponse.statusCode = 200;
-
+console.log(req.body.locatoin)
   Promise.resolve(clarifai.getFoodPrediction(req.body.photoURL))
     .then(({ prediction }) => {
       console.log('*** Result of getFoodPrediction ***', prediction);
       menuItemSearchArray = prediction;
       console.log(req.body.location);
-      return googleMapsGeocode.getPostalCode(req.body.location.lat, req.body.location.lng);
+      return googleMapsGeocode.getPostalCode(req.body.location.lat || 37.773972, req.body.location.lng || -122.431297);
     })
     .then(({ postalCode, countryCode }) => {
       console.log('*** Result of getPostalCode ***', postalCode, countryCode);

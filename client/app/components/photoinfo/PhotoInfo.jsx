@@ -61,6 +61,7 @@ class PhotoInfo extends React.Component {
   }
 
   render() {
+      console.log(this.state.location.latitude);
     const axiosInstance = axios.create({
       data: {
         photoURL: this.state.current.img || defaultData.currentDefault.img,

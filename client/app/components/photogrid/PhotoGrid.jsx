@@ -34,6 +34,7 @@ class PhotoGrid extends React.Component {
     };
     this.handleClick = this.handleClick.bind(this);
   }
+
   componentWillMount() {
     const geolocation = navigator.geolocation;
 
