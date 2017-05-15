@@ -1,6 +1,7 @@
 import React from 'react';
 import { Get } from 'react-axios';
 import { Link } from 'react-router';
+import axios from 'axios';
 
 import photoStore from '../../stores/photoStore';
 import photoActions from '../../actions/photoActions';
@@ -31,6 +32,7 @@ class PhotoGrid extends React.Component {
       list: photoStore.getList(),
       current: photoStore.getCurrent(),
       location: photoStore.getLocation(),
+      username: photoStore.getUsername(),
     };
     this.handleClick = this.handleClick.bind(this);
   }
@@ -49,7 +51,17 @@ class PhotoGrid extends React.Component {
         reject(new Error('Permission denied'));
       });
     });
-}
+  }
+
+  componentDidMount() {
+    axios.get(process.env.NODE_ENV === 'production' ? `${process.env.ENV_URL}/api/user` : `${process.env.ENV_URL}:${process.env.PORT}/api/user`)
+    .then(res => {
+      photoActions.addUsername(res.data.user);
+    })
+    .catch(err => {
+      throw err;
+    });
+  }
 
   handleClick(item, index) {
     photoActions.addItem(item);

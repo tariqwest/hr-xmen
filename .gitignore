@@ -49,3 +49,4 @@ jspm_packages
 
 # Dist files - these should be built fresh in each environment
 /dist/*
+!.gitkeep

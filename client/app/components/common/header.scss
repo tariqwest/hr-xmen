@@ -4,6 +4,47 @@ header {
   border-bottom: 1px solid $light-gray;
   margin-bottom: 40px;
 
+  @mixin color($color) {
+    color: $color;
+  }
+
+  .user {
+    display: inline-block;
+  }
+
+  .userName {
+    display: inline-block;
+    &--blue {
+      @extend .userName;
+      @include color($blue-card);
+    }
+    &--orange {
+      @extend .userName;
+      @include color($orange-card);
+    }
+    &--red {
+      @extend .userName;
+      @include color($red-card);
+    }
+    &--green {
+      @extend .userName;
+      @include color($green-card);
+    }
+    &--darkblue {
+      @extend .userName;
+      @include color($darkblue-card);
+    }
+    &--pink {
+      @extend .userName;
+      @include color($pink-card);
+    }
+  }
+
+  .right {
+    position: absolute;
+    left: 5%;
+  }
+
   nav {
 
     ul {
