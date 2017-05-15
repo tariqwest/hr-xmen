@@ -1,6 +1,6 @@
-# Project Name
+# Photo Hungry
 
-> Pithy project description
+A photo-first approach to figuring out what to eat.
 
 ## Team
 
@@ -11,57 +11,52 @@
 
 ## Table of Contents
 
-1. [Usage](#Usage)
-1. [Requirements](#requirements)
+1. [Stack](#stack)
 1. [Development](#development)
-    1. [Installing Dependencies](#installing-dependencies)
-    1. [Tasks](#tasks)
 1. [Roadmap](#roadmap)
 1. [Contributing](#contributing)
 
-## Features
+## Stack
+General
+- Node
+- Express
+- Mongo / Mongoose
+- React / Flux
 
-- Webpack development and production environment configuration
-- Webpack SCSS configuration
-- React Hot loader
-- React Router configuration
-- React, Redux configuration
-- Testing environment configured with Mocha and Chai
-- Linting with Airbnb eslint configuration
+Dev Tools
+- Bundler: Webpack
+- Testing: Mocha, Chai
+- Linting: eslint, Airbnb configuration
 
-## Getting Started
+## Development
 
-Clone Repo
-
-````
-git clone https://github.com/alexitaylor/express-react-redux-boilerplate
-````
-
-npm install dependencies
+### Clone Repo
 
 ````
+git clone https://github.com/hr-xmen/hr-xmen
+````
 
+### Install Dependencies
+
+````
 npm install
 ````
 
 ### Build Development Environment
 
 ````
-
 npm run build-dev
 ````
 
 ### Start the database
 
 ````
-
 npm run dev-database
 ````
 
 ### Start development server
 
 ````
-
 npm run dev-server
 ````
 
@@ -81,7 +76,7 @@ npm run test:watch
 
 ### Linting
 
-For linting i'm using Eslint with Airbnb Eslint configuration
+For linting we use Eslint with Airbnb Eslint configuration
 
 ````
 npm run lint
@@ -101,17 +96,18 @@ Start production server
 npm run prod-server
 ````
 
-### Roadmap
+## Roadmap
 
-View the project roadmap [here](LINK_TO_DOC)
+See [project roadmap](https://trello.com/b/pMzaKVRB/hr-xmen-greenfield)
 
 
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
 
-### Happy Coding
 
 ### License
 
-MIT
+See [MIT License](https://opensource.org/licenses/MIT)
+
+### Happy Coding!
