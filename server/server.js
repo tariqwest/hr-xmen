@@ -30,8 +30,6 @@ const app = express();
 
 // Setup middleware
 app.use(morgan('tiny'));
-// app.use(express.static('./'));
-// app.use(express.static('dist'));
 app.use(bodyParser.json())
   .use(bodyParser.urlencoded());
 app.use(cookieParser());
@@ -58,7 +56,6 @@ passport.use(new fbStrategy({
   profileFields: ['id', 'email', 'first_name', 'last_name'],
 },
   (token, refreshToken, profile, done) => {
-    console.log('*** Facebook auth success ***', token, profile);
     process.nextTick(() => {
       // Search for existing user
       User.findOne({ 'fbID': profile.id })
@@ -67,21 +64,19 @@ passport.use(new fbStrategy({
             return done(err);
           }
           if (user) {
-            console.log('** Existing user found **', user);
             return done(null, user);
           } else {
-            const newUser = new User();
+
+            let newUser = new User();
             newUser.fbID = profile.id;
             newUser.fbToken = token;
             newUser.fbFirstName = profile.name.givenName;
             newUser.fbLastName = profile.name.familyName;
-            // newUser.fbEmail = (profile.emails[0].value || '').toLowerCase();
 
             newUser.save(function (err) {
               if (err) {
                 return done(err);
               }
-              console.log('** New user created **', newUser);
               return done(null, newUser);
             });
           }
@@ -89,7 +84,7 @@ passport.use(new fbStrategy({
     });
   }));
 
-// configure passport authenticated session persistence.
+// Configure passport authenticated session persistence
 passport.serializeUser(function (user, cb) {
   cb(null, user);
 });
@@ -98,7 +93,7 @@ passport.deserializeUser(function (user, cb) {
   cb(null, user);
 });
 
-// Routes setup
+// Setup routes
 app.use('/app', ensureLoggedIn('/login'));
 
 app.use('/app', express.static(__dirname + '/../dist'));
@@ -122,109 +117,119 @@ app.get('/api/photos', (req, res) => {
   fiveHundredPX.searchPhotos('food', res);
 });
 
-app.post('/api/photos/photo-process-test', (req, res) => {
-  console.log(req.body);
-  res.json(dummyData);
-});
+app.post('/api/photos/photo-process', (req, res)=>{
 
-app.post('/api/photos/photo-process', (req, res) => {
   const clientResponse = {};
-  let menuItemSearchArray;
-  let recipeSearchString;
   clientResponse.photoURL = req.body.photoURL;
   clientResponse.status = 'success';
   clientResponse.statusCode = 200;
-console.log(req.body.locatoin)
+
+  let menuItemSearchArray;
+  let recipeSearchString;
+  
   Promise.resolve(clarifai.getFoodPrediction(req.body.photoURL))
-    .then(({ prediction }) => {
-      console.log('*** Result of getFoodPrediction ***', prediction);
-      menuItemSearchArray = prediction;
-      console.log(req.body.location);
-      return googleMapsGeocode.getPostalCode(req.body.location.lat || 37.773972, req.body.location.lng || -122.431297);
-    })
-    .then(({ postalCode, countryCode }) => {
-      console.log('*** Result of getPostalCode ***', postalCode, countryCode);
-      return openMenu.getMenuItems(menuItemSearchArray[0], postalCode, countryCode);
-    })
-    .then((menuItems) => {
-      console.log('*** Result of getMenuItems ***', menuItems.length);
-      recipeSearchString = menuItems[0].menu_item_name;
-      return Promise.resolve(menuItems);
-    })
-    .mapSeries((menuItem) => {
-      return yelp.getRestaurant(`${menuItem.address_1}, ${menuItem.city_town}, ${menuItem.state_province}`, menuItem.restaurant_name);
-    })
-    .then((restaurants) => {
-      clientResponse.restaurants = restaurants.sort((a, b) => {
-        if (b.rating === a.rating) {
-          return b.review_count - a.review_count;
-        }
-        return b.rating - a.rating;
-      }).slice(0, 3);
-      console.log('*** Result of openMenu + yelp restaurants lookup ***', clientResponse.restaurants.length);
+  .then(({prediction})=>{
+    menuItemSearchArray = prediction;
+    return googleMapsGeocode.getPostalCode(req.body.location.lat || 37.773972, req.body.location.lng || -122.431297);
+  })
+  .then(({postalCode, countryCode})=>{
+    return openMenu.getMenuItems(menuItemSearchArray[0], postalCode, countryCode);
+  })
+  .then((menuItems)=>{
+    recipeSearchString = menuItems[0].menu_item_name;
+    return Promise.resolve(menuItems);
+  })
+  .mapSeries((menuItem)=>{
+    return yelp.getRestaurant(`${menuItem.address_1}, ${menuItem.city_town}, ${menuItem.state_province}`, menuItem.restaurant_name);
+  })
+  .then((restaurants)=>{
+    clientResponse.restaurants = restaurants.sort((a, b)=>{
+      if(b.rating === a.rating){
+        return b.review_count - a.review_count;
+      }
+      return b.rating - a.rating;
+    }).slice(0,3);
+  })
+  .then(()=>{
+    return yummly.getRecipes(recipeSearchString);
+  })
+  .then((recipes)=>{
+    clientResponse.recipes = recipes;
+    res.send(clientResponse);
+  })
+  .catch((err)=>{
+    console.log('*** Error while processing photo ***', err);
+    clientResponse.status = 'fail: ' + err;
+    clientResponse.statusCode = 404;
+    res.send(clientResponse);
+  });
+});
+
+app.post('/api/photos/photo-save', (req, res)=>{
+
+  const clientResponse = {};
+  clientResponse.status = 'success';
+  clientResponse.statusCode = 200;
+  
+  Promise.resolve(database.dbuser.findOne({ _id: req.session.passport.user._id }))
+    .then((user) => {
+      let newSavedItem = new database.saveditem({
+        photoURL: req.body.photoURL,
+        savedItem: req.body.savedItem, // restaurant or recipe
+        userID: user._id
+      });
+      return (newSavedItem.save());
     })
     .then(() => {
-      return yummly.getRecipes(recipeSearchString);
+      res.send(clientResponse);
     })
-    .then((recipes) => {
-      clientResponse.recipes = recipes;
-      console.log('*** Result of openMenu + yummly recipes ***', clientResponse.recipes.length);
+    .catch((err) => {
+      console.log('*** Error while processing saved item ***', err);
+      clientResponse.status = 'fail: ' + err;
+      clientResponse.statusCode = 404;
+      res.send(clientResponse);
+    });
+});
+
+app.get('/api/user/profile', (req, res)=>{
+  
+  const clientResponse = {};
+  clientResponse.status = 'success';
+  clientResponse.statusCode = 200;
+  
+  Promise.resolve(database.dbuser.findOne({ _id: req.session.passport.user._id }))
+    .then((user) => {
+      clientResponse.user = {firstName: user.fbFirstName, lastName: user.fbLastName};
+      return (database.saveditem.find({ userID: user._id}));
+    })
+    .then((favorites) => {
+      clientResponse.favorites = favorites;
       res.json(clientResponse);
     })
     .catch((err) => {
-      console.log('*** Error while processing photo ***', err);
-      res.status(404).send({ statusCode: 404, status: err });
+      console.log('*** Error while retrieving user profile ***', err);
+      clientResponse.status = 'fail: ' + err;
+      clientResponse.statusCode = 404;
+      res.send(clientResponse);
     });
 });
 
-app.post('/api/photos/photo-save', (req, res) => {
-  console.log('received POST request on /photos/photo-save');
-  console.log('** Photo save request body **', req.body);
-  console.log('** Photo save request session **', req.session);
-
-  Promise.resolve(database.dbuser.find({ _id: req.session.passport.user._id }))
+app.get('/api/user', (req, res)=>{
+  
+  const clientResponse = {};
+  clientResponse.status = 'success';
+  clientResponse.statusCode = 200;
+  
+  Promise.resolve(database.dbuser.findOne({ _id: req.session.passport.user._id }))
     .then((result) => {
-      console.log('find user operation returns : ', result[0]);
-      const photoHungry4DB = new database.saveditem({
-        photoURL: req.body.imgURL,
-        savedItem: req.body.recipeORRestaurant, // restaurant or recipe
-        userID: result[0]._id,
-      });
-      console.log('photoHungry4DB created');
-      return (photoHungry4DB);
-    }).catch((err) => {
-      console.log('find user failed');
-    })
-    .then((photoHungry4DB) => {
-      photoHungry4DB.save();
-    })
-    .then(() => {
-      console.log('"saveditem" saved to database');
-      res.end('success');
-    });
-});
-
-app.get('/api/photos/profile', (req, res) => {
-  console.log('received GET request on /photos/profile');
-  Promise.resolve(database.dbuser.find({ _id: req.session.passport.user._id }))
-    .then((result) => {
-      console.log('find user operation returns : ', result[0]);
-      return (result[0]._id);
-    }).catch((err) => {
-      console.log('find user failed');
-    })
-    .then((userID4Profile) => {
-      console.log('userID4Profile = ', userID4Profile);
-      return (database.saveditem.find({ userID: userID4Profile }));
-    })
-    .then((userProfile) => {
-      console.log('returned user profile: ', userProfile);
-      res.json(userProfile);
-      res.end('success');
+      clientResponse.user = {firstName: result.fbFirstName, lastName: result.fbLastName};
+      res.send(clientResponse);
     })
     .catch((err) => {
-      console.log('failed to retrieve profile');
-      res.end('failure');
+      console.log('*** Error while retrieving user ***', err);
+      clientResponse.statusCode = 404;
+      clientResponse.status = 'fail: ' + err;
+      res.send(clientResponse);
     });
 });
 
