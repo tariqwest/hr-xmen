@@ -101,7 +101,7 @@ passport.deserializeUser(function (user, cb) {
 // Setup routes
 app.use('/app', ensureLoggedIn('/login'));
 
-app.use('/app', express.static(__dirname + '/../dist'));
+app.use('/app', express.static(__dirname + '/../static/dist'));
 
 app.get('/', ensureLoggedIn('/login'), function (req, res) {
   res.redirect('/app');

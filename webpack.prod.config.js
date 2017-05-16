@@ -46,7 +46,7 @@ webpackConfig.entry = [Path.join(__dirname, './client/app/index')];
 // ------------------------------------------
 webpackConfig.output = {
   publicPath: '/app',
-  path: Path.join(__dirname, './dist'),
+  path: Path.join(__dirname, './static/dist'),
   filename: jsOutputPath,
 };
 

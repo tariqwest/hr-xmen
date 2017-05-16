@@ -47,7 +47,7 @@ webpackConfig.entry = process.env.CLIENT_DEV === 'true'
 // ------------------------------------------
 webpackConfig.output = {
   publicPath: '/app',
-  path: Path.join(__dirname, './dist'),
+  path: Path.join(__dirname, './static/dist'),
   filename: jsOutputPath,
 };
 
