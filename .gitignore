@@ -48,5 +48,5 @@ jspm_packages
 *.hot-update.*
 
 # Dist files - these should be built fresh in each environment
-/dist/*
+/static/dist/*
 !.gitkeep
