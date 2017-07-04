@@ -1,6 +1,6 @@
-# Photo Hungry
+# Hungry Photo
 
-A photo-first approach to figuring out what to eat.
+Photo-centric food discovery. Turn a food photo into actionable recipes and restaurants that deliver the food you see.
 
 ## Team
 
