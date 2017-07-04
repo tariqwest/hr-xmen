@@ -22,12 +22,12 @@ Photo-centric food discovery. Turn a food photo into actionable recipes and rest
 - React / Flux
 - Testing: Mocha, Chai
 - APIs: 
--- 500px (Food Photos)
--- Clarifai (Machine Vision)
--- OpenMenu (Menu Data)
--- Yelp (Restaurent Location & Food Delivery)
--- Yummly (Recipes)
--- Google Maps (Geocoding)
+ - 500px (Food Photos)
+ - Clarifai (Machine Vision)
+ - OpenMenu (Menu Data)
+ - Yelp (Restaurent Location & Food Delivery)
+ - Yummly (Recipes)
+ - Google Maps (Geocoding)
 
 ### License
 
